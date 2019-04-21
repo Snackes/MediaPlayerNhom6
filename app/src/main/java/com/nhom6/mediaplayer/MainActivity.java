@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    Manager songsManager = new Manager();
     public ArrayList<Song> _songs = new ArrayList<Song>();
 
     @Override
@@ -24,21 +24,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        //check User Permission
         checkUserPermission();
-        // Toast.makeText(this, "load ddc", Toast.LENGTH_SHORT).show();
 
-        Manager songsManager = new Manager();
-        _songs =  songsManager.loadSong(this);
 
-        if(_songs != null)
-        {
-            Toast.makeText(this, "load ddc", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(this, "load deo dc ok", Toast.LENGTH_SHORT).show();
-        }
+
+
+
 
 
 
@@ -50,7 +41,12 @@ public class MainActivity extends AppCompatActivity {
             case 123:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     Toast.makeText(this, "Permission ok", Toast.LENGTH_SHORT).show();
-                    //loadSongs();
+
+                    //tien hanh lay list songs tu divice
+
+                    _songs = songsManager.loadSong(this);
+
+                    //
                 }else{
                     Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
                     checkUserPermission();
@@ -71,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
+
 
 
     }

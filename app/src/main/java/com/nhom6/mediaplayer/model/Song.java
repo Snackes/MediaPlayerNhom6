@@ -1,47 +1,57 @@
 package com.nhom6.mediaplayer.model;
 
+import android.graphics.Bitmap;
+
 public class Song {
     private String Songname;
     private String Artistname;
-    //private int ArtistnameId;
-
-
-
+    private int ArtistnameId;
     private String Album;
-    //private int AlbumId;
+    private int AlbumId;
     private int Duration;
     private String SongUrl;
     private int Songid;
+    private Bitmap AlbumArt;
 
     //constructor
     public Song(){}
 
-    public Song(String songname, String artistname, String Album, int Duration, String songUrl, int Songid) {
+    public Song(String songname, String artistname, String Album, int Duration, String songUrl, int Songid, int ArtistID, int AlbumID, Bitmap AlbumArt) {
         this.Songname = songname;
         this.Artistname = artistname;
         this.SongUrl = songUrl;
         this.Album = Album;
         this.Duration = Duration;
         this.Songid = Songid;
-       // this.AlbumId = AlbumID;
-        //this.ArtistnameId = ArtistID;
+        this.AlbumId = AlbumID;
+        this.ArtistnameId = ArtistID;
+        this.AlbumArt = AlbumArt;
 
     }
-//    public int getArtistnameId() {
-//        return ArtistnameId;
-//    }
-//
-//    public void setArtistnameId(int artistnameId) {
-//        ArtistnameId = artistnameId;
-//    }
-//
-//    public int getAlbumId() {
-//        return AlbumId;
-//    }
 
-//    public void setAlbumId(int albumId) {
-//        AlbumId = albumId;
-//    }
+    public Bitmap getAlbumArt() {
+        return AlbumArt;
+    }
+
+    public void setAlbumArt(Bitmap albumArt) {
+        AlbumArt = albumArt;
+    }
+
+    public int getArtistnameId() {
+        return ArtistnameId;
+    }
+
+    public void setArtistnameId(int artistnameId) {
+        ArtistnameId = artistnameId;
+    }
+
+    public int getAlbumId() {
+        return AlbumId;
+    }
+
+    public void setAlbumId(int albumId) {
+        AlbumId = albumId;
+    }
     public String getArtistname() {
         return Artistname;
     }
