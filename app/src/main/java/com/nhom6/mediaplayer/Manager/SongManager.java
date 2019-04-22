@@ -1,4 +1,4 @@
-package com.nhom6.mediaplayer;
+package com.nhom6.mediaplayer.Manager;
 
 
 import android.app.Activity;
@@ -8,36 +8,38 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 
+import com.nhom6.mediaplayer.model.Album;
 import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
 
-public class Manager extends Activity {
-    public ArrayList<Song> _songs = new ArrayList<Song>();
+public class SongManager extends Activity {
+
+    public ArrayList<Song> _songs = new ArrayList<Song>(); // list tất cả các songs
+
 
     //cóntructor
-    public Manager() {
+    public SongManager() {
     }
 
-    public ArrayList<Song> loadSong(Context context) {
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
 
+    //TODO: hàm load tất cả bài hát có trong máy , trả về một ArrayList<Song>
+    public ArrayList<Song> loadSong(Context context) {
+
+        //điều kiện chọn
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+        // cái này kiểu như lưới hứng
         String[] projection = {
                 MediaStore.Audio.Media.TITLE,
                 MediaStore.Audio.Media.ARTIST,
                 MediaStore.Audio.Media.ALBUM,
-                MediaStore.Audio.Media.DURATION,
+                MediaStore.Audio.Media.DURATION, // thời gian của bài hát *miliseconds
                 MediaStore.Audio.Media.DATA,    // filepath of the audio file
                 MediaStore.Audio.Media._ID,
                 MediaStore.Audio.Media.ALBUM_ID,
                 MediaStore.Audio.Media.ARTIST_ID
-
-
-                // context id/ uri id of the file
         };
 
-
-        //Cursor cursor = getContentResolver().query(uri,null,selection,null,null);
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 projection,
                 selection,
@@ -57,7 +59,8 @@ public class Manager extends Activity {
                     int artistid = Integer.parseInt(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)));
                     //
                     //get AlbumArt
-                    Bitmap bm = getAlbumArt(context,albumid);
+                    ImageOfAlbum imageAlbum = new ImageOfAlbum();
+                    Bitmap bm = imageAlbum.getAlbumArt(context,albumid);
 
                     ///
                     Song s = new Song(title,artist,album,duration,url,songid,artistid,albumid,bm);
@@ -67,29 +70,13 @@ public class Manager extends Activity {
             }
 
             cursor.close();
-            //Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+
 
         }
         return _songs;
     }
-    public Bitmap getAlbumArt(Context context , int albumID)
-    {
-        Bitmap bm =null ;
 
 
-        //Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,null,null,null,null);
-        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
-                new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
-                MediaStore.Audio.Albums._ID+ "=?",
-                new String[] {String.valueOf(albumID)},
-                null);
-        if (cursor.moveToFirst()) {
-            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
 
-            bm = BitmapFactory.decodeFile(path);
 
-        }
-        return bm;
-
-    }
 }
