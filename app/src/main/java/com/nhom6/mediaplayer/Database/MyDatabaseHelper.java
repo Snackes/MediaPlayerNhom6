@@ -89,8 +89,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
+        int maxid=getMaxIDPlaylist();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_PLAYLIST_ID, playlist.getIDPlaylist());
+        values.put(COLUMN_PLAYLIST_ID, maxid+1);
         values.put(COLUMN_PLAYLIST_TITLE, playlist.getTitle());
         values.put(COLUMN_SONG_ID, playlist .getIDsong());
 

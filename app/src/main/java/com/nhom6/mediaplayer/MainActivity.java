@@ -184,8 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(item.getItemId() == MENU_ITEM_CREATE){
             Intent intent = new Intent(this, ListSongActivity.class);
-
-            // Start AddEditPlaylistActivity, có phản hồi.
+            // Start createPlaylist, có phản hồi.
             this.startActivityForResult(intent, MY_REQUEST_CODE);
         }
         else if(item.getItemId() == MENU_ITEM_EDIT ){
@@ -235,7 +234,21 @@ public class MainActivity extends AppCompatActivity {
                 this.ListPlaylist.clear();
                 MyDatabaseHelper db = new MyDatabaseHelper(this);
                 List<Playlist> list=  db.getAllPlaylists();
-                this.ListPlaylist.addAll(list);
+                ArrayList<Playlist> temp=new ArrayList<Playlist>();
+                boolean flag=true;
+                temp.add(list.get(0));
+                for(int i=1;i<list.size();i++){
+                    flag=true;
+                    for(int j=0;j<temp.size();j++){
+                        if(temp.get(j).getIDPlaylist()==list.get(i).getIDPlaylist()){
+                            flag=false;
+                        }
+                    }
+                    if(flag==true) {
+                        temp.add(list.get(i));
+                    }
+                }
+                this.ListPlaylist.addAll(temp);
                 // Thông báo dữ liệu thay đổi (Để refresh ListView).
                 this.listViewAdapter.notifyDataSetChanged();
             }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.SongManager;
@@ -68,32 +69,32 @@ public class ListSongActivity extends AppCompatActivity {
 
 
     // Người dùng Click vào nút Save.
-    /*public void buttonSaveClicked(View view)  {
+    public void buttonSaveClicked(View view)  {
         MyDatabaseHelper db = new MyDatabaseHelper(this);
 
         String title = this.textTitle.getText().toString();
-        String content = this.textContent.getText().toString();
+        //String content = this.textContent.getText().toString();
 
-        if(title.equals("") || content.equals("")) {
+        if(title.equals("") /*|| content.equals("")*/) {
             Toast.makeText(getApplicationContext(),
                     "Please enter title & content", Toast.LENGTH_LONG).show();
             return;
         }
 
         if(mode==MODE_CREATE ) {
-            this.playlist= new Playlist(title);
+            this.playlist= new Playlist(title,7);
             db.addPlaylist(playlist);
         } else  {
-            this.note.setNoteTitle(title);
+/*            this.note.setNoteTitle(title);
             this.note.setNoteContent(content);
-            db.updateNote(note);
+            db.updateNote(note);*/
         }
 
         this.needRefresh = true;
         // Trở lại MainActivity.
         this.onBackPressed();
     }
-*/
+
     // Khi người dùng Click vào button Cancel.
     public void buttonCancelClicked(View view)  {
         // Không làm gì, trở về MainActivity.
