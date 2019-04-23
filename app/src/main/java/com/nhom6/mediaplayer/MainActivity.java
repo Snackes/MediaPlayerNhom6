@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     ArtistManager artistManager =  new ArtistManager();
     public  ArrayList<Artist> _artist = new ArrayList<Artist>();
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
             _songs = songsManager.loadSong(this);
             _album = albumsManager.loadAlbum(this);
             _artist = artistManager.loadArtist(this);
+
+            Song song = songsManager.loadSongWithID(this,7861);
+
             Toast.makeText(this, " vừa mới làm hàng", Toast.LENGTH_SHORT).show();
         }
         else

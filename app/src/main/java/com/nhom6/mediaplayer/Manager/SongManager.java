@@ -76,6 +76,45 @@ public class SongManager extends Activity {
         return _songs;
     }
 
+    //TODO: hàm load Songs theo id
+    public Song loadSongWithID(Context context,int songID)
+    {
+       // tạo song với mục đích trả về
+       Song _newSong =  null;
+
+        //
+        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                null,
+                MediaStore.Audio.Media._ID + "=?",
+                new String[] {String.valueOf(songID)},
+                null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+
+                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                int duration = Integer.parseInt(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+                String url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                int songid = Integer.parseInt(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
+                int albumid = Integer.parseInt(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
+                int artistid = Integer.parseInt(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)));
+                //
+                //get AlbumArt
+                ImageOfAlbum imageAlbum = new ImageOfAlbum();
+                Bitmap bm = imageAlbum.getAlbumArt(context,albumid);
+
+                //khởi tạo với những giá trị đã lấy đc
+                _newSong = new Song(title,artist,album,duration,url,songid,artistid,albumid,bm);
+
+            }
+            cursor.close();
+
+        }
+
+        return _newSong;
+    }
+
 
 
 
