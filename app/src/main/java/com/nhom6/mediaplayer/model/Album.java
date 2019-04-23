@@ -1,11 +1,14 @@
 package com.nhom6.mediaplayer.model;
 
+import android.graphics.Bitmap;
+
 public class Album {
     //
-    public int albumID; // id của album
-    public String albumTitle; // tên album
-    public String artistName;// tên artist
-    public int songCount;// số bài hát trong album này
+    private int albumID; // id của album
+    private String albumTitle; // tên album
+    private String artistName;// tên artist
+    private int songCount;// số bài hát trong album này
+    private Bitmap albumArt;//
     //
 
 
@@ -43,16 +46,25 @@ public class Album {
         this.songCount = songCount;
     }
 
+    public Bitmap getAlbumArt() {
+        return albumArt;
+    }
+
+    public void setAlbumArt(Bitmap albumArt) {
+        this.albumArt = albumArt;
+    }
+
     //constructor
     public Album(){}
 
     //
-    public  Album(int albumID, String albumTitle, String artistName,int songCount)
+    public  Album(int albumID, String albumTitle, String artistName,int songCount, Bitmap albumArt)
     {
         this.albumID = albumID;
         this.albumTitle = albumTitle;
         this.artistName = artistName;
         this.songCount = songCount;
+        this.albumArt = albumArt;
     }
 
 

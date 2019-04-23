@@ -13,8 +13,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.nhom6.mediaplayer.Manager.AlbumManager;
+import com.nhom6.mediaplayer.Manager.ArtistManager;
 import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.model.Album;
+import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
     //
     AlbumManager albumsManager =  new AlbumManager();
     public ArrayList<Album> _album = new ArrayList<Album>();
+    //
+    ArtistManager artistManager =  new ArtistManager();
+    public  ArrayList<Artist> _artist = new ArrayList<Artist>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +60,9 @@ public class MainActivity extends AppCompatActivity {
         //TODO: nếu đã có permission rồi thì những lần sau sẽ chạy vào đây
         if(_songs.isEmpty())
         {
-
             _songs = songsManager.loadSong(this);
+            _album = albumsManager.loadAlbum(this);
+            _artist = artistManager.loadArtist(this);
             Toast.makeText(this, " vừa mới làm hàng", Toast.LENGTH_SHORT).show();
         }
         else
@@ -75,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, "Permission ok", Toast.LENGTH_SHORT).show();
 
                     _songs = songsManager.loadSong(this);
+                    _album = albumsManager.loadAlbum(this);
+                    _artist = artistManager.loadArtist(this);
 
 
                 }else{
