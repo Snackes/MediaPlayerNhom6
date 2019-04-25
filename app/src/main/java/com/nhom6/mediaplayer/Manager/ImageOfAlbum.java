@@ -16,9 +16,9 @@ public class ImageOfAlbum extends Activity {
     public ImageOfAlbum(){}
 
     //TODO: lấy hình của album với đầu vào là albumID
-    public Bitmap getAlbumArt(Context context , int albumID)
+    public String getAlbumArt(Context context , int albumID)
     {
-        Bitmap bm =null ;
+        String path = null;
 
 
         //Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,null,null,null,null);
@@ -28,12 +28,12 @@ public class ImageOfAlbum extends Activity {
                 new String[] {String.valueOf(albumID)},
                 null);
         if (cursor.moveToFirst()) {
-            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+             path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
 
-            bm = BitmapFactory.decodeFile(path);
+           // bm = BitmapFactory.decodeFile(path);
 
         }
-        return bm;
+        return path;
 
     }
 

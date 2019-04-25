@@ -60,10 +60,10 @@ public class SongManager extends Activity {
                     //
                     //get AlbumArt
                     ImageOfAlbum imageAlbum = new ImageOfAlbum();
-                    Bitmap bm = imageAlbum.getAlbumArt(context,albumid);
+                    String img = imageAlbum.getAlbumArt(context,albumid);
 
                     ///
-                    Song s = new Song(title,artist,album,duration,url,songid,artistid,albumid,bm);
+                    Song s = new Song(title,artist,album,duration,url,songid,artistid,albumid,img);
                     _songs.add(s);
 
                 } while (cursor.moveToNext());
@@ -102,10 +102,10 @@ public class SongManager extends Activity {
                 //
                 //get AlbumArt
                 ImageOfAlbum imageAlbum = new ImageOfAlbum();
-                Bitmap bm = imageAlbum.getAlbumArt(context,albumid);
+                String img = imageAlbum.getAlbumArt(context,albumid);
 
                 //khởi tạo với những giá trị đã lấy đc
-                _newSong = new Song(title,artist,album,duration,url,songid,artistid,albumid,bm);
+                _newSong = new Song(title,artist,album,duration,url,songid,artistid,albumid,img);
 
             }
             cursor.close();
