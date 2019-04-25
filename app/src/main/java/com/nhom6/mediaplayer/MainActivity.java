@@ -3,6 +3,7 @@ package com.nhom6.mediaplayer;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import com.nhom6.mediaplayer.Manager.AlbumManager;
 import com.nhom6.mediaplayer.Manager.ArtistManager;
 import com.nhom6.mediaplayer.Manager.SongManager;
+import com.nhom6.mediaplayer.activity.ShowAllSong;
 import com.nhom6.mediaplayer.model.Album;
 import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.Song;
@@ -50,6 +53,13 @@ public class MainActivity extends AppCompatActivity {
         CheckUserPermission(this);
 
 
+    }
+
+
+    public void ShowAllSong(View view)
+    {
+        Intent i = new Intent(this, ShowAllSong.class) ;
+        startActivity(i);
     }
 
     private void CheckUserPermission(Context context)
