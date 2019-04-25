@@ -27,18 +27,6 @@ import com.nhom6.mediaplayer.model.Song;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
-    SongManager songsManager = new SongManager();
-    public ArrayList<Song> _songs = new ArrayList<Song>();
-    //
-    AlbumManager albumsManager =  new AlbumManager();
-    public ArrayList<Album> _album = new ArrayList<Album>();
-    //
-    ArtistManager artistManager =  new ArtistManager();
-    public  ArrayList<Artist> _artist = new ArrayList<Artist>();
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
+        //kiem tra permission
         CheckUserPermission(this);
 
 
@@ -76,20 +64,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //TODO: nếu đã có permission rồi thì những lần sau sẽ chạy vào đây
-        if(_songs.isEmpty())
-        {
-            _songs = songsManager.loadSong(this);
-            _album = albumsManager.loadAlbum(this);
-            _artist = artistManager.loadArtist(this);
 
-            Song song = songsManager.loadSongWithID(this,7861);
-
-            Toast.makeText(this, " vừa mới làm hàng", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(this, " hàng có sẵn", Toast.LENGTH_SHORT).show();
-        }
+        // do something
     }
 
     @Override
@@ -100,12 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
                     Toast.makeText(this, "Permission ok", Toast.LENGTH_SHORT).show();
-
-                    _songs = songsManager.loadSong(this);
-                    _album = albumsManager.loadAlbum(this);
-                    _artist = artistManager.loadArtist(this);
-
-
                 }else{
                     Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
                     CheckUserPermission(this);
