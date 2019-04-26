@@ -9,19 +9,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
 
-public class ListSongAdapter extends ArrayAdapter<Song> {
+public class CustomAdapter extends ArrayAdapter<Song> {
 
     private Context context;
     private int resource;
     private ArrayList<Song> arrSong;
 
 
-    public ListSongAdapter( Context context, int resource,  ArrayList<Song> objects) {
+    public CustomAdapter( Context context, int resource,  ArrayList<Song> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -31,11 +32,11 @@ public class ListSongAdapter extends ArrayAdapter<Song> {
     @NonNull
     @Override
     public View getView(int position,  View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.row_item_song,parent,false);
+        convertView = LayoutInflater.from(context).inflate(R.layout.row_item_allsong,parent,false);
 
-        ImageView imageSong = (ImageView) convertView.findViewById(R.id.image_song);
-        TextView songName = (TextView) convertView.findViewById(R.id.name_song);
-        TextView artistName = (TextView) convertView.findViewById(R.id.name_artist);
+        ImageView imageSong = (ImageView) convertView.findViewById(R.id.imageViewAD);
+        TextView songName = (TextView) convertView.findViewById(R.id.songNameAD);
+        TextView artistName = (TextView) convertView.findViewById(R.id.singerAD);
 
 
         Song song = arrSong.get(position);

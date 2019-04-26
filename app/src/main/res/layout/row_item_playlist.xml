@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/image_song"
+            android:id="@+id/image_playlist"
             android:layout_width="60dp"
             android:layout_height="60dp" />
     </LinearLayout>
@@ -25,32 +25,13 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/name_song"
+            android:id="@+id/name_playlist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tenbaihat"
+            android:text="@string/playlistName"
             android:textColor="@android:color/background_light"
             android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/name_artist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ten nghe si"
-            android:textColor="#9DD8C1C1" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:srcCompat="@drawable/ic_gif_sound" />
     </LinearLayout>
 
 
