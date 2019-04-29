@@ -12,19 +12,21 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.AlbumManager;
 import com.nhom6.mediaplayer.Manager.ArtistManager;
 import com.nhom6.mediaplayer.Manager.SongManager;
+import com.nhom6.mediaplayer.activity.ShowAllSong;
 import com.nhom6.mediaplayer.model.Album;
 import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.Playlist;
@@ -44,10 +46,7 @@ public class MainActivity extends AppCompatActivity {
     ArtistManager artistManager =  new ArtistManager();
     public  ArrayList<Artist> _artist = new ArrayList<Artist>();
 
-
-
     private ListView listView;
-
     //
     // .private static final int MENU_ITEM_VIEW = 111;
     private static final int MENU_ITEM_EDIT = 222;
@@ -61,15 +60,22 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<Playlist> listViewAdapter;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
+        getSupportActionBar().hide(); // hide the title bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
+        setContentView(R.layout.activity_main);
 
         CheckUserPermission(this);
         setContentView(R.layout.activity_main);
 
-        // Get ListView object from xml
         listView = (ListView) findViewById(R.id.listView);
+        //kiem tra permission
+        CheckUserPermission(this);
 
         MyDatabaseHelper db = new MyDatabaseHelper(this);
         db.createDefaultPlaylistsIfNeed();
@@ -105,7 +111,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Đăng ký Context menu cho ListView.
         registerForContextMenu(this.listView);
+    }
 
+    public void ShowAllSong(View view)
+    {
+        Intent i = new Intent(this, ShowAllSong.class) ;
+        startActivity(i);
     }
 
     private void CheckUserPermission(Context context)
@@ -130,12 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
             Song song = songsManager.loadSongWithID(this,33030);
 
-            Toast.makeText(this, " vừa mới làm hàng", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(this, " hàng có sẵn", Toast.LENGTH_SHORT).show();
-        }
+        // do something
     }
 
     @Override
@@ -146,12 +152,6 @@ public class MainActivity extends AppCompatActivity {
                 if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
                     Toast.makeText(this, "Permission ok", Toast.LENGTH_SHORT).show();
-
-                    _songs = songsManager.loadSong(this);
-                    _album = albumsManager.loadAlbum(this);
-                    _artist = artistManager.loadArtist(this);
-
-
                 }else{
                     Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
                     CheckUserPermission(this);
