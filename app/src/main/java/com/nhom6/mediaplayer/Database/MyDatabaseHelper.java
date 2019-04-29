@@ -102,6 +102,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    //Lấy 1 playlist khi trỏ vào theo id của nó trong csdl
     public Playlist getPlaylist(int id) {
         Log.i(TAG, "MyDatabaseHelper.getPlaylist ... " + id);
 
@@ -119,6 +120,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    //Lấy danh sách playlist có trong cơ sở dữ liệu
     public List<Playlist> getAllPlaylists() {
         Log.i(TAG, "MyDatabaseHelper.getAllPlaylists ... " );
 
@@ -146,7 +148,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return ListPlaylist;
     }
 
-    //
+    //lấy danh sách bài hát trong một playlist theo id của playlist đó trong csdl
     public ArrayList<String> GetListSongInPlaylist(int idplaylist) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery( "select Song_Id from Playlist where Playlist_Id="+idplaylist+"", null);
@@ -160,7 +162,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
         return test;
     }
-    //
+    //Đếm số lượng của playlist hiện có
     public int getPlaylistCount() {
         Log.i(TAG, "MyDatabaseHelper.getPlaylistsCount ... " );
 
@@ -176,6 +178,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
+    //Lấy id lớn nhất của playlist trong csdl
     public int getMaxIDPlaylist(){
         int mx=-1;
         try{
@@ -208,13 +211,18 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(playlist.getIDPlaylist())});
     }
 
+    //xóa 1 playlist khỏi cơ sở dữ liệu
+    public void deleteSongInPlaylist(int idsong,int idplaylist) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_PLAYLIST, COLUMN_PLAYLIST_ID + " = ?" + COLUMN_SONG_ID +" = ?",
+                new String[] {String.valueOf(idplaylist),String.valueOf(idsong)});
+        db.close();
+    }
+    //xóa 1 playlist khỏi cơ sở dữ liệu
     public void deletePlaylist(Playlist playlist) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_PLAYLIST, COLUMN_PLAYLIST_ID + " = ?",
                 new String[] { String.valueOf(playlist.getIDPlaylist()) });
         db.close();
     }
-
-
-
 }
