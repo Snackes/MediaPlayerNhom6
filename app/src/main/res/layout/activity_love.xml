@@ -33,16 +33,16 @@
         app:layout_constraintTop_toBottomOf="@id/lnSearch">
 
         <TextView
-            android:id="@+id/txtAllSong"
+            android:id="@+id/txtLoveSong"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
             android:gravity="center_horizontal"
-            android:text="@string/AllSong"
+            android:text="@string/lovesong"
             android:textSize="30sp" />
 
         <ListView
-            android:id="@+id/listViewSong"
+            android:id="@+id/listLoveSong"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp">

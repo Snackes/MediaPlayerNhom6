@@ -1,6 +1,8 @@
 package com.nhom6.mediaplayer.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +42,9 @@ public class ListSongAdapter extends ArrayAdapter<Song> {
 
         Song song = arrSong.get(position);
 
-        imageSong.setImageBitmap(song.getAlbumArt());
+        Bitmap bm = BitmapFactory.decodeFile(song.getAlbumArt());
+
+        imageSong.setImageBitmap(bm);
         songName.setText(song.getSongname());
         artistName.setText(song.getArtistname());
 

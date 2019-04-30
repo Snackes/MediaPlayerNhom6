@@ -19,6 +19,7 @@ import com.nhom6.mediaplayer.MainActivity;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
+import com.nhom6.mediaplayer.adapter.PlaylistAdapterView;
 import com.nhom6.mediaplayer.model.PlayList;
 
 import java.util.ArrayList;
@@ -43,53 +44,6 @@ public class PlayActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_play);
 
-        //load playlist len dialog
-        listView = (ListView) findViewById(R.id.listDialogPL);
-
-        //tiến hành lấy toàn bộ song trong máy
-        _playlists = playlistsManager.loadPlayList(this);
-        //đưa vào adapter để hiển thị
-        PlaylistAdapter listPlayListAdapter = new PlaylistAdapter(this,R.layout.row_item_playlist,_playlists);
-        listView.setAdapter(listPlayListAdapter);
-
-        button = findViewById(R.id.btnThemPlayList);
-        button.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        context);
-
-                // set title
-                alertDialogBuilder.setTitle("Your Title");
-                    // Get the layout inflater
-                LayoutInflater inflater = getLayoutInflater();
-
-                // Inflate and set the layout for the dialog
-                // Pass null as the parent view because its going in the dialog layout
-                alertDialogBuilder.setView(inflater.inflate(R.layout.dialog_addplaylist, null))
-                // Add action buttons
-                .setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
-                    }
-                })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
-                        });
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
-            }
-        });
-
-
-
-
     }
 
     public void showMainSreen(View view) {
@@ -101,6 +55,7 @@ public class PlayActivity extends AppCompatActivity {
             System.out.println(e);
         }
     }
+
 
 
 

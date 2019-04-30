@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,10 +23,12 @@ import android.widget.Toast;
 
 
 import com.nhom6.mediaplayer.activity.AlbumActivity;
+import com.nhom6.mediaplayer.activity.LoveActivity;
 import com.nhom6.mediaplayer.activity.PlayActivity;
 import com.nhom6.mediaplayer.activity.PlayScreenActivity;
 import com.nhom6.mediaplayer.activity.PlaylistActivity;
 import com.nhom6.mediaplayer.activity.ShowAllSong;
+import com.nhom6.mediaplayer.activity.SingerActivity;
 import com.nhom6.mediaplayer.lib.setcolor;
 import com.nhom6.mediaplayer.model.PlayList;
 
@@ -70,6 +73,21 @@ public class MainActivity extends AppCompatActivity {
         Intent i=new Intent(this, PlayScreenActivity.class);
         startActivity(i);
     }
+    public  void ShowSinger(View view)
+    {
+        Intent i=new Intent(this, SingerActivity.class);
+        startActivity(i);
+    }
+    public  void ShowLoveSong(View view)
+    {
+        Intent i=new Intent(this, LoveActivity.class);
+        startActivity(i);
+    }
+    public void clickScan(View view)
+    {
+        Snackbar.make(view,"Đang quét", Snackbar.LENGTH_LONG)
+                .setAction("No action", null).show();
+    }
 
     private void CheckUserPermission(Context context)
     {
@@ -88,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
 
         // do something
     }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

@@ -9,22 +9,23 @@ import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 
 import com.nhom6.mediaplayer.model.Album;
+import com.nhom6.mediaplayer.model.LoveSong;
 import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
 
-public class SongManager extends Activity {
+public class LoveSongManager extends Activity {
 
-    public ArrayList<Song> _songs = new ArrayList<Song>(); // list tất cả các songs
+    public ArrayList<LoveSong> _lovesongs = new ArrayList<LoveSong>(); // list tất cả các songs
 
 
     //cóntructor
-    public SongManager() {
+    public LoveSongManager() {
     }
 
 
     //TODO: hàm load tất cả bài hát có trong máy , trả về một ArrayList<Song>
-    public ArrayList<Song> loadSong(Context context) {
+    public ArrayList<LoveSong> loadSong(Context context) {
 
         //điều kiện chọn
         String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
@@ -63,8 +64,8 @@ public class SongManager extends Activity {
                     String img = imageAlbum.getAlbumArt(context,albumid);
 
                     ///
-                    Song s = new Song(title,artist,album,duration,url,songid,artistid,albumid,img);
-                    _songs.add(s);
+                    LoveSong s = new LoveSong(title,artist,album,duration,url,songid,artistid,albumid,img);
+                    _lovesongs.add(s);
 
                 } while (cursor.moveToNext());
             }
@@ -73,14 +74,14 @@ public class SongManager extends Activity {
 
 
         }
-        return _songs;
+        return _lovesongs;
     }
 
     //TODO: hàm load Songs theo id
-    public Song loadSongWithID(Context context,int songID)
+    public LoveSong loadSongWithID(Context context,int songID)
     {
-       // tạo song với mục đích trả về
-       Song _newSong =  null;
+        // tạo song với mục đích trả về
+        LoveSong _newSong =  null;
 
         //
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -105,7 +106,7 @@ public class SongManager extends Activity {
                 String img = imageAlbum.getAlbumArt(context,albumid);
 
                 //khởi tạo với những giá trị đã lấy đc
-                _newSong = new Song(title,artist,album,duration,url,songid,artistid,albumid,img);
+                _newSong = new LoveSong(title,artist,album,duration,url,songid,artistid,albumid,img);
 
             }
             cursor.close();

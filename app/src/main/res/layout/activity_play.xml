@@ -23,15 +23,12 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp">
+                android:layout_height="wrap_content">
 
                 <ImageButton
                     android:id="@+id/btnDown"
                     android:layout_width="49dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="0dp"
-                    android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:backgroundTint="#FFFFFF"
                     android:onClick="showMainSreen"
@@ -40,12 +37,16 @@
 
                 <Button
                     android:id="@+id/btnThemPlayList"
-                    android:layout_width="wrap_content"
+                    android:layout_width="51dp"
                     android:layout_height="match_parent"
                     android:layout_column="2"
                     android:layout_weight="1"
-                    android:background="@android:color/black"
-                    android:tint="@color/cardview_light_background" />
+                    android:background="@drawable/ic_plus"
+                    android:backgroundTint="#FCFCFC"
+                    android:foregroundTint="#00FEFBFB"
+                    android:onClick="showPlayListDialog"
+                    android:tint="@color/cardview_light_background"
+                    tools:ignore="OnClick" />
 
                 <ImageButton
                     android:id="@+id/btnLove"
@@ -53,9 +54,11 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="0dp"
                     android:layout_weight="1"
+                    android:onClick="clickLove"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_heart"
-                    android:tint="@color/cardview_light_background" />
+                    android:tint="@color/cardview_light_background"
+                    tools:ignore="OnClick" />
             </TableRow>
 
         </TableLayout>
@@ -93,15 +96,6 @@
                 android:textAlignment="center"
                 android:textColor="#F8F4F4"
                 android:textSize="30sp" />
-
-            <Button
-                android:id="@+id/btnThemPlayList2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_column="2"
-                android:layout_weight="1"
-                android:background="@android:color/black"
-                android:tint="@color/cardview_light_background" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

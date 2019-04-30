@@ -12,37 +12,42 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nhom6.mediaplayer.R;
-import com.nhom6.mediaplayer.model.Album;
 import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class AlbumAdapter extends ArrayAdapter<Album> {
+public class ListSameSongAdapter extends ArrayAdapter<Song> {
 
     private Context context;
     private int resource;
-    private ArrayList<Album> arrAlbum;
+    private ArrayList<Song> arrSong;
 
 
-    public AlbumAdapter( Context context, int resource,  ArrayList<Album> objects) {
+    public ListSameSongAdapter( Context context, int resource,  ArrayList<Song> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
-        this.arrAlbum = objects;
+        this.arrSong = objects;
     }
 
     @NonNull
     @Override
     public View getView(int position,  View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.girdview_album,parent,false);
-        ImageView imageAlbum = (ImageView) convertView.findViewById(R.id.grid_item_imageAlbum);
-        TextView albumName = (TextView) convertView.findViewById(R.id.grid_item_nameAlbum);
-        Album song = arrAlbum.get(position);
+        convertView = LayoutInflater.from(context).inflate(R.layout.row_item_samesong,parent,false);
+
+        ImageView imageSong = (ImageView) convertView.findViewById(R.id.image_samesong);
+        TextView songName = (TextView) convertView.findViewById(R.id.name_samesong);
+        TextView artistName = (TextView) convertView.findViewById(R.id.name_sameartist);
+
+
+        Song song = arrSong.get(position);
+
         Bitmap bm = BitmapFactory.decodeFile(song.getAlbumArt());
 
-        imageAlbum.setImageBitmap(bm);
-        albumName.setText(song.getAlbumTitle());
+        imageSong.setImageBitmap(bm);
+        songName.setText(song.getSongname());
+        artistName.setText(song.getArtistname());
+
         return convertView;
     }
 }

@@ -84,6 +84,7 @@
                 android:drawableEnd="@drawable/ic_right"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
+                android:onClick="ShowLoveSong"
                 android:text="@string/love"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -138,6 +139,7 @@
             android:id="@+id/lnCaSi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="ShowSinger"
             android:orientation="vertical">
 
             <TextView
@@ -173,6 +175,7 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
                 android:text="@string/scan"
+                android:onClick="clickScan"
                 android:textSize="20sp" />
         </LinearLayout>
 

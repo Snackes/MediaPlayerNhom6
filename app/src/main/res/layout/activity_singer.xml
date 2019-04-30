@@ -38,11 +38,11 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
             android:gravity="center_horizontal"
-            android:text="@string/AllSong"
+            android:text="@string/singer"
             android:textSize="30sp" />
 
         <ListView
-            android:id="@+id/listViewSong"
+            android:id="@+id/listViewSinger"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp">

@@ -26,4 +26,7 @@
     <string name="cancel">Cancel</string>
     <string name="signin">Sign In</string>
     <string name="create">Create</string>
+    <string name="choose">Choose</string>
+    <string name="SameSong">Danh sách phát</string>
+    <string name="lovesong">Bài hát yêu thích</string>
 </resources>

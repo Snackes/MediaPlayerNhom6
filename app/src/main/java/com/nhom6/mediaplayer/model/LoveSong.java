@@ -2,7 +2,7 @@ package com.nhom6.mediaplayer.model;
 
 import android.graphics.Bitmap;
 
-public class Song {
+public class LoveSong {
     private String Songname;
     private String Artistname;
     private int ArtistnameId;
@@ -14,9 +14,9 @@ public class Song {
     private String AlbumArt;
 
     //constructor
-    public Song(){}
+    public LoveSong(){}
 
-    public Song(String songname, String artistname, String Album, int Duration, String songUrl, int Songid, int ArtistID, int AlbumID, String AlbumArt) {
+    public LoveSong(String songname, String artistname, String Album, int Duration, String songUrl, int Songid, int ArtistID, int AlbumID, String AlbumArt) {
         this.Songname = songname;
         this.Artistname = artistname;
         this.SongUrl = songUrl;
