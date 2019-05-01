@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ListSongActivity" />
+        <activity android:name=".activity.ShowAllSongInPlaylist"></activity>
+        <activity android:name=".activity.ShowAllPlaylist" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.PlayMedia"></activity>
+        <activity android:name=".activity.PlayMedia" />
     </application>
 
 </manifest>

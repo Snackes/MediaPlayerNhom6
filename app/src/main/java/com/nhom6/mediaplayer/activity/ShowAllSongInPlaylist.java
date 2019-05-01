@@ -1,25 +1,26 @@
-package com.nhom6.mediaplayer;
-
+package com.nhom6.mediaplayer.activity;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
+import com.nhom6.mediaplayer.MainActivity;
 import com.nhom6.mediaplayer.Manager.SongManager;
+import com.nhom6.mediaplayer.R;
+import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.model.Playlist;
 import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
 
 
-public class ListSongActivity extends AppCompatActivity {
+public class ShowAllSongInPlaylist extends AppCompatActivity {
 
     Playlist playlist;
     private static final int MODE_CREATE = 1;
@@ -28,13 +29,13 @@ public class ListSongActivity extends AppCompatActivity {
     private int mode;
     private EditText textTitle;
     private ListView ListSong;
-
+    Context context;
     private boolean needRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_song);
+        setContentView(R.layout.activity_show_all_song_in_playlist);
 
         this.textTitle = this.findViewById(R.id.Text_Playlist_Title);
         this.ListSong = this.findViewById(R.id.Listview_Song);
@@ -47,22 +48,26 @@ public class ListSongActivity extends AppCompatActivity {
             this.textTitle.setText(playlist.getTitle());
 
             MyDatabaseHelper db = new MyDatabaseHelper(this);
-            ArrayList<String> listSong=new ArrayList<String>();//tạo mới 1 list chứa các song
+
             SongManager sm=new SongManager();
-            ArrayList<String> temp= db.GetListSongInPlaylist(this.playlist.getIDPlaylist());
-            for(int i=0; i<temp.size();i++){
-                Song song = sm.loadSongWithID(this,Integer.parseInt(temp.get(i)));
-                listSong.add(song.getSongname());
+            ArrayList<String> listIDsong= db.GetListSongInPlaylist(this.playlist.getIDPlaylist());
+            if(listIDsong.size()==0){
+                Toast.makeText(getApplicationContext(),
+                        "Méo có gì trong này", Toast.LENGTH_LONG).show();
+                // Trở lại MainActivity.
+                this.onBackPressed();
+            }
+            ArrayList<Song> _songs = new ArrayList<Song>();
+            for(int i=0; i<listIDsong.size();i++){
+                Song song = sm.loadSongWithID(this,Integer.parseInt(listIDsong.get(i)));
+                _songs.add(song);
             }
 
-            this.listViewAdapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1, android.R.id.text1,listSong);
-
-            // Đăng ký Adapter cho ListView.
-            this.ListSong.setAdapter(this.listViewAdapter);
-
-            // Đăng ký Context menu cho ListView.
+            //đưa vào adapter để hiển thị
+            ListSongAdapter listSongAdapter = new ListSongAdapter(this,R.layout.row_item_song,_songs);
+            ListSong.setAdapter(listSongAdapter);
             registerForContextMenu(this.ListSong);
+            context = getApplicationContext();
         }
 
     }
@@ -82,8 +87,7 @@ public class ListSongActivity extends AppCompatActivity {
         }
 
         if(mode==MODE_CREATE ) {
-            this.playlist= new Playlist(title,7);
-            db.addPlaylist(playlist);
+            db.addPlaylist(title);
         } else  {
 /*            this.note.setNoteTitle(title);
             this.note.setNoteContent(content);
@@ -91,7 +95,7 @@ public class ListSongActivity extends AppCompatActivity {
         }
 
         this.needRefresh = true;
-        // Trở lại MainActivity.
+        //Trở lại MainActivity.
         this.onBackPressed();
     }
 
@@ -117,3 +121,5 @@ public class ListSongActivity extends AppCompatActivity {
     }
 
 }
+
+

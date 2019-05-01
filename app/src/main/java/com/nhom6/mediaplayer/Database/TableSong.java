@@ -95,6 +95,7 @@ public class TableSong extends SQLiteOpenHelper {
                 song.setAlbumId(Integer.parseInt(cursor.getString(5)));
                 song.setDuration(Integer.parseInt(cursor.getString(6)));
                 song.setSongUrl(cursor.getString(7));
+                song.setAlbumArt(cursor.getString(8));
                 // Thêm vào danh sách.
                 ListSong.add(song);
             } while (cursor.moveToNext());

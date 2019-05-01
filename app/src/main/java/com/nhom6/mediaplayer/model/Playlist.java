@@ -15,6 +15,10 @@ public class Playlist implements Serializable {
         this.Title= title;
         this.IDsong= idsong;
     }
+    public Playlist(int idPlaylist, String title) {
+        this.Title= title;
+        this.IDPlaylist= idPlaylist;
+    }
     public Playlist(String title) {
         this.Title= title;
     }
