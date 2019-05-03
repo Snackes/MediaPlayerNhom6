@@ -2,13 +2,16 @@ package com.nhom6.mediaplayer.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -26,6 +29,7 @@ public class PlaylistActivity extends AppCompatActivity {
 
     final Context context = this;
     private Button buttonCreatePlaylist;
+    private static final int MY_REQUEST_CODE = 1000;
     //khai báo ListView cho adapter
     private ListView listView;
     //khai báo SongManager để loadSong
@@ -88,6 +92,16 @@ public class PlaylistActivity extends AppCompatActivity {
         //đưa vào adapter để hiển thị
         PlaylistAdapter listPlayListAdapter = new PlaylistAdapter(this,R.layout.row_item_playlist,_playlists);
         listView.setAdapter(listPlayListAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                PlayList playList=_playlists.get(position);
+                Intent intent = new Intent(context, SongOfPlaylistActivity.class);
+                intent.putExtra("playlist", playList);
+                startActivity(intent);
+                startActivityForResult(intent, MY_REQUEST_CODE);
+            }
+        });
     }
 
 
