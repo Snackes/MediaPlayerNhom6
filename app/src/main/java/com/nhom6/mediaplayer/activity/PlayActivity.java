@@ -13,13 +13,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.PopupMenu;
+
 
 import com.nhom6.mediaplayer.MainActivity;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.R;
-import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
-import com.nhom6.mediaplayer.adapter.PlaylistAdapterView;
+
 import com.nhom6.mediaplayer.model.PlayList;
 
 import java.util.ArrayList;

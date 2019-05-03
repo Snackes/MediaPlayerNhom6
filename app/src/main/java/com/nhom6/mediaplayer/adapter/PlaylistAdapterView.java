@@ -37,7 +37,7 @@ public class PlaylistAdapterView extends ArrayAdapter<PlayList> {
         TextView playListName = (TextView) convertView.findViewById(R.id.name_playlist_view);
         PlayList playList = arrPlayList.get(position);
         imagePlayList.setImageResource(R.drawable.adele);
-        playListName.setText(playList.getPlaylistname());
+        playListName.setText(playList.getTitle());
         return convertView;
     }
 }

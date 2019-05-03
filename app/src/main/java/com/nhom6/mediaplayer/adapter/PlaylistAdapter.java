@@ -42,7 +42,7 @@ public class PlaylistAdapter extends ArrayAdapter<PlayList> {
         PlayList playList = arrPlayList.get(position);
 
         imagePlayList.setImageResource(R.drawable.adele);
-        playListName.setText(playList.getPlaylistname());
+        playListName.setText(playList.getTitle());
 
         return convertView;
     }
