@@ -135,7 +135,7 @@ public class ShowAllSong extends AppCompatActivity {
                                 db.addSongForPlayList(_playlists.get(position1).getIDPlayList(),_songs.get(position).getSongid());
                                 Toast.makeText(getApplicationContext(),
                                         "Thêm được rồi vô playlist coi đi e iu...", Toast.LENGTH_LONG).show();
-                                return;
+                                dialogAdd.cancel();
                             }
                         });
                         dialogAdd.setContentView(mView);
