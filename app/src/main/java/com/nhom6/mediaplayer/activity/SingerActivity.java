@@ -40,7 +40,7 @@ public class SingerActivity extends AppCompatActivity {
         //tiến hành lấy toàn bộ song trong máy
         MyDatabaseHelper db=new MyDatabaseHelper(this);
         //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
-        if(db.CheckTableSong()==0){
+        if(db.CheckTableSinger()==0){
             //tiến hành lấy toàn bộ song trong máy
             _artists = artistsManager.loadArtist(this);
             //đưa songs lấy được vào csdl
