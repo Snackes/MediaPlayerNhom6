@@ -6,6 +6,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ListView;
 
+import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.ArtistManager;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.R;
@@ -36,9 +37,19 @@ public class SingerActivity extends AppCompatActivity {
 
         //find id ListView
         listSinger = (ListView) findViewById(R.id.listViewSinger);
-
         //tiến hành lấy toàn bộ song trong máy
-        _artists = artistsManager.loadArtist(this);
+        MyDatabaseHelper db=new MyDatabaseHelper(this);
+        //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
+        if(db.CheckTableSong()==0){
+            //tiến hành lấy toàn bộ song trong máy
+            _artists = artistsManager.loadArtist(this);
+            //đưa songs lấy được vào csdl
+            db.addSinger(_artists);
+        }
+        else {
+            _artists=db.GetListSinger();
+        }
+
         //đưa vào adapter để hiển thị
         SingerAdapter listArtistAdapter = new SingerAdapter(this,R.layout.row_item_singer,_artists);
         listSinger.setAdapter(listArtistAdapter);

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.model.PlayList;
+import com.nhom6.mediaplayer.model.Song;
 
 
 import java.util.ArrayList;
@@ -30,6 +31,10 @@ public class PlayListManager extends Activity {
     public void CreatePlayList(String title,Context context){
         MyDatabaseHelper db =new MyDatabaseHelper(context);
         db.addPlayList(title);
+    }
+    public void CreatePlayListAndAddSong(String title, Context context, int idsong){
+        MyDatabaseHelper db =new MyDatabaseHelper(context);
+        db.addPlayListAndAddSong(title,idsong);
     }
 
 }
