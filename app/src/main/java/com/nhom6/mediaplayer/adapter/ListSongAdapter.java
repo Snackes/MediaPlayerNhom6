@@ -44,7 +44,12 @@ public class ListSongAdapter extends ArrayAdapter<Song> {
 
         Bitmap bm = BitmapFactory.decodeFile(song.getAlbumArt());
 
-        imageSong.setImageBitmap(bm);
+        if (bm != null) {
+            imageSong.setImageBitmap(bm);
+        }
+        else {
+            imageSong.setImageResource(R.drawable.adele);
+        }
         songName.setText(song.getSongname());
         artistName.setText(song.getArtistname());
 

@@ -23,7 +23,7 @@ public class ListSameSongAdapter extends ArrayAdapter<Song> {
     private ArrayList<Song> arrSong;
 
 
-    public ListSameSongAdapter( Context context, int resource,  ArrayList<Song> objects) {
+    public ListSameSongAdapter(Context context, int resource, ArrayList<Song> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -32,8 +32,8 @@ public class ListSameSongAdapter extends ArrayAdapter<Song> {
 
     @NonNull
     @Override
-    public View getView(int position,  View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.row_item_samesong,parent,false);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        convertView = LayoutInflater.from(context).inflate(R.layout.row_item_samesong, parent, false);
 
         ImageView imageSong = (ImageView) convertView.findViewById(R.id.image_samesong);
         TextView songName = (TextView) convertView.findViewById(R.id.name_samesong);
@@ -43,8 +43,12 @@ public class ListSameSongAdapter extends ArrayAdapter<Song> {
         Song song = arrSong.get(position);
 
         Bitmap bm = BitmapFactory.decodeFile(song.getAlbumArt());
-
-        imageSong.setImageBitmap(bm);
+        if (bm != null) {
+            imageSong.setImageBitmap(bm);
+        }
+        else {
+            imageSong.setImageResource(R.drawable.adele);
+        }
         songName.setText(song.getSongname());
         artistName.setText(song.getArtistname());
 

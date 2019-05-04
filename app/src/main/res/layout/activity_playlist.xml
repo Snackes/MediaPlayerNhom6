@@ -60,10 +60,10 @@
                 android:layout_gravity="center"
                 android:text="+ Create Playlist" />
 
-            <ListView
+            <com.baoyz.swipemenulistview.SwipeMenuListView
                 android:id="@+id/listPlayList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></ListView>
+                android:layout_height="wrap_content"></com.baoyz.swipemenulistview.SwipeMenuListView>
         </LinearLayout>
 
     </LinearLayout>

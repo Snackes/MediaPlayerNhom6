@@ -41,14 +41,14 @@
             android:text="@string/lovesong"
             android:textSize="30sp" />
 
-        <ListView
+        <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@+id/listLoveSong"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp">
 
 
-        </ListView>
+        </com.baoyz.swipemenulistview.SwipeMenuListView>
     </LinearLayout>
 
     <LinearLayout

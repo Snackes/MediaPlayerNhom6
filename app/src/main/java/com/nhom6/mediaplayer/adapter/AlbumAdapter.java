@@ -41,7 +41,12 @@ public class AlbumAdapter extends ArrayAdapter<Album> {
         Album song = arrAlbum.get(position);
         Bitmap bm = BitmapFactory.decodeFile(song.getAlbumArt());
 
-        imageAlbum.setImageBitmap(bm);
+        if (bm!=null) {
+            imageAlbum.setImageBitmap(bm);
+        }
+        else {
+            imageAlbum.setImageResource(R.drawable.adele);
+        }
         albumName.setText(song.getAlbumTitle());
         return convertView;
     }

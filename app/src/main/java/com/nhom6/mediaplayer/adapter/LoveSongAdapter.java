@@ -45,7 +45,12 @@ public class LoveSongAdapter extends ArrayAdapter<LoveSong> {
 
         Bitmap bm = BitmapFactory.decodeFile(lovesong.getAlbumArt());
 
-        imageSong.setImageBitmap(bm);
+        if (bm != null) {
+            imageSong.setImageBitmap(bm);
+        }
+        else {
+            imageSong.setImageResource(R.drawable.adele);
+        }
         songName.setText(lovesong.getSongname());
         artistName.setText(lovesong.getArtistname());
 

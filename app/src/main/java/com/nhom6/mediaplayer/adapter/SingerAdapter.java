@@ -37,7 +37,6 @@ public class SingerAdapter extends ArrayAdapter<Artist> {
 
         ImageView imageArtist = (ImageView) convertView.findViewById(R.id.image_singer);
         TextView ArtistName = (TextView) convertView.findViewById(R.id.name_singer);
-        TextView numSong=(TextView) convertView.findViewById(R.id.numSong);
 
 
 
@@ -45,8 +44,6 @@ public class SingerAdapter extends ArrayAdapter<Artist> {
 
         imageArtist.setImageResource(R.drawable.ic_micro);
         ArtistName.setText(artist.getArtistName());
-        numSong.setText(artist.getSongsCount());
-
         return convertView;
     }
 }
