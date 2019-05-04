@@ -9,20 +9,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
-import com.nhom6.mediaplayer.Manager.ArtistManager;
-import com.nhom6.mediaplayer.Manager.LoveSongManager;
+import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.R;
-import com.nhom6.mediaplayer.adapter.LoveSongAdapter;
-import com.nhom6.mediaplayer.adapter.SingerAdapter;
-import com.nhom6.mediaplayer.model.Artist;
-import com.nhom6.mediaplayer.model.LoveSong;
+import com.nhom6.mediaplayer.adapter.ListSongAdapter;
+import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
 
@@ -30,9 +26,7 @@ public class LoveActivity extends AppCompatActivity {
     //khai báo ListView cho adapter
     private SwipeMenuListView listLoveSong;
     final Context context = this;
-    //khai báo artistManager để loadSong
-    LoveSongManager lovesongsManager = new LoveSongManager();
-    public ArrayList<LoveSong> _lovesongs = new ArrayList<LoveSong>();
+    public ArrayList<Song> _lovesongs = new ArrayList<Song>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +41,10 @@ public class LoveActivity extends AppCompatActivity {
         listLoveSong = (SwipeMenuListView) findViewById(R.id.listLoveSong);
 
         //tiến hành lấy toàn bộ song trong máy
-        _lovesongs = lovesongsManager.loadSong(this);
+        MyDatabaseHelper db=new MyDatabaseHelper(context);
+        _lovesongs=db.GetListSongFavorite();
         //đưa vào adapter để hiển thị
-        LoveSongAdapter listArtistAdapter = new LoveSongAdapter(this,R.layout.row_item_lovesong,_lovesongs);
+        ListSongAdapter listArtistAdapter = new ListSongAdapter(this,R.layout.row_item_lovesong,_lovesongs);
         listLoveSong.setAdapter(listArtistAdapter);
         setSwipeListView();
     }

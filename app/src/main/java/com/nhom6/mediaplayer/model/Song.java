@@ -12,7 +12,7 @@ public class Song {
     private String SongUrl;
     private int Songid;
     private String AlbumArt;
-
+    private int Favorite;
     //constructor
     public Song(){}
 
@@ -100,5 +100,13 @@ public class Song {
 
     public void setSongname(String songname) {
         Songname = songname;
+    }
+
+    public int getFavorite() {
+        return Favorite;
+    }
+
+    public void setFavorite(int favorite) {
+        Favorite = favorite;
     }
 }

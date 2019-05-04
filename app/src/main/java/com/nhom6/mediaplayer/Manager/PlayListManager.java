@@ -2,12 +2,7 @@ package com.nhom6.mediaplayer.Manager;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
-import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.model.PlayList;
 
 
