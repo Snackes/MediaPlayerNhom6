@@ -25,8 +25,9 @@ import java.util.ArrayList;
 public class LoveActivity extends AppCompatActivity {
     //khai báo ListView cho adapter
     private SwipeMenuListView listLoveSong;
-    final Context context = this;
+    public Context context = this;
     public ArrayList<Song> _lovesongs = new ArrayList<Song>();
+    private ListSongAdapter listsongtAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,8 @@ public class LoveActivity extends AppCompatActivity {
         MyDatabaseHelper db=new MyDatabaseHelper(context);
         _lovesongs=db.GetListSongFavorite();
         //đưa vào adapter để hiển thị
-        ListSongAdapter listArtistAdapter = new ListSongAdapter(this,R.layout.row_item_lovesong,_lovesongs);
-        listLoveSong.setAdapter(listArtistAdapter);
+        listsongtAdapter = new ListSongAdapter(this,R.layout.row_item_lovesong,_lovesongs);
+        listLoveSong.setAdapter(listsongtAdapter);
         setSwipeListView();
     }
     private void setSwipeListView() {
@@ -91,14 +92,15 @@ public class LoveActivity extends AppCompatActivity {
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                         dialog.setContentView(R.layout.dialog_data);
                         TextView dialog_title = (TextView) dialog.findViewById(R.id.dialog_title);
-                        dialog_title.setText(String.valueOf("Delete List"));
+                        dialog_title.setText(String.valueOf("Xóa khỏi danh sách"));
 
                         TextView dialog_description = (TextView) dialog.findViewById(R.id.dialog_description);
-                        dialog_description.setText(String.valueOf("You want delete this?"));
+                        dialog_description.setText(String.valueOf("Bạn muốn xóa bài hát này chứ ?"));
 
                         Button buttonCancel = (Button) dialog.findViewById(R.id.buttonCancel);
                         buttonCancel.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
+
                                 dialog.cancel();
                             }
                         });
@@ -106,6 +108,11 @@ public class LoveActivity extends AppCompatActivity {
                         Button buttonOK = (Button) dialog.findViewById(R.id.buttonOK);
                         buttonOK.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
+                                MyDatabaseHelper db=new MyDatabaseHelper(context);
+                                db.deleteSongInFavorite(_lovesongs.get(position).getSongid());
+                                _lovesongs=db.GetListSongFavorite();
+                                listLoveSong.invalidateViews();
+                                listsongtAdapter.notifyDataSetChanged();
                                 dialog.cancel();
                             }
                         });

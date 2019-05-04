@@ -219,13 +219,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Thêm 1 bài hát vào PlayList vào csdl
-    public void addSongForPlayList(PlayList playlist) {
+    public void addSongForPlayList(int idplaylist, int idsong) {
         //Log.i(TAG, "MyDatabaseHelper.addPlayList ... " + PlayList.getTitle());
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_PLAYLIST_ID, playlist.getIDPlayList());
-        values.put(COLUMN_SONG_ID, playlist.getIDsong());
+        values.put(COLUMN_PLAYLIST_ID, idplaylist);
+        values.put(COLUMN_SONG_ID, idsong);
 
         // Trèn một dòng dữ liệu vào bảng.
         db.insert(TABLE_SONG_PLAYLIST, null, values);
@@ -274,6 +274,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    //xóa 1 bài hát khỏi DANH SÁCH YÊU THÍCH
+    public void deleteSongInFavorite(int idsong) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "UPDATE "+TABLE_SONG+" SET "+COLUMN_FAVORITE+"=0 WHERE "+COLUMN_SONG_ID+"="+idsong+"";
+        db.execSQL(selectQuery);
+    }
+
     //Thêm tất cả bài hát đã load được từ máy vào csdl
     public void addSong(ArrayList<Song>_song) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -305,7 +312,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         // return count
         return count;
     }
-
 
     //Thêm bài hát vào yêu thích (Tức bật thuộc tính Favorite = 1)
     public void AddSongFavorite (int idsong){

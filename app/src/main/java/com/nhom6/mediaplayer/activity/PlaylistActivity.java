@@ -101,6 +101,7 @@ public class PlaylistActivity extends AppCompatActivity {
         listView.setAdapter(listPlayListAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
+            //Xem danh sách bài hát khi chọn vào 1 playlist
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PlayList playList=_playlists.get(position);
                 Intent intent = new Intent(context, SongOfPlaylistActivity.class);
