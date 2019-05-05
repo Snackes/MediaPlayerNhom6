@@ -2,6 +2,7 @@ package com.nhom6.mediaplayer.activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,7 +42,6 @@ public class LoveActivity extends AppCompatActivity {
         //find id ListView
         listLoveSong = (SwipeMenuListView) findViewById(R.id.listLoveSong);
 
-        //tiến hành lấy toàn bộ song trong máy
         MyDatabaseHelper db=new MyDatabaseHelper(context);
         _lovesongs=db.GetListSongFavorite();
         //đưa vào adapter để hiển thị
@@ -54,17 +54,6 @@ public class LoveActivity extends AppCompatActivity {
 
             @Override
             public void create(SwipeMenu menu) {
-                // create "delete" item
-                SwipeMenuItem plusItem = new SwipeMenuItem(context);
-                // set item background
-                plusItem.setBackground(R.color.greenic);
-
-                // set item width
-                plusItem.setWidth(100);
-                // set a icon
-                plusItem.setIcon(R.drawable.ic_add);
-                // add to menu
-                menu.addMenuItem(plusItem);
                 SwipeMenuItem deleteItem = new SwipeMenuItem(context);
                 // set item background
                 deleteItem.setBackground(R.color.pinkic);
@@ -84,8 +73,6 @@ public class LoveActivity extends AppCompatActivity {
             public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        break;
-                    case 1:
                         final Dialog dialog = new Dialog(context);
                         dialog.getWindow();
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -105,14 +92,19 @@ public class LoveActivity extends AppCompatActivity {
                             }
                         });
 
+                        //đồng ý xóa
                         Button buttonOK = (Button) dialog.findViewById(R.id.buttonOK);
                         buttonOK.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
                                 MyDatabaseHelper db=new MyDatabaseHelper(context);
                                 db.deleteSongInFavorite(_lovesongs.get(position).getSongid());
                                 _lovesongs=db.GetListSongFavorite();
-                                listLoveSong.invalidateViews();
-                                listsongtAdapter.notifyDataSetChanged();
+                                /*listLoveSong.invalidateViews();
+                                listsongtAdapter.notifyDataSetChanged();*/
+
+                                Intent i=getIntent();
+                                context.startActivity(i);
+                                finish();
                                 dialog.cancel();
                             }
                         });

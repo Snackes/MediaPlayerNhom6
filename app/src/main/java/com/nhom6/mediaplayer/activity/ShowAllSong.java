@@ -102,6 +102,7 @@ public class ShowAllSong extends AppCompatActivity {
                 loveItem.setWidth(100);
                 // set a icon
                 loveItem.setIcon(R.drawable.ic_love);
+            //}
                 // add to menu
                 menu.addMenuItem(loveItem);
 
@@ -113,6 +114,7 @@ public class ShowAllSong extends AppCompatActivity {
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(final int position, SwipeMenu menu, final int index) {
+
                 switch (index) {
                     case 0:
                         final Dialog dialogAdd = new Dialog(context);
@@ -134,7 +136,7 @@ public class ShowAllSong extends AppCompatActivity {
                                 db.addSongForPlayList(_playlists.get(position1).getIDPlayList(),_songs.get(position).getSongid());
                                 Toast.makeText(getApplicationContext(),
                                         "Thêm được rồi vô playlist coi đi e iu...", Toast.LENGTH_LONG).show();
-                                return;
+                                dialogAdd.cancel();
                             }
                         });
                         dialogAdd.setContentView(mView);
@@ -175,7 +177,7 @@ public class ShowAllSong extends AppCompatActivity {
                                                     "Đm chưa nhập tạo cái qq...", Toast.LENGTH_LONG).show();
                                             return;
                                         }
-                                        playlistsManager.CreatePlayList(title,context);
+                                        playlistsManager.CreatePlayListAndAddSong(title,context,_songs.get(position).getSongid());
                                     }
                                 })
                                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -197,8 +199,6 @@ public class ShowAllSong extends AppCompatActivity {
                 }
                 // false : close the menu; true : not close the menu
                 return false;
-
-
             }
         });
 

@@ -24,6 +24,7 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
@@ -81,6 +82,10 @@ public class PlaylistActivity extends AppCompatActivity {
                                     return;
                                 }
                                 playlistsManager.CreatePlayList(title,context);
+                                Intent i=getIntent();
+                                context.startActivity(i);
+                                finish();
+                                dialog.cancel();
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -153,11 +158,11 @@ public class PlaylistActivity extends AppCompatActivity {
                         dialogrepair.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                         dialogrepair.setContentView(R.layout.dialog_repair);
                         TextView dialog_titlerepair = (TextView) dialogrepair.findViewById(R.id.dialog_title_repair);
-                        dialog_titlerepair.setText(String.valueOf("Repair Playlist"));
+                        dialog_titlerepair.setText(String.valueOf("Sửa tên playlist"));
 
                         TextView dialog_descriptionrepair = (TextView) dialogrepair.findViewById(R.id.dialog_description_repair);
-                        dialog_descriptionrepair.setText(String.valueOf("You want delete this?"));
-
+                        final EditText edtnewPlayListName=(EditText)dialogrepair.findViewById(R.id.newnamePlayList);
+                        dialog_descriptionrepair.setText(String.valueOf("Muốn sửa thật không ?"));
                         Button buttonCancelrepair = (Button) dialogrepair.findViewById(R.id.buttonCancel_repair);
                         buttonCancelrepair.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
@@ -168,6 +173,13 @@ public class PlaylistActivity extends AppCompatActivity {
                         Button buttonOKrepair = (Button) dialogrepair.findViewById(R.id.buttonOK_repair);
                         buttonOKrepair.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
+                                String newName= edtnewPlayListName.getText().toString();
+                                edtnewPlayListName.setText(newName);
+                                MyDatabaseHelper db=new MyDatabaseHelper(context);
+                                db.UpdateNamePlaylist(_playlists.get(position).getIDPlayList(),newName);
+                                Intent i=getIntent();
+                                context.startActivity(i);
+                                finish();
                                 dialogrepair.cancel();
                             }
                         });
@@ -181,10 +193,10 @@ public class PlaylistActivity extends AppCompatActivity {
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                         dialog.setContentView(R.layout.dialog_data);
                         TextView dialog_title = (TextView) dialog.findViewById(R.id.dialog_title);
-                        dialog_title.setText(String.valueOf("Delete List"));
+                        dialog_title.setText(String.valueOf("Xóa khỏi danh sách playlist"));
 
                         TextView dialog_description = (TextView) dialog.findViewById(R.id.dialog_description);
-                        dialog_description.setText(String.valueOf("Add new name:"));
+                        dialog_description.setText(String.valueOf("Bạn có muốn xóa playlist này ?"));
 
                         Button buttonCancel = (Button) dialog.findViewById(R.id.buttonCancel);
                         buttonCancel.setOnClickListener(new View.OnClickListener() {
@@ -196,6 +208,11 @@ public class PlaylistActivity extends AppCompatActivity {
                         Button buttonOK = (Button) dialog.findViewById(R.id.buttonOK);
                         buttonOK.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
+                                MyDatabaseHelper db=new MyDatabaseHelper(context);
+                                db.deletePlayList(_playlists.get(position).IDPlayList);
+                                Intent i=getIntent();
+                                context.startActivity(i);
+                                finish();
                                 dialog.cancel();
                             }
                         });

@@ -34,6 +34,7 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
     PlayList playlist;
     TextView PlayListName;
     SwipeMenuListView LvSongInPlayList;
+    ArrayList<Song> _songs = new ArrayList<Song>();
     final Context context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,20 +54,13 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
         this.PlayListName.setText(playlist.getTitle());
         MyDatabaseHelper db = new MyDatabaseHelper(this);
         SongManager sm=new SongManager();
-        ArrayList<String> listIDsong= db.GetListSongInPlayList(this.playlist.getIDPlayList());
-        if(listIDsong.size()==0){
+        _songs= db.GetListSongInPlayList(this.playlist.getIDPlayList());
+        if(_songs.size()==0){
             Toast.makeText(getApplicationContext(), "Méo có gì trong này", Toast.LENGTH_LONG).show();
             // Trở lại MainActivity.
             this.onBackPressed();
             return;
         }
-        ArrayList<Song> _songs = new ArrayList<Song>();
-        for(int i=0; i<listIDsong.size();i++){
-            Song song = sm.loadSongWithID(this,Integer.parseInt(listIDsong.get(i)));
-            _songs.add(song);
-        }
-
-        //đưa vào adapter để hiển thị
         //đưa vào adapter để hiển thị
         ListSongAdapter listSongAdapter = new ListSongAdapter(this,R.layout.row_item_song,_songs);
         LvSongInPlayList.setAdapter(listSongAdapter);
@@ -77,26 +71,6 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
 
             @Override
             public void create(SwipeMenu menu) {
-                // create "delete" item
-                SwipeMenuItem plusItem = new SwipeMenuItem(context);
-                // set item background
-                plusItem.setBackground(R.color.greenic);
-
-                // set item width
-                plusItem.setWidth(100);
-                // set a icon
-                plusItem.setIcon(R.drawable.ic_add);
-                // add to menu
-                menu.addMenuItem(plusItem);
-                SwipeMenuItem loveItem = new SwipeMenuItem(context);
-                // set item background
-                loveItem.setBackground(R.color.pinkwhite);
-                // set item width
-                loveItem.setWidth(100);
-                // set a icon
-                loveItem.setIcon(R.drawable.ic_love);
-                // add to menu
-                menu.addMenuItem(loveItem);
                 SwipeMenuItem deleteItem = new SwipeMenuItem(context);
                 // set item background
                 deleteItem.setBackground(R.color.pinkic);
@@ -116,20 +90,16 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
             public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        break;
-                    case 1:
-                        break;
-                    case 2:
                         final Dialog dialog = new Dialog(context);
                         dialog.getWindow();
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                         dialog.setContentView(R.layout.dialog_data);
                         TextView dialog_title = (TextView) dialog.findViewById(R.id.dialog_title);
-                        dialog_title.setText(String.valueOf("Delete List"));
+                        dialog_title.setText(String.valueOf("Xóa khỏi playlist...!"));
 
                         TextView dialog_description = (TextView) dialog.findViewById(R.id.dialog_description);
-                        dialog_description.setText(String.valueOf("You want delete this?"));
+                        dialog_description.setText(String.valueOf("Bạn có muốn xóa bài hát?"));
 
                         Button buttonCancel = (Button) dialog.findViewById(R.id.buttonCancel);
                         buttonCancel.setOnClickListener(new View.OnClickListener() {
@@ -141,12 +111,13 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
                         Button buttonOK = (Button) dialog.findViewById(R.id.buttonOK);
                         buttonOK.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
+                                MyDatabaseHelper db=new MyDatabaseHelper(context);
+                                db.deleteSongInPlayList(_songs.get(position).getSongid(),playlist.getIDPlayList());
+                                //return;
                                 dialog.cancel();
                             }
                         });
-
                         dialog.show();
-
                         break;
                 }
                 // false : close the menu; true : not close the menu

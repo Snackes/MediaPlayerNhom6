@@ -1,13 +1,17 @@
 package com.nhom6.mediaplayer.Database;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.nhom6.mediaplayer.model.Album;
+import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 
@@ -58,6 +62,24 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             COLUMN_FAVORITE + " INTEGER)";
 
 
+    // Tên bảng: Album.
+    private static final String TABLE_ALBUM = "Album";
+    private static final String COLUMN_SONG_COUNT ="SongCount";
+    private static final String CREATE_TABLE_ALBUM = "CREATE TABLE IF NOT EXISTS " + TABLE_ALBUM +
+            " (" + COLUMN_ALBUM_ID + " INTEGER PRIMARY KEY ," +
+            COLUMN_ALBUM + " TEXT," +
+            COLUMN_ARTIST_NAME + " TEXT," +
+            COLUMN_SONG_COUNT + " INTEGER," +
+            COLUMN_ALBUMART + " TEXT)";
+
+
+    // Tên bảng: Singer.
+    private static final String TABLE_SINGER = "Singer";
+    private static final String CREATE_TABLE_SINGER = "CREATE TABLE IF NOT EXISTS " + TABLE_SINGER +
+            " (" + COLUMN_ARTISTNAME_ID + " INTEGER PRIMARY KEY ," +
+            COLUMN_ARTIST_NAME + " TEXT," +
+            COLUMN_SONG_COUNT + " INTEGER)";
+
 
     public MyDatabaseHelper(Context context)  {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -69,13 +91,17 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_SONG);
         db.execSQL(CREATE_TABLE_PLAYLIST);
+        db.execSQL(CREATE_TABLE_ALBUM);
         db.execSQL(CREATE_TABLE_SONG_PLAYLIST);
+        db.execSQL(CREATE_TABLE_SINGER);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Hủy (drop) bảng cũ nếu nó đã tồn tại.
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SONG);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLAYLIST);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ALBUM);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SINGER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SONG_PLAYLIST);
         // Và tạo lại.
         onCreate(db);
@@ -88,6 +114,24 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         if(count ==0 ) {
             this.addPlayList("Chất");
         }
+    }
+    //Thêm 1 PlayList cùng bài hát muốn thêm vào playlist đó vào csdl
+    public void addPlayListAndAddSong(String NamePlaylist, int idsong) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        int maxIDPlayList=getMaxIDPlayList();
+        values.put(COLUMN_PLAYLIST_ID, maxIDPlayList+1);
+        values.put(COLUMN_PLAYLIST_TITLE, NamePlaylist);
+        // Trèn một dòng dữ liệu vào bảng.
+        db.insert(TABLE_PLAYLIST, null, values);
+
+        ContentValues values1 = new ContentValues();
+        values1.put(COLUMN_PLAYLIST_ID, maxIDPlayList+1);
+        values1.put(COLUMN_SONG_ID, idsong);
+        // Trèn một dòng dữ liệu vào bảng.
+        db.insert(TABLE_SONG_PLAYLIST, null, values1);
+        // Đóng kết nối database.
+        db.close();
     }
 
     //Thêm 1 PlayList vào csdl
@@ -128,19 +172,34 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     //lấy danh sách id bài hát trong một PlayList theo id của PlayList đó trong csdl
-    public ArrayList<String> GetListSongInPlayList(int idPlayList) {
-        String selectQuery = "select "+COLUMN_SONG_ID+" from "+TABLE_SONG_PLAYLIST+" where PlayList_Id="+idPlayList;
+    public ArrayList<Song> GetListSongInPlayList(int idPlayList) {
+//        String selectQuery = "select * from "+TABLE_SONG_PLAYLIST+" where PlayList_Id="+idPlayList;
+        String selectQuery = "SELECT  * FROM " + TABLE_SONG + " ts, "
+                + TABLE_SONG_PLAYLIST + " sp WHERE sp."
+                + COLUMN_PLAYLIST_ID + " = '" + idPlayList
+                + "'" + " AND ts." + COLUMN_SONG_ID + " = "
+                + "sp." + COLUMN_SONG_ID;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery( selectQuery, null);
-
-        ArrayList<String> listIDsong = new ArrayList<String>();
+        ArrayList<Song> listSong = new ArrayList<Song>();
         // Duyệt trên con trỏ, và thêm vào danh sách.
         if (cursor.moveToFirst()) {
             do {
-                listIDsong.add(cursor.getString(0));
+                Song song=new Song();
+                song.setSongid(Integer.parseInt(cursor.getString(0)));
+                song.setSongname(cursor.getString(1));
+                song.setArtistname(cursor.getString(2));
+                song.setArtistnameId(Integer.parseInt(cursor.getString(3)));
+                song.setAlbum(cursor.getString(4));
+                song.setAlbumId(Integer.parseInt(cursor.getString(5)));
+                song.setDuration(Integer.parseInt(cursor.getString(6)));
+                song.setSongUrl(cursor.getString(7));
+                song.setAlbumArt(cursor.getString(8));
+                song.setFavorite(Integer.parseInt(cursor.getString(9)));
+                listSong.add(song);
             } while (cursor.moveToNext());
         }
-        return listIDsong;
+        return listSong;
     }
 
     //Lấy id lớn nhất của PlayList trong csdl
@@ -190,6 +249,27 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return ListSong;
     }
 
+    //Lấy tất cả album có trong csdl
+    public ArrayList<Album> GetListAlbums() {
+        String selectQuery = "select * from "+TABLE_ALBUM;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery( selectQuery, null);
+
+        ArrayList<Album> ListAlbum = new ArrayList<Album>();
+        // Duyệt trên con trỏ, và thêm vào danh sách.
+        if (cursor.moveToFirst()) {
+            do {
+                Album album=new Album();
+                album.setAlbumID(Integer.parseInt(cursor.getString(0)));
+                album.setAlbumTitle(cursor.getString(1));
+                album.setArtistName(cursor.getString(2));
+                album.setSongCount(Integer.parseInt(cursor.getString(3)));
+                album.setAlbumArt(cursor.getString(4));
+                ListAlbum.add(album);
+            } while (cursor.moveToNext());
+        }
+        return ListAlbum;
+    }
 
     //Lấy ra danh sách bài hát yêu thích(Tức có thuộc tính Favorite=1)
     public ArrayList<Song> GetListSongFavorite(){
@@ -241,7 +321,29 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return song;
     }
 
-    //Thêm 1 bài hát vào PlayList
+
+    //Lấy tất cả ca sĩ có trong csdl
+    public ArrayList<Artist> GetListSinger() {
+        String selectQuery = "select * from "+TABLE_SINGER;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery( selectQuery, null);
+
+        ArrayList<Artist> ListArtist = new ArrayList<Artist>();
+        // Duyệt trên con trỏ, và thêm vào danh sách.
+        if (cursor.moveToFirst()) {
+            do {
+                Artist artist=new Artist();
+                artist.setArtistID(Integer.parseInt(cursor.getString(0)));
+                artist.setArtistName(cursor.getString(1));
+                artist.setSongsCount(Integer.parseInt(cursor.getString(2)));
+                ListArtist.add(artist);
+            } while (cursor.moveToNext());
+        }
+        return ListArtist;
+    }
+
+    //Thêm 1 bài hát vào PlayList vào csdl
+
     public void addSongForPlayList(int idplaylist, int idsong) {
         //Log.i(TAG, "MyDatabaseHelper.addPlayList ... " + PlayList.getTitle());
 
@@ -279,21 +381,21 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(playlist.getIDPlayList())});
     }
 
-    //xóa 1 bài hát khỏi PlayList khỏi csdl
+    //xóa 1 bài hát khỏi PlayList
     public void deleteSongInPlayList(int idsong,int idPlayList) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_PLAYLIST, COLUMN_PLAYLIST_ID + " = ?" + COLUMN_SONG_ID +" = ?",
+        db.delete(TABLE_SONG_PLAYLIST, COLUMN_PLAYLIST_ID + " = ? AND "+ COLUMN_SONG_ID +" = ?",
                 new String[] {String.valueOf(idPlayList),String.valueOf(idsong)});
         db.close();
     }
 
     //xóa 1 PlayList khỏi cơ sở dữ liệu
-    public void deletePlayList(PlayList playlist) {
+    public void deletePlayList(int idplaylist) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_SONG_PLAYLIST, COLUMN_PLAYLIST_ID + " = ?",
-                new String[] { String.valueOf(playlist.getIDPlayList()) });
+                new String[] { String.valueOf(idplaylist) });
         db.delete(TABLE_PLAYLIST, COLUMN_PLAYLIST_ID + " = ?",
-                new String[] { String.valueOf(playlist.getIDPlayList()) });
+                new String[] { String.valueOf(idplaylist) });
         db.close();
     }
 
@@ -324,10 +426,59 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         // Đóng kết nối database.
         db.close();
     }
+    //Thêm tất cả ca sĩ đã load được từ máy vào csdl
+    public void addSinger(ArrayList<Artist>_Aritst) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        for(int i=0;i<_Aritst.size();i++){
+            values.put(COLUMN_ARTISTNAME_ID, _Aritst.get(i).getArtistID());
+            values.put(COLUMN_ARTIST_NAME, _Aritst.get(i).getArtistName());
+            values.put(COLUMN_SONG_COUNT, _Aritst.get(i).getSongsCount());
+            db.insert(TABLE_SONG, null, values);
+        }
+        // Đóng kết nối database.
+        db.close();
+    }
+
+    //Thêm tất cả bài hát đã load được từ máy vào csdl
+    public void addAlbum(ArrayList<Album>_album) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        for(int i=0;i<_album.size();i++){
+            values.put(COLUMN_ALBUM_ID, _album.get(i).getAlbumID());
+            values.put(COLUMN_ALBUM, _album.get(i).getAlbumTitle());
+            values.put(COLUMN_ARTIST_NAME, _album.get(i).getArtistName());
+            values.put(COLUMN_SONG_COUNT, _album.get(i).getSongCount());
+            values.put(COLUMN_ALBUMART, _album.get(i).getAlbumArt());
+            db.insert(TABLE_ALBUM, null, values);
+        }
+        // Đóng kết nối database.
+        db.close();
+    }
 
     //Kiểm tra xem trong bảng Song có dữ liệu chưa
     public int CheckTableSong(){
         String countQuery = "SELECT  * FROM " + TABLE_SONG;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        // return count
+        return count;
+    }
+    //Kiểm tra xem trong bảng Singer có dữ liệu chưa
+    public int CheckTableSinger(){
+        String countQuery = "SELECT  * FROM " + TABLE_SINGER;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        // return count
+        return count;
+    }
+    //Kiểm tra xem trong bảng Song có dữ liệu chưa
+    public int CheckTableAlbum(){
+        String countQuery = "SELECT  * FROM " + TABLE_ALBUM;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         int count = cursor.getCount();
@@ -343,5 +494,18 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(selectQuery);
     }
 
+    //xóa 1 PlayList khỏi cơ sở dữ liệu
+    public int UpdateNamePlaylist(int idplaylist,String NewName) {
+/*        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "UPDATE "+TABLE_PLAYLIST+" SET "+COLUMN_PLAYLIST_TITLE+"="+NewName+" WHERE "+COLUMN_PLAYLIST_ID+"="+idplaylist+"";
+        db.execSQL(selectQuery);*/
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PLAYLIST_TITLE, NewName);
+        // updating row
+        return db.update(TABLE_PLAYLIST, values, COLUMN_PLAYLIST_ID + " = ?",
+                new String[] { String.valueOf(idplaylist) });
+    }
 
 }
