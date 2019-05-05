@@ -34,22 +34,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="TextView"
-            android:typeface="monospace"
             android:gravity="center"
+            android:text="TextView"
             android:textColor="#000000"
             android:textSize="14sp"
-            android:layout_marginBottom="25dp"/>
+            android:typeface="monospace" />
+
         <EditText
             android:id="@+id/newnamePlayList"
-            android:layout_width="398dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
             android:hint="@string/playlistName"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textAlignment="center" />
 
     </LinearLayout>
 
