@@ -171,7 +171,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return ListPlayList;
     }
 
-    //lấy danh sách id bài hát trong một PlayList theo id của PlayList đó trong csdl
+    //lấy danh sách bài hát trong một PlayList theo id của PlayList đó trong csdl
     public ArrayList<Song> GetListSongInPlayList(int idPlayList) {
 //        String selectQuery = "select * from "+TABLE_SONG_PLAYLIST+" where PlayList_Id="+idPlayList;
         String selectQuery = "SELECT  * FROM " + TABLE_SONG + " ts, "
@@ -224,7 +224,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     //Lấy tất cả bài hát có trong csdl
     public ArrayList<Song> GetListSong() {
-        String selectQuery = "select * from "+TABLE_SONG;
+        String selectQuery = "select distinct * from "+TABLE_SONG;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery( selectQuery, null);
 
