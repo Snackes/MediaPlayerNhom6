@@ -441,6 +441,16 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         // return count
         return count;
     }
+    //Kiểm tra xem trong bảng Singer có dữ liệu chưa
+    public int CheckTableSinger(){
+        String countQuery = "SELECT  * FROM " + TABLE_SINGER;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        // return count
+        return count;
+    }
     //Kiểm tra xem trong bảng Song có dữ liệu chưa
     public int CheckTableAlbum(){
         String countQuery = "SELECT  * FROM " + TABLE_ALBUM;
