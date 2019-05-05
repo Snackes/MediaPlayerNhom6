@@ -77,7 +77,7 @@
                 android:src="@drawable/adele" />
 
             <TextView
-                android:id="@+id/txtTile2"
+                android:id="@+id/songTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -85,17 +85,17 @@
                 android:text="@string/title"
                 android:textAlignment="center"
                 android:textColor="#FAF6F6"
-                android:textSize="60sp"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/singer2"
+                android:id="@+id/artist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/singer"
                 android:textAlignment="center"
                 android:textColor="#F8F4F4"
-                android:textSize="30sp" />
+                android:textSize="15sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -171,17 +171,19 @@
 
                 <ImageButton
                     android:id="@+id/btnPlayMenu"
+                    android:onClick="PlaySong"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:gravity="center_horizontal"
-                    android:src="@drawable/ic_play_new_main"
+                    android:src="@drawable/ic_play_new"
                     android:tint="@color/cardview_light_background" />
 
                 <ImageButton
                     android:id="@+id/btnNext"
+                    android:onClick="NextSong"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"

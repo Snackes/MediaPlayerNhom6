@@ -3,10 +3,10 @@ package com.nhom6.mediaplayer.activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -203,6 +202,55 @@ public class ShowAllSong extends AppCompatActivity {
             }
         });
 
+        //TODO: CHỖ NÀY HIỆP CODE ĐỂ INTENT THỬ BÀI HÁT QUA CÁI PHÁT NHẠC
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+
+
+                //TODO: khi mình intent 1 item sang PlayActivity mình sẽ gửi 2 thứ: position của item và listID ( toàn bộ )
+                //Lấy item tại vị trí click
+                Song newsong = (Song) parent.getItemAtPosition(position);
+
+                //lấy listID
+                ArrayList<String> lstUrlSong = GetListUrlSong();
+
+                //tạo bundle
+
+                Bundle Package = new Bundle();
+                // nhét thông tin vào bundle
+                Package.putInt("position", position);
+                Package.putInt("SongID", newsong.getSongid());
+                Package.putString("SongName",newsong.getSongname());
+                Package.putString("ArtistName",newsong.getArtistname());
+                Package.putString("AlbumArt", newsong.getAlbumArt() );
+                Package.putString("SongUrl",newsong.getSongUrl());
+                Package.putStringArrayList("lstUrlSong",lstUrlSong);
+
+                //
+                //
+                Intent i = new Intent(context, PlayActivity.class);
+                i.putExtras(Package);
+
+                startActivity(i);
+            }
+        });
+
+
+    }
+
+    //TODO: input : ArrayList<Song> , output : ArrayList<String> là các Url của song
+    private ArrayList<String> GetListUrlSong()
+    {
+        ArrayList<String> lstUrlSong = new ArrayList<String>();
+
+        for (Song item : _songs)
+        {
+            lstUrlSong.add(item.getSongUrl());
+        }
+        return lstUrlSong;
     }
 }

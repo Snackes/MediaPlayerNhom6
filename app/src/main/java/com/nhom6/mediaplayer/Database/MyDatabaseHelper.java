@@ -217,8 +217,31 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
         return ListSong;
     }
+    //Lấy thong tin bai hat theo id
+    public Song GetInfoSong(int idsong){
+        String selectQuery = "select * from "+TABLE_SONG+" WHERE "+COLUMN_SONG_ID+"="+idsong+"";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery( selectQuery, null);
+        // Duyệt trên con trỏ, và thêm vào danh sách.
+        Song song=new Song();
+        if (cursor.moveToFirst()) {
+            do {
+                song.setSongid(Integer.parseInt(cursor.getString(0)));
+                song.setSongname(cursor.getString(1));
+                song.setArtistname(cursor.getString(2));
+                song.setArtistnameId(Integer.parseInt(cursor.getString(3)));
+                song.setAlbum(cursor.getString(4));
+                song.setAlbumId(Integer.parseInt(cursor.getString(5)));
+                song.setDuration(Integer.parseInt(cursor.getString(6)));
+                song.setSongUrl(cursor.getString(7));
+                song.setAlbumArt(cursor.getString(8));
+                song.setFavorite(Integer.parseInt(cursor.getString(9)));
+            } while (cursor.moveToNext());
+        }
+        return song;
+    }
 
-    //Thêm 1 bài hát vào PlayList vào csdl
+    //Thêm 1 bài hát vào PlayList
     public void addSongForPlayList(int idplaylist, int idsong) {
         //Log.i(TAG, "MyDatabaseHelper.addPlayList ... " + PlayList.getTitle());
 
