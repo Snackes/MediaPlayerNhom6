@@ -36,10 +36,6 @@ import java.util.List;
 public class BackgroundAudioService extends MediaBrowserServiceCompat implements MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 
 
-
-
-
-
     //
     public String Songname;
     public String Artistname;
@@ -71,7 +67,6 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
             }
         }
     };
-
 
 
     @Override
