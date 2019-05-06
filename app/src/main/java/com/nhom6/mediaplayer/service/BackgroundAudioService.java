@@ -35,8 +35,23 @@ import java.util.List;
 
 public class BackgroundAudioService extends MediaBrowserServiceCompat implements MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 
+
     ////////////////////////
     // list danh sách Url
+
+
+    //
+    public String Songname;
+    public String Artistname;
+    public String Album;
+    public String SongUrl;
+    public String AlbumArt;
+    public Integer ArtistnameId;
+    public Integer AlbumId;
+    public Integer Duration;
+    public Integer Songid;
+    //
+
     public ArrayList<String> lstUrl = new ArrayList<String>();
     //list danh sách ID
     public ArrayList<Integer> lstID = new ArrayList<Integer>();
@@ -66,7 +81,6 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
             }
         }
     };
-
 
 
     @Override

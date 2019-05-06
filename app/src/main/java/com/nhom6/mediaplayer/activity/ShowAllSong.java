@@ -229,7 +229,7 @@ public class ShowAllSong extends AppCompatActivity {
 
                 //
                 //
-                Intent i = new Intent(context, PlayActivity.class);
+                Intent i = new Intent(context, PlayScreenActivity.class);
                 i.putExtras(Package);
 
                 startActivity(i);
