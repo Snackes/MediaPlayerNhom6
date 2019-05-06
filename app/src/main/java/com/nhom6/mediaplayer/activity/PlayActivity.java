@@ -36,14 +36,14 @@ public class PlayActivity extends AppCompatActivity {
 
     //
     public Song song;
-    public String Songname;
-    public String Artistname;
-    public String Album;
-    public String SongUrl;
-    public String AlbumArt;
-    public Integer ArtistnameId;
-    public Integer AlbumId;
-    public Integer Duration;
+//    public String Songname;
+//    public String Artistname;
+//    public String Album;
+//    public String SongUrl;
+//    public String AlbumArt;
+//    public Integer ArtistnameId;
+//    public Integer AlbumId;
+//    public Integer Duration;
     public Integer Songid;
 
     //
@@ -58,6 +58,8 @@ public class PlayActivity extends AppCompatActivity {
 
     private static final int STATE_PAUSED = 0;
     private static final int STATE_PLAYING = 1;
+    private static final int STATE_SHUFFLE = 2;
+    private static final int STATE_REPEAT = 3;
     private int currentState;
     private MediaBrowserCompat mediaBrowserCompat;
     private MediaControllerCompat mediaControllerCompat;
