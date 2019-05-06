@@ -16,8 +16,10 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.MainActivity;
 import com.nhom6.mediaplayer.R;
+import com.nhom6.mediaplayer.model.Song;
 import com.nhom6.mediaplayer.service.BackgroundAudioService;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class PlayActivity extends AppCompatActivity {
     public TextView nameArtist;
 
     //
+    public Song song;
     public String Songname;
     public String Artistname;
     public String Album;
@@ -42,10 +45,15 @@ public class PlayActivity extends AppCompatActivity {
     public Integer AlbumId;
     public Integer Duration;
     public Integer Songid;
-    public Integer posotion;
+
     //
     Bundle Package;
+    public Integer position;
     ArrayList<String> lstUrlSong = new ArrayList<String>();
+    ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
+    //
+    //tạo object Database
+    MyDatabaseHelper db = new MyDatabaseHelper(this);
     //
 
     private static final int STATE_PAUSED = 0;
@@ -80,34 +88,24 @@ public class PlayActivity extends AppCompatActivity {
         Intent i = getIntent();
         //lấy bundle
         Package = i.getExtras();
-
-        posotion = Package.getInt("position");
-        SongUrl = Package.getString("SongUrl");
-        AlbumArt = Package.getString("AlbumArt");
-        Songname = Package.getString("SongName");
-        Artistname = Package.getString("ArtistName");
         lstUrlSong = Package.getStringArrayList("lstUrlSong");
+        lstIDSong = Package.getIntegerArrayList("lstIDSong");
+        position = Package.getInt("position");
+
+        //lấy id theo position
+        Songid = lstIDSong.get(position);
+
+        //tạo object Song để chứa
+        song = db.GetInfoSong(Songid);
+        //song này để hiển thị
+        Screen(song);
+
+
 
 
 
 
         //
-
-        //decode Bitmap
-        Bitmap bm = BitmapFactory.decodeFile(AlbumArt);
-        // nếu bitmap null == không có hình ta sẽ thay bằng hình mặc định
-        if(bm != null)
-        {
-            img.setImageBitmap(bm);
-        }
-        else
-        {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.adele);
-            img.setImageBitmap(bitmap);
-        }
-        nameSong.setText(Songname);
-        nameArtist.setText(Artistname);
-
 
 
 
@@ -119,15 +117,23 @@ public class PlayActivity extends AppCompatActivity {
         ///
 
 
-
-
-
-
-
-
-
-
-
+    }
+    public void Screen(Song song)
+    {
+        //decode Bitmap
+        Bitmap bm = BitmapFactory.decodeFile(song.getAlbumArt());
+        // nếu bitmap null == không có hình ta sẽ thay bằng hình mặc định
+        if(bm != null)
+        {
+            img.setImageBitmap(bm);
+        }
+        else
+        {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.adele);
+            img.setImageBitmap(bitmap);
+        }
+        nameSong.setText(song.getSongname());
+        nameArtist.setText(song.getArtistname());
     }
 
 
@@ -149,20 +155,91 @@ public class PlayActivity extends AppCompatActivity {
     }
     public void NextSong(View view)
     {
-        if(currentState == STATE_PAUSED)
+        //đổi hình theo
+        if ( position < lstIDSong.size() -1 ) // check if next song is there or not
+        {
+            int idNext = lstIDSong.get( position + 1);
+            song = db.GetInfoSong(idNext);
+            position = position +1;
+            Screen(song);
+        }
+        else
+        {
+            int idNext = lstIDSong.get(0);
+            song = db.GetInfoSong(idNext);
+            position = 0;
+            Screen(song);
+        }
+
+
+        //mỗi lần next Song sẽ tiến hành pause =>> start lại
+
+        //pause
+        mediaControllerCompat.getTransportControls().pause();
+        currentState = STATE_PAUSED;
+        //next
+
+        if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PAUSED)
         {
             mediaControllerCompat.getTransportControls().skipToNext();
-            currentState = STATE_PLAYING;
+            currentState = STATE_PAUSED;
+
+
         }else
         {
             if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING)
             {
                 mediaControllerCompat.getTransportControls().skipToNext();
+                currentState = STATE_PLAYING;
             }
-            currentState = STATE_PAUSED;
         }
 
+
     }
+    public void PreviousSong(View view)
+    {
+        //đổi hình theo
+        if ( position > 0 ) // check if next song is there or not
+        {
+            int idNext = lstIDSong.get( position -1 );
+            song = db.GetInfoSong(idNext);
+            position = position - 1;
+            Screen(song);
+        }
+        else
+        {
+            int idNext = lstIDSong.get(lstIDSong.size() -1);
+            song = db.GetInfoSong(idNext);
+            position = lstIDSong.size() -1 ;
+            Screen(song);
+        }
+
+
+        //mỗi lần next Song sẽ tiến hành pause =>> start lại
+
+        //pause
+        mediaControllerCompat.getTransportControls().pause();
+        currentState = STATE_PAUSED;
+        //next
+
+        if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PAUSED)
+        {
+            mediaControllerCompat.getTransportControls().skipToPrevious();
+            currentState = STATE_PAUSED;
+
+
+        }else
+        {
+            if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING)
+            {
+                mediaControllerCompat.getTransportControls().skipToPrevious();
+                currentState = STATE_PLAYING;
+            }
+        }
+
+
+    }
+
 
     @Override
     protected void onPostResume() {
@@ -214,7 +291,7 @@ public class PlayActivity extends AppCompatActivity {
                 mediaControllerCompat.setMediaController(PlayActivity.this, mediaControllerCompat);
 
                 mediaControllerCompat.getMediaController(PlayActivity.this);
-                mediaControllerCompat.getTransportControls().playFromMediaId(String.valueOf(SongUrl) ,Package);
+                mediaControllerCompat.getTransportControls().playFromMediaId("chokhoinull" ,Package);
 
 
 

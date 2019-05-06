@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -24,7 +25,9 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 
+import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.R;
+import com.nhom6.mediaplayer.model.Song;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,8 +50,12 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
     public Integer AlbumId;
     public Integer Duration;
     public Integer Songid;
+    //
     public ArrayList<String> lstUrl = new ArrayList<String>();
+    public ArrayList<Integer> lstID = new ArrayList<Integer>();
     public Integer position;
+    public Song song;
+    MyDatabaseHelper db = new MyDatabaseHelper(this);
     //
 
     //tạo mediplayer
@@ -79,6 +86,14 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 
     private void initMediaPlayer()
     {
+        if(mediaPlayer != null)
+        {
+            mediaPlayer.release();
+            mediaPlayer = null;
+            mediaSessionCompat.release();
+        }
+
+
         mediaPlayer =  new MediaPlayer();
         mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
     }
@@ -105,12 +120,56 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
     }
 
     private MediaSessionCompat.Callback mediaSessionCallBack = new MediaSessionCompat.Callback() {
+
+
+        @Override
+        public void onSkipToPrevious() {
+            super.onSkipToPrevious();
+            if ( position > 0 ) // check if next song is there or not
+            {
+                //tạo song mới để cập nhật
+
+                try {
+                    mediaPlayer.reset();
+                    mediaPlayer.setDataSource(lstUrl.get(position - 1));
+                    mediaPlayer.prepareAsync();
+                    mediaPlayer.start();
+                    position = position  - 1 ;
+                    song = db.GetInfoSong(lstID.get(position));
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else // play last song
+            {
+                mediaPlayer.reset();
+                try {
+                    mediaPlayer.reset();
+
+                    mediaPlayer.setDataSource(lstUrl.get(lstUrl.size() - 1));
+                    mediaPlayer.prepareAsync();
+                    mediaPlayer.start();
+                    position = lstUrl.size() - 1 ;
+                    //tạo song mới để cập nhật
+                    song = db.GetInfoSong(lstID.get(position));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            initMediaSessionMetadata();
+            showPauseNotification();
+
+        }
+
         @Override
         public void onSkipToNext() {
             super.onSkipToNext();
 
-            if ( position < lstUrl.size() -1 ) // check if next song is there or not
+            if ( position < lstID.size() -1 ) // check if next song is there or not
             {
+                //tạo song mới để cập nhật
 
                 try {
                     mediaPlayer.reset();
@@ -118,7 +177,8 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
                     mediaPlayer.prepareAsync();
                     mediaPlayer.start();
                     position = position +1 ;
-                    //setMediaPlayBackState(PlaybackStateCompat.STATE_PLAYING);
+                    song = db.GetInfoSong(lstID.get(position));
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -133,11 +193,15 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
                     mediaPlayer.prepareAsync();
                     mediaPlayer.start();
                     position = 0 ;
-                    //setMediaPlayBackState(PlaybackStateCompat.STATE_PLAYING);
+                    //tạo song mới để cập nhật
+                    song = db.GetInfoSong(lstID.get(position));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+
+            initMediaSessionMetadata();
+            showPauseNotification();
 
 
 
@@ -150,6 +214,8 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
             if( !successfullyRetrievedAudioFocus() ) {
                 return;
             }
+
+
 
             mediaSessionCompat.setActive(true);
             setMediaPlayBackState(PlaybackStateCompat.STATE_PLAYING);
@@ -174,25 +240,21 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 
 
             lstUrl = Package.getStringArrayList("lstUrlSong");
+            lstID = Package.getIntegerArrayList("lstIDSong");
             position = Package.getInt("position");
 
-
-//             //
-//            AlbumArt = Package.getString("AlbumArt");
-//            Songname = Package.getString("SongName");
-//            Artistname = Package.getString("ArtistName");
-//            //
-
+            // lấy song theo id
+            song = db.GetInfoSong(lstID.get(position));
 
             try {
 
                 try {
-                    mediaPlayer.setDataSource(mediaId);
+                    mediaPlayer.setDataSource(lstUrl.get(position));
 
                 } catch (IllegalStateException e) {
                     mediaPlayer.release();
                     initMediaPlayer();
-                    mediaPlayer.setDataSource(mediaId);
+                    mediaPlayer.setDataSource(lstUrl.get(position));
                 }
 
 
@@ -233,7 +295,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
         }
 
 
-        builder.addAction(new NotificationCompat.Action(R.drawable.ic_pause,"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        builder.addAction(new NotificationCompat.Action(R.drawable.ic_pause_new,"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView().setMediaSession(mediaSessionCompat.getSessionToken()));
         builder.setSmallIcon(R.mipmap.ic_launcher);
         NotificationManagerCompat.from(BackgroundAudioService.this).notify(1, builder.build());
@@ -247,7 +309,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
         }
 
 
-        builder.addAction(new NotificationCompat.Action(R.drawable.ic_play,"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        builder.addAction(new NotificationCompat.Action(R.drawable.ic_play_new,"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView().setMediaSession(mediaSessionCompat.getSessionToken()));
         builder.setSmallIcon(R.mipmap.ic_launcher);
         NotificationManagerCompat.from(BackgroundAudioService.this).notify(1, builder.build());
@@ -275,12 +337,12 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
         //chỗ này là notification ở màn hình khóa
         MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
         //Notification icon in card
-        metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON,BitmapFactory.decodeFile(AlbumArt));
-        metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART,BitmapFactory.decodeFile(AlbumArt));
+        metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON,Screen(song));
+        metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART,Screen(song));
         //
-        metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, BitmapFactory.decodeFile(AlbumArt));
-        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, Songname);
-        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, Artistname);
+        metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART,Screen(song));
+        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, song.getSongname());
+        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, song.getArtistname());
         metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, 1);
         metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, 1);
 
@@ -359,5 +421,21 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
     public int onStartCommand(Intent intent, int flags, int startId) {
         MediaButtonReceiver.handleIntent(mediaSessionCompat, intent);
         return super.onStartCommand(intent, flags, startId);
+    }
+    public Bitmap Screen(Song song)
+    {
+        //decode Bitmap
+        Bitmap bm = BitmapFactory.decodeFile(song.getAlbumArt());
+        // nếu bitmap null == không có hình ta sẽ thay bằng hình mặc định
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.adele);
+        if(bm != null)
+        {
+            return bm;
+        }
+        else
+        {
+            return bitmap;
+        }
+
     }
 }

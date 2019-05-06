@@ -217,18 +217,15 @@ public class ShowAllSong extends AppCompatActivity {
 
                 //lấy listID
                 ArrayList<String> lstUrlSong = GetListUrlSong();
+                ArrayList<Integer> lstIDSong = GetListIDSong();
 
                 //tạo bundle
 
                 Bundle Package = new Bundle();
                 // nhét thông tin vào bundle
                 Package.putInt("position", position);
-                Package.putInt("SongID", newsong.getSongid());
-                Package.putString("SongName",newsong.getSongname());
-                Package.putString("ArtistName",newsong.getArtistname());
-                Package.putString("AlbumArt", newsong.getAlbumArt() );
-                Package.putString("SongUrl",newsong.getSongUrl());
                 Package.putStringArrayList("lstUrlSong",lstUrlSong);
+                Package.putIntegerArrayList("lstIDSong",lstIDSong);
 
                 //
                 //
@@ -252,5 +249,16 @@ public class ShowAllSong extends AppCompatActivity {
             lstUrlSong.add(item.getSongUrl());
         }
         return lstUrlSong;
+    }
+    //TODO: input : ArrayList<Song> , output : ArrayList<Integer> là các ID của song
+    private ArrayList<Integer> GetListIDSong()
+    {
+        ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
+
+        for (Song item : _songs)
+        {
+            lstIDSong.add(item.getSongid());
+        }
+        return lstIDSong;
     }
 }
