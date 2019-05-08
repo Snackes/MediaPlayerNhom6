@@ -1,5 +1,6 @@
 package com.nhom6.mediaplayer.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -25,10 +27,11 @@ import java.util.ArrayList;
 
 public class LoveActivity extends AppCompatActivity {
     //khai báo ListView cho adapter
+    Activity activity=this;
     private SwipeMenuListView listLoveSong;
     public Context context = this;
     public ArrayList<Song> _lovesongs = new ArrayList<Song>();
-    private ListSongAdapter listsongtAdapter;
+    public ListSongAdapter listsongtAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,10 @@ public class LoveActivity extends AppCompatActivity {
         MyDatabaseHelper db=new MyDatabaseHelper(context);
         _lovesongs=db.GetListSongFavorite();
         //đưa vào adapter để hiển thị
-        listsongtAdapter = new ListSongAdapter(this,R.layout.row_item_lovesong,_lovesongs);
+/*        listsongtAdapter = new ListSongAdapter(this,R.layout.row_item_lovesong,_lovesongs);
+        listLoveSong.setAdapter(listsongtAdapter);*/
+        activity=this;
+        listsongtAdapter = new ListSongAdapter(this,_lovesongs);
         listLoveSong.setAdapter(listsongtAdapter);
         setSwipeListView();
     }
@@ -99,13 +105,15 @@ public class LoveActivity extends AppCompatActivity {
                                 MyDatabaseHelper db=new MyDatabaseHelper(context);
                                 db.deleteSongInFavorite(_lovesongs.get(position).getSongid());
                                 _lovesongs=db.GetListSongFavorite();
-                                /*listLoveSong.invalidateViews();
-                                listsongtAdapter.notifyDataSetChanged();*/
-
-                                Intent i=getIntent();
-                                context.startActivity(i);
-                                finish();
+                                listsongtAdapter = new ListSongAdapter(activity,_lovesongs);
+                                listLoveSong.setAdapter(listsongtAdapter);
+                                setSwipeListView();
                                 dialog.cancel();
+
+                                /*Intent i=getIntent();
+                                context.startActivity(i);
+                                finish();*/
+
                             }
                         });
 

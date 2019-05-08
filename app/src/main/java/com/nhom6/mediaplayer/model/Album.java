@@ -1,8 +1,7 @@
 package com.nhom6.mediaplayer.model;
+import java.io.Serializable;
 
-import android.graphics.Bitmap;
-
-public class Album {
+public class Album implements Serializable {
     //
     private int albumID; // id của album
     private String albumTitle; // tên album

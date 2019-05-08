@@ -108,13 +108,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Nếu trong bảng PlayList chưa có dữ liệu,
-    // Trèn vào mặc định 2 bản ghi.
     public void createDefaultPlayListsIfNeed()  {
         int count = this.getPlayListCount();
         if(count ==0 ) {
             this.addPlayList("Chất");
         }
     }
+
     //Thêm 1 PlayList cùng bài hát muốn thêm vào playlist đó vào csdl
     public void addPlayListAndAddSong(String NamePlaylist, int idsong) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -179,6 +179,64 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_PLAYLIST_ID + " = '" + idPlayList
                 + "'" + " AND ts." + COLUMN_SONG_ID + " = "
                 + "sp." + COLUMN_SONG_ID;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery( selectQuery, null);
+        ArrayList<Song> listSong = new ArrayList<Song>();
+        // Duyệt trên con trỏ, và thêm vào danh sách.
+        if (cursor.moveToFirst()) {
+            do {
+                Song song=new Song();
+                song.setSongid(Integer.parseInt(cursor.getString(0)));
+                song.setSongname(cursor.getString(1));
+                song.setArtistname(cursor.getString(2));
+                song.setArtistnameId(Integer.parseInt(cursor.getString(3)));
+                song.setAlbum(cursor.getString(4));
+                song.setAlbumId(Integer.parseInt(cursor.getString(5)));
+                song.setDuration(Integer.parseInt(cursor.getString(6)));
+                song.setSongUrl(cursor.getString(7));
+                song.setAlbumArt(cursor.getString(8));
+                song.setFavorite(Integer.parseInt(cursor.getString(9)));
+                listSong.add(song);
+            } while (cursor.moveToNext());
+        }
+        return listSong;
+    }
+
+    //lấy danh sách bài hát trong một Album theo id của Album đó trong csdl
+    public ArrayList<Song> GetListSongInAlbum(int idAlbum) {
+        //        String selectQuery = "select * from "+TABLE_SONG_PLAYLIST+" where PlayList_Id="+idPlayList;
+        String selectQuery = "SELECT  * FROM " + TABLE_SONG+
+                " WHERE "
+                + COLUMN_ALBUM_ID + " = " + idAlbum;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery( selectQuery, null);
+        ArrayList<Song> listSong = new ArrayList<Song>();
+        // Duyệt trên con trỏ, và thêm vào danh sách.
+        if (cursor.moveToFirst()) {
+            do {
+                Song song=new Song();
+                song.setSongid(Integer.parseInt(cursor.getString(0)));
+                song.setSongname(cursor.getString(1));
+                song.setArtistname(cursor.getString(2));
+                song.setArtistnameId(Integer.parseInt(cursor.getString(3)));
+                song.setAlbum(cursor.getString(4));
+                song.setAlbumId(Integer.parseInt(cursor.getString(5)));
+                song.setDuration(Integer.parseInt(cursor.getString(6)));
+                song.setSongUrl(cursor.getString(7));
+                song.setAlbumArt(cursor.getString(8));
+                song.setFavorite(Integer.parseInt(cursor.getString(9)));
+                listSong.add(song);
+            } while (cursor.moveToNext());
+        }
+        return listSong;
+    }
+
+    //lấy danh sách bài hát trong một ca sĩ theo id của ca sĩ đó trong csdl
+    public ArrayList<Song> GetListSongOfArtist(int idArtist) {
+        //        String selectQuery = "select * from "+TABLE_SONG_PLAYLIST+" where PlayList_Id="+idPlayList;
+        String selectQuery = "SELECT  * FROM " + TABLE_SONG+
+                " WHERE "
+                + COLUMN_ARTISTNAME_ID + " = " + idArtist;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery( selectQuery, null);
         ArrayList<Song> listSong = new ArrayList<Song>();
@@ -401,6 +459,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         // Đóng kết nối database.
         db.close();
     }
+
     //Thêm tất cả ca sĩ đã load được từ máy vào csdl
     public void addSinger(ArrayList<Artist>_Aritst) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -441,6 +500,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         // return count
         return count;
     }
+
     //Kiểm tra xem trong bảng Singer có dữ liệu chưa
     public int CheckTableSinger(){
         String countQuery = "SELECT  * FROM " + TABLE_SINGER;
@@ -451,11 +511,24 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         // return count
         return count;
     }
+
     //Kiểm tra xem trong bảng Song có dữ liệu chưa
     public int CheckTableAlbum(){
         String countQuery = "SELECT  * FROM " + TABLE_ALBUM;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        // return count
+        return count;
+    }
+
+    //Lấy ra danh sách bài hát yêu thích(Tức có thuộc tính Favorite=1)
+    public int CheckSongFavorite(int idsong){
+        String selectQuery = "select * from "+TABLE_SONG+" WHERE "+COLUMN_FAVORITE+"=1"+
+                " AND "+ COLUMN_SONG_ID +"="+idsong+"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
         int count = cursor.getCount();
         cursor.close();
         // return count

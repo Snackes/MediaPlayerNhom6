@@ -1,9 +1,13 @@
 package com.nhom6.mediaplayer.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
@@ -12,6 +16,7 @@ import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
 import com.nhom6.mediaplayer.adapter.SingerAdapter;
+import com.nhom6.mediaplayer.model.Album;
 import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.PlayList;
 
@@ -19,7 +24,8 @@ import java.util.ArrayList;
 
 public class SingerActivity extends AppCompatActivity {
     //khai báo ListView cho adapter
-    private ListView listSinger;
+    private ListView listViewSinger;
+    final Context context=this;
 
     //khai báo artistManager để loadSong
     ArtistManager artistsManager = new ArtistManager();
@@ -36,7 +42,7 @@ public class SingerActivity extends AppCompatActivity {
 
 
         //find id ListView
-        listSinger = (ListView) findViewById(R.id.listViewSinger);
+        listViewSinger = (ListView) findViewById(R.id.listViewSinger);
         //tiến hành lấy toàn bộ song trong máy
         MyDatabaseHelper db=new MyDatabaseHelper(this);
         //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
@@ -52,6 +58,20 @@ public class SingerActivity extends AppCompatActivity {
 
         //đưa vào adapter để hiển thị
         SingerAdapter listArtistAdapter = new SingerAdapter(this,R.layout.row_item_singer,_artists);
-        listSinger.setAdapter(listArtistAdapter);
+        listViewSinger.setAdapter(listArtistAdapter);
+        ClickItemArtist();
+    }
+    //Xử lí khi click vào 1 ca sĩ bất kì
+    public void ClickItemArtist(){
+        listViewSinger.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            //Xem danh sách bài hát khi chọn vào 1 album
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Artist artist=_artists.get(position);
+                Intent intent = new Intent(context, SongOfPlaylistActivity.class);
+                intent.putExtra("Singer", artist);
+                startActivity(intent);
+            }
+        });
     }
 }
