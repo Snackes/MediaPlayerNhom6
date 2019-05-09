@@ -9,11 +9,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.ArtistManager;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.R;
+import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
 import com.nhom6.mediaplayer.adapter.SingerAdapter;
 import com.nhom6.mediaplayer.model.Album;
@@ -22,11 +24,11 @@ import com.nhom6.mediaplayer.model.PlayList;
 
 import java.util.ArrayList;
 
-public class SingerActivity extends AppCompatActivity {
+public class SingerActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     //khai báo ListView cho adapter
     private ListView listViewSinger;
     final Context context=this;
-
+    private SearchView searchView;
     //khai báo artistManager để loadSong
     ArtistManager artistsManager = new ArtistManager();
     public ArrayList<Artist> _artists = new ArrayList<Artist>();
@@ -60,6 +62,9 @@ public class SingerActivity extends AppCompatActivity {
         SingerAdapter listArtistAdapter = new SingerAdapter(this,R.layout.row_item_singer,_artists);
         listViewSinger.setAdapter(listArtistAdapter);
         ClickItemArtist();
+
+        searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
     }
     //Xử lí khi click vào 1 ca sĩ bất kì
     public void ClickItemArtist(){
@@ -73,5 +78,21 @@ public class SingerActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        String text = newText;
+        MyDatabaseHelper db = new MyDatabaseHelper(this);
+        _artists = db.SearchSinger(text);
+        SingerAdapter listArtistAdapter = new SingerAdapter(this,R.layout.row_item_singer,_artists);
+        listViewSinger.setAdapter(listArtistAdapter);
+        ClickItemArtist();
+        return false;
     }
 }
