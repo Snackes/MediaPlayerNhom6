@@ -1,6 +1,7 @@
 package com.nhom6.mediaplayer.activity;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,13 +34,14 @@ import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
 import com.nhom6.mediaplayer.model.PlayList;
+import com.nhom6.mediaplayer.model.Song;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class PlaylistActivity extends AppCompatActivity {
-
+public class PlaylistActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+    private SearchView searchView;
     Activity activity=this;
     final Context context = this;
     private Button buttonCreatePlaylist;
@@ -68,6 +71,11 @@ public class PlaylistActivity extends AppCompatActivity {
         //gọi hàm xử lí khi click vào 1 playlist
         clickItemPlaylist();
         setSwipeListView();
+
+        searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
+
+
     }
     //xử lí khi click vào 1 playlist
     public void clickItemPlaylist(){
@@ -82,6 +90,7 @@ public class PlaylistActivity extends AppCompatActivity {
             }
         });
     }
+
     //Tạo mới 1 playlist
     public void CreatePLaylist(){
         buttonCreatePlaylist.setOnClickListener(new View.OnClickListener() {
@@ -245,4 +254,20 @@ public class PlaylistActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        String text = newText;
+        MyDatabaseHelper db = new MyDatabaseHelper(this);
+        _playlists = db.SearchPlayList(text);
+        //đưa vào adapter để hiển thị
+        PlaylistAdapter listPlayListAdapter = new PlaylistAdapter(this,_playlists);
+        listView.setAdapter(listPlayListAdapter);
+        return false;
+    }
 }

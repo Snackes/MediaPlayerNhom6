@@ -379,7 +379,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return song;
     }
 
-
     //Lấy tất cả ca sĩ có trong csdl
     public ArrayList<Artist> GetListSinger() {
         String selectQuery = "select * from "+TABLE_SINGER;
@@ -493,7 +492,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             values.put(COLUMN_ARTISTNAME_ID, _Aritst.get(i).getArtistID());
             values.put(COLUMN_ARTIST_NAME, _Aritst.get(i).getArtistName());
             values.put(COLUMN_SONG_COUNT, _Aritst.get(i).getSongsCount());
-            db.insert(TABLE_SONG, null, values);
+            db.insert(TABLE_SINGER, null, values);
         }
         // Đóng kết nối database.
         db.close();
@@ -579,6 +578,101 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         // updating row
         return db.update(TABLE_PLAYLIST, values, COLUMN_PLAYLIST_ID + " = ?",
                 new String[] { String.valueOf(idplaylist) });
+    }
+
+
+    //Tìm kiếm danh sách bài hát theo chuỗi nhập vào
+    public ArrayList<Song> SearchSong(String Chuoi){
+        String selectQuery = "SELECT  * FROM " + TABLE_SONG
+                + " WHERE "
+                + COLUMN_SONG_NAME +
+                " LIKE  '"+Chuoi+"%'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery( selectQuery, null);
+        ArrayList<Song> listSong = new ArrayList<Song>();
+        // Duyệt trên con trỏ, và thêm vào danh sách.
+        if (cursor.moveToFirst()) {
+            do {
+                Song song=new Song();
+                song.setSongid(Integer.parseInt(cursor.getString(0)));
+                song.setSongname(cursor.getString(1));
+                song.setArtistname(cursor.getString(2));
+                song.setArtistnameId(Integer.parseInt(cursor.getString(3)));
+                song.setAlbum(cursor.getString(4));
+                song.setAlbumId(Integer.parseInt(cursor.getString(5)));
+                song.setDuration(Integer.parseInt(cursor.getString(6)));
+                song.setSongUrl(cursor.getString(7));
+                song.setAlbumArt(cursor.getString(8));
+                song.setFavorite(Integer.parseInt(cursor.getString(9)));
+                listSong.add(song);
+            } while (cursor.moveToNext());
+        }
+        return listSong;
+    }
+
+    //Tìm kiếm danh sách Playlist theo chuỗi nhập vào
+    public ArrayList<PlayList> SearchPlayList(String Chuoi){
+        String selectQuery = "SELECT  * FROM " + TABLE_PLAYLIST
+                + " WHERE "
+                + COLUMN_PLAYLIST_TITLE +
+                " LIKE  '"+Chuoi+"%'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery( selectQuery, null);
+        ArrayList<PlayList> ListPlayList = new ArrayList<PlayList>();
+        // Duyệt trên con trỏ, và thêm vào danh sách.
+        if (cursor.moveToFirst()) {
+            do {
+                PlayList playlist = new PlayList();
+                playlist.setIDPlayList(Integer.parseInt(cursor.getString(0)));
+                playlist.setTitle(cursor.getString(1));
+                // Thêm vào danh sách.
+                ListPlayList.add(playlist);
+            } while (cursor.moveToNext());
+        }
+        return ListPlayList;
+    }
+
+    //Tìm kiếm danh sách Album theo chuỗi nhập vào
+    public ArrayList<Album> SearchAlbum(String Chuoi){
+        String selectQuery = "SELECT  * FROM " + TABLE_ALBUM
+                + " WHERE "
+                + COLUMN_ALBUM +
+                " LIKE  '"+Chuoi+"%'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery( selectQuery, null);
+        ArrayList<Album> ListAlbum = new ArrayList<Album>();
+        // Duyệt trên con trỏ, và thêm vào danh sách.
+        if (cursor.moveToFirst()) {
+            do {
+                Album album=new Album();
+                album.setAlbumID(Integer.parseInt(cursor.getString(0)));
+                album.setAlbumTitle(cursor.getString(1));
+                album.setArtistName(cursor.getString(2));
+                album.setSongCount(Integer.parseInt(cursor.getString(3)));
+                album.setAlbumArt(cursor.getString(4));
+                ListAlbum.add(album);
+            } while (cursor.moveToNext());
+        }
+        return ListAlbum;
+    }
+
+    //Tìm kiếm danh sách Artist theo chuỗi nhập vào
+    public ArrayList<Artist> SearchSinger(String Chuoi){
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("select * from " +
+                TABLE_SINGER + " where " + COLUMN_ARTIST_NAME + " like ?", new String[] { "%" + Chuoi + "%" });
+        ArrayList<Artist> ListArtist = new ArrayList<Artist>();
+        // Duyệt trên con trỏ, và thêm vào danh sách.
+        if (cursor.moveToFirst()) {
+            do {
+                Artist artist=new Artist();
+                artist.setArtistID(Integer.parseInt(cursor.getString(0)));
+                artist.setArtistName(cursor.getString(1));
+                artist.setSongsCount(Integer.parseInt(cursor.getString(2)));
+                ListArtist.add(artist);
+            } while (cursor.moveToNext());
+        }
+        return ListArtist;
     }
 
 }
