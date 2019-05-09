@@ -71,6 +71,46 @@ public class PlayActivity extends AppCompatActivity {
     private MediaBrowserCompat mediaBrowserCompat;
     private MediaControllerCompat mediaControllerCompat;
 
+    public ImageButton btn_play;
+    public CircleImageView img;
+    public  TextView nameSong ;
+    public TextView nameArtist;
+
+    //
+    public Song song;
+//    public String Songname;
+//    public String Artistname;
+//    public String Album;
+//    public String SongUrl;
+//    public String AlbumArt;
+//    public Integer ArtistnameId;
+//    public Integer AlbumId;
+//    public Integer Duration;
+    public Integer Songid;
+
+    //
+    Bundle Package;
+    public Integer position;
+    ArrayList<String> lstUrlSong = new ArrayList<String>();
+    ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
+    //
+    //tạo object Database
+    MyDatabaseHelper db = new MyDatabaseHelper(this);
+    //
+
+    private static final int STATE_PAUSED = 0;
+    private static final int STATE_PLAYING = 1;
+    private static final int STATE_SHUFFLE = 2;
+    private static final int STATE_REPEAT = 3;
+    private int currentState;
+    private MediaBrowserCompat mediaBrowserCompat;
+    private MediaControllerCompat mediaControllerCompat;
+
+
+
+
+
+
     public static final int MY_REQUEST_CODE = 100;
 
     @SuppressLint("ClickableViewAccessibility")

@@ -36,6 +36,10 @@ import java.util.List;
 public class BackgroundAudioService extends MediaBrowserServiceCompat implements MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 
 
+    ////////////////////////
+    // list danh sách Url
+
+
     //
     public String Songname;
     public String Artistname;
@@ -47,16 +51,26 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
     public Integer Duration;
     public Integer Songid;
     //
+
     public ArrayList<String> lstUrl = new ArrayList<String>();
+    //list danh sách ID
     public ArrayList<Integer> lstID = new ArrayList<Integer>();
+    //vị trí của position truyền vào
     public Integer position;
-    public Song song;
+    // gọi database để load bài hát theo id
     MyDatabaseHelper db = new MyDatabaseHelper(this);
+
+    public Song song;
+    ////////////////////////
     //
 
     //tạo mediplayer
     private MediaPlayer mediaPlayer;
     private MediaSessionCompat mediaSessionCompat;
+
+    ////////////////////////
+
+
 
     private BroadcastReceiver headPhoneReceiver = new BroadcastReceiver() {
         //nếu như đang phát nhạc mà cắm tai nghe vào thì nó pause
@@ -417,6 +431,8 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
         MediaButtonReceiver.handleIntent(mediaSessionCompat, intent);
         return super.onStartCommand(intent, flags, startId);
     }
+
+    //hàm này đưa vào cái song trả về ảnh của song đó
     public Bitmap Screen(Song song)
     {
         //decode Bitmap
