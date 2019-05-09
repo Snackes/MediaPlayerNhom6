@@ -1,6 +1,7 @@
 package com.nhom6.mediaplayer.activity;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,6 +30,7 @@ import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
+import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapterView;
 import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
@@ -160,9 +162,36 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                         break;
                     case 1://thêm zô danh sách bài hát yêu thích
                         MyDatabaseHelper db = new MyDatabaseHelper(context);
-                        db.AddSongFavorite(_songs.get(position).getSongid());
-                        Toast.makeText(getApplicationContext(),
-                                "Đã thêm vào Yêu Thích...", 50).show();
+                        int k=db.CheckSongFavorite(_songs.get(position).getSongid());
+                        if(k==0) {
+
+                            db.AddSongFavorite(_songs.get(position).getSongid());
+                            Toast.makeText(getApplicationContext(),
+                                    "Đã thêm vào Yêu Thích...", 50).show();
+                        }
+                        else {
+                            new android.app.AlertDialog.Builder(context)
+                                    .setTitle("Bài hát đã có trong yêu thích.")
+                                    .setMessage("Bạn muốn xóa khỏi yêu thích..?")
+                                    .setIcon(R.drawable.adele)
+                                    .setPositiveButton("Đồng ý",
+                                            new DialogInterface.OnClickListener() {
+                                                @TargetApi(11)
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    MyDatabaseHelper db=new MyDatabaseHelper(context);
+                                                    db.deleteSongInFavorite(_songs.get(position).getSongid());
+                                                    Toast.makeText(getApplicationContext(),
+                                                            "Đã xóa khỏi Yêu Thích...", 50).show();
+                                                    dialog.cancel();
+                                                }
+                                            })
+                                    .setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+                                        @TargetApi(11)
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    }).show();
+                        }
                         break;
                 }
                 // false : close the menu; true : not close the menu

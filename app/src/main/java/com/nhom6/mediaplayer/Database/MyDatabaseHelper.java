@@ -658,12 +658,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     //Tìm kiếm danh sách Artist theo chuỗi nhập vào
     public ArrayList<Artist> SearchSinger(String Chuoi){
-        String selectQuery = "SELECT  * FROM " + TABLE_SINGER
-                + " WHERE "
-                + COLUMN_ARTIST_NAME +
-                " LIKE  '"+Chuoi+"%'";
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery( selectQuery, null);
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("select * from " +
+                TABLE_SINGER + " where " + COLUMN_ARTIST_NAME + " like ?", new String[] { "%" + Chuoi + "%" });
         ArrayList<Artist> ListArtist = new ArrayList<Artist>();
         // Duyệt trên con trỏ, và thêm vào danh sách.
         if (cursor.moveToFirst()) {
