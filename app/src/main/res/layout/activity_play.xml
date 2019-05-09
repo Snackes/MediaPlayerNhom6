@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.PlayActivity"
     android:background="@drawable/gardientback"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:layout_constraintTop_toTopOf="@+id/playHead"
+    android:id="@+id/layoutPlay">
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints">
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="#3F51B5"
             android:shrinkColumns="0"
-            android:stretchColumns="1">
+            android:stretchColumns="1"
+            android:id="@+id/playHead"
+            app:layout_constraintBottom_toTopOf="@id/playBody">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -67,7 +73,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/playBody">
 
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -195,7 +202,7 @@
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_next"
                     android:tint="@color/cardview_light_background"
-                    tools:ignore="OnClick" />
+                    tools:ignore="OnClick"/>
 
                 <ImageButton
                     android:id="@+id/btnRepeat"
@@ -211,4 +218,4 @@
         </LinearLayout>
 
     </LinearLayout>
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

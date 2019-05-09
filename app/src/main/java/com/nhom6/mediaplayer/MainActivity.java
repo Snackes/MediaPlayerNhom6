@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.nhom6.mediaplayer.activity.AlbumActivity;
 import com.nhom6.mediaplayer.activity.LoveActivity;
-import com.nhom6.mediaplayer.activity.PlayScreenActivity;
+import com.nhom6.mediaplayer.activity.PlayActivity;
 import com.nhom6.mediaplayer.activity.PlaylistActivity;
 import com.nhom6.mediaplayer.activity.ShowAllSong;
 import com.nhom6.mediaplayer.activity.SingerActivity;
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public  void ShowPlayScreen(View view)
     {
-        Intent i=new Intent(this, PlayScreenActivity.class);
+        Intent i=new Intent(this, PlayActivity.class);
         startActivity(i);
     }
     public  void ShowSinger(View view)

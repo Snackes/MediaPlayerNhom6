@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/gardientback"
     app:layout_constraintTop_toTopOf="@id/lnSearch"
-    tools:context=".activity.SameSongActivity">
+    tools:context=".activity.SameSongActivity"
+    android:id="@+id/layoutSameSong">
 
     <LinearLayout
         android:id="@+id/lnSearch"

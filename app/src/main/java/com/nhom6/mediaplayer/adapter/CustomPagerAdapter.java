@@ -47,4 +47,6 @@ public class CustomPagerAdapter extends PagerAdapter {
         return mContext.getString(customPagerEnum.getTitleResId());
     }
 
+
+
 }

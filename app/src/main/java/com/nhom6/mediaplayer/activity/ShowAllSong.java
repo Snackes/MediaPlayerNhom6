@@ -226,12 +226,13 @@ public class ShowAllSong extends AppCompatActivity {
                 Package.putInt("position", position);
                 Package.putStringArrayList("lstUrlSong",lstUrlSong);
                 Package.putIntegerArrayList("lstIDSong",lstIDSong);
+                //
+                //
+                Intent i = new Intent(context, PlayActivity.class);
 
-                //
-                //
-                Intent i = new Intent(context, PlayScreenActivity.class);
+//                Intent i1 = new Intent(context, PlayActivity.class);
+//                i1.putExtras(Package);
                 i.putExtras(Package);
-
                 startActivity(i);
             }
         });

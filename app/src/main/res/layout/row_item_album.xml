@@ -17,8 +17,8 @@
 
             <ImageView
                 android:id="@+id/imageAlbumAD"
-                android:layout_width="match_parent"
-                android:layout_height="88dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/albumNameAD"
