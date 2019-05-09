@@ -31,9 +31,9 @@
         android:id="@+id/lnListMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:isScrollContainer="true"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/lnSearch"
-        app:layout_constraintVertical_bias="0.48000002">
+        app:layout_constraintTop_toBottomOf="@id/lnSearch">
 
         <TextView
             android:id="@+id/txtLib"
@@ -117,8 +117,8 @@
             android:id="@+id/lnPlayList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:onClick="ShowPlayList">
+            android:onClick="ShowPlayList"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txtPlayList"
@@ -174,8 +174,8 @@
                 android:drawableEnd="@drawable/ic_right"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
-                android:text="@string/scan"
                 android:onClick="clickScan"
+                android:text="@string/scan"
                 android:textSize="20sp" />
         </LinearLayout>
 
