@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/gardientback"
     android:orientation="vertical"
+    android:focusableInTouchMode="true"
     app:layout_constraintTop_toTopOf="@id/lnSearch"
     tools:context=".activity.PlaylistActivity">
 

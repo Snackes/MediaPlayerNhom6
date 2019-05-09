@@ -21,14 +21,12 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
-import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.SwipeTouch.OnSwipeTouchListener;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapterView;
