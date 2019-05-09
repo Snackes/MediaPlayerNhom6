@@ -11,211 +11,152 @@
     android:id="@+id/layoutPlay">
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints">
+    <TableLayout
+        android:id="@+id/playHead"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="#3F51B5"
+        android:shrinkColumns="0"
+        android:stretchColumns="1"
+        app:layout_constraintBottom_toTopOf="@+id/body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <TableLayout
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="#3F51B5"
-            android:shrinkColumns="0"
-            android:stretchColumns="1"
-            android:id="@+id/playHead"
-            app:layout_constraintBottom_toTopOf="@id/playBody">
+            android:layout_height="wrap_content">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/btnDown"
+                android:layout_width="49dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:backgroundTint="#FFFFFF"
+                android:onClick="showMainSreen"
+                android:src="@drawable/ic_down"
+                android:tint="#FFFFFF"
+                tools:ignore="OnClick" />
 
-                <ImageButton
-                    android:id="@+id/btnDown"
-                    android:layout_width="49dp"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:backgroundTint="#FFFFFF"
-                    android:onClick="showMainSreen"
-                    android:src="@drawable/ic_down"
-                    android:tint="#FFFFFF"
-                    tools:ignore="OnClick" />
+            <Button
+                android:id="@+id/btnThemPlayList"
+                android:layout_width="51dp"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:background="@drawable/ic_plus"
+                android:backgroundTint="#FCFCFC"
+                android:foregroundTint="#00FEFBFB"
+                android:onClick="showPlayListDialog"
+                android:tint="@color/cardview_light_background"
+                tools:ignore="OnClick" />
 
-                <Button
-                    android:id="@+id/btnThemPlayList"
-                    android:layout_width="51dp"
-                    android:layout_height="match_parent"
-                    android:layout_column="2"
-                    android:layout_weight="1"
-                    android:background="@drawable/ic_plus"
-                    android:backgroundTint="#FCFCFC"
-                    android:foregroundTint="#00FEFBFB"
-                    android:onClick="showPlayListDialog"
-                    android:tint="@color/cardview_light_background"
-                    tools:ignore="OnClick" />
-
-                <ImageButton
-                    android:id="@+id/btnLove"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="0dp"
-                    android:layout_weight="1"
-                    android:onClick="clickLove"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_heart"
-                    android:tint="@color/cardview_light_background"
-                    tools:ignore="OnClick" />
-            </TableRow>
-
-        </TableLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/playBody">
-
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imgMusic"
-                android:layout_width="331dp"
-                android:layout_height="280dp"
-                android:layout_gravity="center"
-                android:src="@drawable/adele" />
-
-            <TextView
-                android:id="@+id/songTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:text="@string/title"
-                android:textAlignment="center"
-                android:textColor="#FAF6F6"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/artist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/singer"
-                android:textAlignment="center"
-                android:textColor="#F8F4F4"
-                android:textSize="15sp" />
-
-            <LinearLayout
+            <ImageButton
+                android:id="@+id/btnLove"
                 android:layout_width="wrap_content"
-                android:layout_height="87dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:onClick="clickLove"
+                android:src="@drawable/ic_heart"
+                android:tint="@color/cardview_light_background"
+                tools:ignore="OnClick" />
+        </TableRow>
 
-                <SeekBar
-                    android:id="@+id/seekBar"
-                    android:layout_width="268dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:indeterminate="false"
+    </TableLayout>
 
-                    android:max="100"
-                    android:outlineAmbientShadowColor="@color/cardview_light_background"
-                    android:progress="15" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+    <LinearLayout
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="512dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/playbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
 
-                    <TextView
-                        android:id="@+id/startTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="00:00"
-                        android:textColor="#F7EAEF"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-                    <TextView
-                        android:id="@+id/endTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_weight="1"
-                        android:text="10:00"
-                        android:textAlignment="textEnd"
-                        android:textColor="#FBEFEF"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="81dp"
-                android:orientation="horizontal">
+    </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/btnShuf"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_shuf"
-                    android:tint="@color/cardview_light_background" />
+    <LinearLayout
+        android:id="@+id/playbar"
+        android:layout_width="match_parent"
+        android:layout_height="81dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-                <ImageButton
-                    android:id="@+id/btnPre"
-                    android:onClick="PreviousSong"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_pre"
-                    android:tint="@color/cardview_light_background"
-                    tools:ignore="OnClick" />
+        <ImageButton
+            android:id="@+id/btnShuf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_shuf"
+            android:tint="@color/cardview_light_background" />
 
-                <ImageButton
-                    android:id="@+id/btnPlayMenu"
-                    android:onClick="PlaySong"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_horizontal"
-                    android:src="@drawable/ic_play_new"
-                    android:tint="@color/cardview_light_background"
-                    tools:ignore="OnClick" />
+        <ImageButton
+            android:id="@+id/btnPre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="PreviousSong"
+            android:src="@drawable/ic_pre"
+            android:tint="@color/cardview_light_background"
+            tools:ignore="OnClick" />
 
-                <ImageButton
-                    android:id="@+id/btnNext"
-                    android:onClick="NextSong"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_next"
-                    android:tint="@color/cardview_light_background"
-                    tools:ignore="OnClick"/>
+        <ImageButton
+            android:id="@+id/btnPlayMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal"
+            android:onClick="PlaySong"
+            android:src="@drawable/ic_play_new"
+            android:tint="@color/cardview_light_background"
+            tools:ignore="OnClick" />
 
-                <ImageButton
-                    android:id="@+id/btnRepeat"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_repeat"
-                    android:tint="@color/cardview_light_background" />
-            </LinearLayout>
+        <ImageButton
+            android:id="@+id/btnNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="NextSong"
+            android:src="@drawable/ic_next"
+            android:tint="@color/cardview_light_background"
+            tools:ignore="OnClick" />
 
-        </LinearLayout>
-
+        <ImageButton
+            android:id="@+id/btnRepeat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_repeat"
+            android:tint="@color/cardview_light_background" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

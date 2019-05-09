@@ -15,7 +15,6 @@
         <activity android:name=".activity.SongOfPlaylistActivity"></activity>
         <activity android:name=".activity.LoveActivity" />
         <activity android:name=".activity.SingerActivity" />
-        <activity android:name=".activity.SameSongActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
