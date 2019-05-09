@@ -158,8 +158,8 @@ public class PlayActivity extends AppCompatActivity {
         dialog.setContentView(mView);
         dialog.setCancelable(true);
         Window window = dialog.getWindow();
-        window.setGravity(Gravity.BOTTOM);
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawableResource(R.drawable.borderradius);
         dialog.show();
 

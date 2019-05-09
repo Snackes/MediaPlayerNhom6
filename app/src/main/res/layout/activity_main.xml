@@ -8,6 +8,7 @@
     android:focusableInTouchMode="true"
     tools:context=".MainActivity"
     app:layout_constraintTop_toTopOf="@id/lnSearch"
+    android:screenOrientation="portrait"
     >
 
 
@@ -44,6 +45,7 @@
             android:fontFamily="sans-serif-black"
             android:gravity="center_horizontal"
             android:text="@string/thuvien"
+            android:textColor="#DCF6F0F0"
             android:textColorHint="#00F4ECEC"
             android:textSize="30sp" />
 
@@ -64,11 +66,15 @@
                 android:layout_marginRight="10dp"
                 android:drawableStart="@drawable/ic_musiclib"
                 android:drawableEnd="@drawable/ic_right"
+                android:drawablePadding="20dp"
+                android:drawableTint="#DCF6F0F0"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
                 android:text="@string/AllSong"
-                android:textColorHint="#00F4ECEC"
-                android:textColorLink="#00FFFFFF"
+                android:textAlignment="textStart"
+                android:textColor="#DCF6F0F0"
+                android:textColorHint="#DCF6F0F0"
+                android:textColorLink="#DCF6F0F0"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -87,11 +93,16 @@
                 android:layout_marginRight="10dp"
                 android:drawableStart="@drawable/ic_heart"
                 android:drawableEnd="@drawable/ic_right"
+                android:drawablePadding="20dp"
+                android:drawableTint="#DCF6F0F0"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
                 android:onClick="ShowLoveSong"
                 android:text="@string/love"
-                android:textColorHint="#00F4ECEC"
+                android:textAlignment="textStart"
+                android:textColor="#DCF6F0F0"
+                android:textColorHint="#DCF6F0F0"
+                android:textColorLink="#DCF6F0F0"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -112,11 +123,15 @@
                 android:layout_marginRight="10dp"
                 android:drawableStart="@drawable/ic_album"
                 android:drawableEnd="@drawable/ic_right"
+                android:drawablePadding="20dp"
+                android:drawableTint="#DCF6F0F0"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
                 android:text="@string/album"
-
-                android:textColorHint="#00F4ECEC"
+                android:textAlignment="textStart"
+                android:textColor="#DCF6F0F0"
+                android:textColorHint="#DCF6F0F0"
+                android:textColorLink="#DCF6F0F0"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -136,10 +151,15 @@
                 android:layout_marginRight="10dp"
                 android:drawableStart="@drawable/ic_playlist"
                 android:drawableEnd="@drawable/ic_right"
+                android:drawablePadding="20dp"
+                android:drawableTint="#DCF6F0F0"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
                 android:text="@string/playlist"
-                android:textColorHint="#00F4ECEC"
+                android:textAlignment="textStart"
+                android:textColor="#DCF6F0F0"
+                android:textColorHint="#DCF6F0F0"
+                android:textColorLink="#DCF6F0F0"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -159,10 +179,15 @@
                 android:layout_marginRight="10dp"
                 android:drawableStart="@drawable/ic_micro"
                 android:drawableEnd="@drawable/ic_right"
+                android:drawablePadding="20dp"
+                android:drawableTint="#DCF6F0F0"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
                 android:text="@string/singer"
-                android:textColorHint="#00F4ECEC"
+                android:textAlignment="textStart"
+                android:textColor="#DCF6F0F0"
+                android:textColorHint="#DCF6F0F0"
+                android:textColorLink="#DCF6F0F0"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -181,13 +206,16 @@
                 android:layout_marginEnd="10dp"
                 android:drawableStart="@drawable/ic_scan"
                 android:drawableEnd="@drawable/ic_right"
+                android:drawablePadding="20dp"
+                android:drawableTint="#DCF6F0F0"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
                 android:onClick="clickScan"
                 android:text="@string/scan"
-
-                android:textColorHint="#00F4ECEC"
-
+                android:textAlignment="textStart"
+                android:textColor="#DCF6F0F0"
+                android:textColorHint="#DCF6F0F0"
+                android:textColorLink="#DCF6F0F0"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -207,7 +235,7 @@
         <include
             layout="@layout/playbar"
             android:layout_width="match_parent"
-            android:layout_height="59dp" />
+            android:layout_height="60dp" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
