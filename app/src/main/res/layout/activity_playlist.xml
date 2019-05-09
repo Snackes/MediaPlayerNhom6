@@ -8,23 +8,23 @@
     android:orientation="vertical"
     android:focusableInTouchMode="true"
     app:layout_constraintTop_toTopOf="@id/lnSearch"
+    android:screenOrientation="portrait"
     tools:context=".activity.PlaylistActivity">
 
     <LinearLayout
         android:id="@+id/lnSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#3F51B5"
+        android:background="#33717173"
         android:gravity="top"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/lnListPL"
-        app:layout_constraintVertical_bias="0.65999997"
         tools:layout_editor_absoluteX="1dp">
 
         <include
             layout="@layout/searchbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -44,7 +44,7 @@
             android:gravity="center_horizontal"
             android:text="@string/playlist"
             android:textColor="#FFFFFF"
-            android:textSize="36sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:visibility="visible" />
 
@@ -59,12 +59,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="@drawable/gardientbtn"
                 android:text="+ Create Playlist" />
 
             <com.baoyz.swipemenulistview.SwipeMenuListView
                 android:id="@+id/listPlayList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></com.baoyz.swipemenulistview.SwipeMenuListView>
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -72,11 +73,10 @@
     <LinearLayout
         android:id="@+id/lnPlayBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:gravity="bottom"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         tools:layout_editor_absoluteX="-1dp">
 
         <include

@@ -16,7 +16,7 @@
             android:layout_height="155dp"
             android:layout_marginRight="10px"
             android:scaleType="fitXY"
-            android:src="@drawable/adele"></ImageView>
+            android:src="@drawable/adele"/>
 
         <TextView
             android:id="@+id/grid_item_nameAlbum"
@@ -29,7 +29,8 @@
             android:textAlignment="gravity"
             android:textSize="12sp"
             android:typeface="serif"
-            android:verticalScrollbarPosition="defaultPosition"></TextView>
+            android:textColor="#DCF6F0F0"
+            android:verticalScrollbarPosition="defaultPosition"/>
 
     </LinearLayout>
 
