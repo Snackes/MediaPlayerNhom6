@@ -4,10 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -16,11 +14,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -31,10 +27,8 @@ import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.R;
-
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapterView;
-
 import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
 
@@ -83,6 +77,8 @@ public class ShowAllSong extends AppCompatActivity {
         ListSongAdapter listSongAdapter = new ListSongAdapter(this,_songs);
         listView.setAdapter(listSongAdapter);
         setSwipeListView();
+        ClickItem();
+
     }
     private void setSwipeListView() {
         SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -173,67 +169,6 @@ public class ShowAllSong extends AppCompatActivity {
     public  void CreatePlaylist(final int position, final Dialog dialogAdd){
         buttonCreatePlaylist.setOnClickListener(new View.OnClickListener() {
 
-
-        //TODO: CHỖ NÀY HIỆP CODE ĐỂ INTENT THỬ BÀI HÁT QUA CÁI PHÁT NHẠC
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-
-
-                //TODO: khi mình intent 1 item sang PlayActivity mình sẽ gửi 2 thứ: position của item và listID ( toàn bộ )
-                //Lấy item tại vị trí click
-                Song newsong = (Song) parent.getItemAtPosition(position);
-
-                //lấy listID
-                ArrayList<String> lstUrlSong = GetListUrlSong();
-                ArrayList<Integer> lstIDSong = GetListIDSong();
-
-                //tạo bundle
-
-                Bundle Package = new Bundle();
-                // nhét thông tin vào bundle
-                Package.putInt("position", position);
-                Package.putStringArrayList("lstUrlSong",lstUrlSong);
-                Package.putIntegerArrayList("lstIDSong",lstIDSong);
-                //
-                //
-                Intent i = new Intent(context, PlayActivity.class);
-
-//                Intent i1 = new Intent(context, PlayActivity.class);
-//                i1.putExtras(Package);
-                i.putExtras(Package);
-                startActivity(i);
-            }
-        });
-
-
-    }
-
-    //TODO: input : ArrayList<Song> , output : ArrayList<String> là các Url của song
-    private ArrayList<String> GetListUrlSong()
-    {
-        ArrayList<String> lstUrlSong = new ArrayList<String>();
-
-        for (Song item : _songs)
-        {
-            lstUrlSong.add(item.getSongUrl());
-        }
-        return lstUrlSong;
-    }
-    //TODO: input : ArrayList<Song> , output : ArrayList<Integer> là các ID của song
-    private ArrayList<Integer> GetListIDSong()
-    {
-        ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
-
-        for (Song item : _songs)
-        {
-            lstIDSong.add(item.getSongid());
-        }
-        return lstIDSong;
-
             @Override
             public void onClick(View arg0) {
                 dialogAdd.hide();
@@ -275,6 +210,63 @@ public class ShowAllSong extends AppCompatActivity {
                 alertDialog.show();
             }
         });
+    }
+    public void ClickItem()
+    {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+
+
+
+                //TODO: khi mình intent 1 item sang PlayActivity mình sẽ gửi 2 thứ: position của item và listID ( toàn bộ )
+                //Lấy item tại vị trí click
+                Song newsong = (Song) parent.getItemAtPosition(position);
+
+                //lấy listID
+                ArrayList<String> lstUrlSong = GetListUrlSong();
+                ArrayList<Integer> lstIDSong = GetListIDSong();
+
+                //tạo bundle
+
+                Bundle Package = new Bundle();
+                // nhét thông tin vào bundle
+                Package.putInt("position", position);
+                Package.putStringArrayList("lstUrlSong",lstUrlSong);
+                Package.putIntegerArrayList("lstIDSong",lstIDSong);
+                //
+                //
+                Intent i = new Intent(context, PlayActivity.class);
+
+//                Intent i1 = new Intent(context, PlayActivity.class);
+//                i1.putExtras(Package);
+                i.putExtras(Package);
+                startActivity(i);
+            }
+        });
+
+    }
+    //TODO: input : ArrayList<Song> , output : ArrayList<String> là các Url của song
+    private ArrayList<String> GetListUrlSong()
+    {
+        ArrayList<String> lstUrlSong = new ArrayList<String>();
+
+        for (Song item : _songs)
+        {
+            lstUrlSong.add(item.getSongUrl());
+        }
+        return lstUrlSong;
+    }
+    //TODO: input : ArrayList<Song> , output : ArrayList<Integer> là các ID của song
+    private ArrayList<Integer> GetListIDSong()
+    {
+        ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
+
+        for (Song item : _songs)
+        {
+            lstIDSong.add(item.getSongid());
+        }
+        return lstIDSong;
     }
 }

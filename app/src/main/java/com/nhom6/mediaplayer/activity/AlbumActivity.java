@@ -3,7 +3,6 @@ package com.nhom6.mediaplayer.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -16,10 +15,7 @@ import com.nhom6.mediaplayer.Manager.AlbumManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.AlbumAdapter;
 import com.nhom6.mediaplayer.model.Album;
-import com.nhom6.mediaplayer.model.PlayList;
 
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class AlbumActivity extends AppCompatActivity {
