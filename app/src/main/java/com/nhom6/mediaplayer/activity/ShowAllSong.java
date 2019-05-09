@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
-import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -62,6 +60,7 @@ public class ShowAllSong extends AppCompatActivity {
         setContentView(R.layout.activity_all_song);
         //find id ListView
         listView = (SwipeMenuListView) findViewById(R.id.listViewSong);
+
         MyDatabaseHelper db=new MyDatabaseHelper(this);
         //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
         if(db.CheckTableSong()==0){
@@ -80,13 +79,13 @@ public class ShowAllSong extends AppCompatActivity {
 
         ListSongAdapter listSongAdapter = new ListSongAdapter(this,_songs);
         listView.setAdapter(listSongAdapter);
-        setSwipeListView(_songs);
+        setSwipeListView();
     }
-    private void setSwipeListView(ArrayList<Song> _songs1) {
+    private void setSwipeListView() {
         SwipeMenuCreator creator = new SwipeMenuCreator() {
             @Override
             public void create(SwipeMenu menu) {
-                // create "delete" item
+                // create "add playlist" item
                 SwipeMenuItem plusItem = new SwipeMenuItem(context);
                 // set item background
                 plusItem.setBackground(R.color.greenic);
@@ -97,7 +96,6 @@ public class ShowAllSong extends AppCompatActivity {
                 // add to menu
                 menu.addMenuItem(plusItem);
 
-
                 SwipeMenuItem loveItem = new SwipeMenuItem(context);
                 // set item background
                 loveItem.setBackground(R.color.pinkwhite);
@@ -107,10 +105,8 @@ public class ShowAllSong extends AppCompatActivity {
                 loveItem.setIcon(R.drawable.ic_love);
                 // add to menu
                 menu.addMenuItem(loveItem);
-
             }
         };
-
         // set creator
         listView.setMenuCreator(creator);
         ClickItemSong();
@@ -125,7 +121,7 @@ public class ShowAllSong extends AppCompatActivity {
                 switch (index) {
                     case 0://chọn chức năng thêm bài hát vào playlist
                         final Dialog dialogAdd = new Dialog(context);
-                        dialogAdd.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialogAdd.requestWindowFeature(Window.FEATURE_CONTEXT_MENU);
                         //load playlist len dialog
                         LayoutInflater inflaterDia = getLayoutInflater();
                         View mView = inflaterDia.inflate(R.layout.dialog_addplaylist, null);
@@ -142,7 +138,7 @@ public class ShowAllSong extends AppCompatActivity {
                                 MyDatabaseHelper db= new MyDatabaseHelper(context);
                                 db.addSongForPlayList(_playlists.get(position1).getIDPlayList(),_songs.get(position).getSongid());
                                 Toast.makeText(getApplicationContext(),
-                                        "Thêm được rồi vô playlist coi đi e iu...", Toast.LENGTH_SHORT).show();
+                                        "Thêm bài hát vào PlayList thành công..!", Toast.LENGTH_SHORT).show();
                                 dialogAdd.cancel();
                             }
                         });
@@ -154,13 +150,15 @@ public class ShowAllSong extends AppCompatActivity {
                         window.setBackgroundDrawableResource(R.drawable.borderradius);
                         dialogAdd.show();
                         buttonCreatePlaylist = mView.findViewById(R.id.btnCreatePlayList);
+
+                        //
                         CreatePlaylist(position,dialogAdd);
                         break;
                     case 1://thêm zô danh sách bài hát yêu thích
                         MyDatabaseHelper db=new MyDatabaseHelper(context);
                         db.AddSongFavorite(_songs.get(position).getSongid());
                         Toast.makeText(getApplicationContext(),
-                                "Thêm được rồi em iu s2...", 50).show();
+                                "Đã thêm vào Yêu Thích...", 50).show();
                         break;
                 }
                 // false : close the menu; true : not close the menu
@@ -168,6 +166,7 @@ public class ShowAllSong extends AppCompatActivity {
             }
         });
     }
+    //tạo mới playlist đồng thời thêm bài hát đã chọn vào playlist vừa tạo
     public  void CreatePlaylist(final int position, final Dialog dialogAdd){
         buttonCreatePlaylist.setOnClickListener(new View.OnClickListener() {
 
@@ -189,15 +188,18 @@ public class ShowAllSong extends AppCompatActivity {
                 alertDialogBuilder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
 
 
+                    @SuppressLint("WrongConstant")
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String title= edtPlayListName.getText().toString();
                         if(title.equals("")) {
                             Toast.makeText(getApplicationContext(),
-                                    "Đm chưa nhập tạo cái qq...", Toast.LENGTH_LONG).show();
+                                    "Vui lòng nhập tên trước khi tạo Playlist..!", 50).show();
                             return;
                         }
                         playlistsManager.CreatePlayListAndAddSong(title,context,_songs.get(position).getSongid());
+                        Toast.makeText(getApplicationContext(),
+                                "Đã thêm vào Playlist..!", 50).show();
                     }
                 })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
