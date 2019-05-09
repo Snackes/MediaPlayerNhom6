@@ -1,5 +1,6 @@
 package com.nhom6.mediaplayer.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,8 @@ import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
+import com.nhom6.mediaplayer.model.Album;
+import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
 
@@ -31,7 +34,11 @@ import java.util.ArrayList;
 
 public class SongOfPlaylistActivity extends AppCompatActivity {
 
+    Activity activity=this;
+    int kt=0;
     PlayList playlist;
+    Album album;
+    Artist artist;
     TextView PlayListName;
     SwipeMenuListView LvSongInPlayList;
     ArrayList<Song> _songs = new ArrayList<Song>();
@@ -49,20 +56,40 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
         this.LvSongInPlayList=this.findViewById(R.id.listSongofActivity);
 
         Intent intent = this.getIntent();
-        this.playlist = (PlayList) intent.getSerializableExtra("playlist");
 
-        this.PlayListName.setText(playlist.getTitle());
-        MyDatabaseHelper db = new MyDatabaseHelper(this);
-        SongManager sm=new SongManager();
-        _songs= db.GetListSongInPlayList(this.playlist.getIDPlayList());
-        if(_songs.size()==0){
+        //TH show tất cả bài hát có trong 1 playlist được chọn
+        if(intent.getSerializableExtra("playlist")!=null) {
+            this.playlist = (PlayList) intent.getSerializableExtra("playlist");
+            this.PlayListName.setText(playlist.getTitle());
+            MyDatabaseHelper db = new MyDatabaseHelper(this);
+            _songs = db.GetListSongInPlayList(this.playlist.getIDPlayList());
+            kt=1;
+        }
+        //TH show tất cả bài hát có trong 1 album được chọn
+        if(intent.getSerializableExtra("Album")!=null) {
+            this.album= (Album) getIntent().getSerializableExtra("Album");
+            this.PlayListName.setText(album.getAlbumTitle());
+            MyDatabaseHelper db = new MyDatabaseHelper(this);
+            _songs = db.GetListSongInAlbum(this.album.getAlbumID());
+        }
+        //TH show tất cả bài hát có trong 1 ca sĩ được chọn
+        if(intent.getSerializableExtra("Singer")!=null) {
+            this.artist= (Artist) getIntent().getSerializableExtra("Singer");
+            this.PlayListName.setText(artist.getArtistName());
+            MyDatabaseHelper db = new MyDatabaseHelper(this);
+            _songs = db.GetListSongOfArtist(this.artist.getArtistID());
+        }
+
+        //Kiểm tra List bài hát có gì không, nếu không có thì thoát
+        if (_songs.size() == 0) {
             Toast.makeText(getApplicationContext(), "Méo có gì trong này", Toast.LENGTH_LONG).show();
             // Trở lại MainActivity.
             this.onBackPressed();
             return;
         }
         //đưa vào adapter để hiển thị
-        ListSongAdapter listSongAdapter = new ListSongAdapter(this,R.layout.row_item_song,_songs);
+        //ListSongAdapter listSongAdapter = new ListSongAdapter(this, R.layout.row_item_song, _songs);
+        ListSongAdapter listSongAdapter = new ListSongAdapter(this,_songs);
         LvSongInPlayList.setAdapter(listSongAdapter);
         setSwipeListView();
     }
@@ -84,7 +111,12 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
         };
 
         // set creator
-        LvSongInPlayList.setMenuCreator(creator);
+        if(kt==1) {
+            LvSongInPlayList.setMenuCreator(creator);
+            DeleteSongInPlaylist();
+        }
+    }
+    public void DeleteSongInPlaylist(){
         LvSongInPlayList.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
@@ -96,10 +128,10 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                         dialog.setContentView(R.layout.dialog_data);
                         TextView dialog_title = (TextView) dialog.findViewById(R.id.dialog_title);
-                        dialog_title.setText(String.valueOf("Xóa khỏi playlist...!"));
+                        dialog_title.setText("Xóa khỏi playlist...!");
 
                         TextView dialog_description = (TextView) dialog.findViewById(R.id.dialog_description);
-                        dialog_description.setText(String.valueOf("Bạn có muốn xóa bài hát?"));
+                        dialog_description.setText("Bạn có muốn xóa bài hát?");
 
                         Button buttonCancel = (Button) dialog.findViewById(R.id.buttonCancel);
                         buttonCancel.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +145,10 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
                             public void onClick(View v) {
                                 MyDatabaseHelper db=new MyDatabaseHelper(context);
                                 db.deleteSongInPlayList(_songs.get(position).getSongid(),playlist.getIDPlayList());
-                                //return;
+                                _songs = db.GetListSongInPlayList(playlist.getIDPlayList());
+                                ListSongAdapter listSongAdapter = new ListSongAdapter(activity,_songs);
+                                LvSongInPlayList.setAdapter(listSongAdapter);
+                                setSwipeListView();
                                 dialog.cancel();
                             }
                         });
@@ -126,7 +161,5 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 }

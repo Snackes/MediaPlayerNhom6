@@ -1,9 +1,14 @@
 package com.nhom6.mediaplayer.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
@@ -11,11 +16,16 @@ import com.nhom6.mediaplayer.Manager.AlbumManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.AlbumAdapter;
 import com.nhom6.mediaplayer.model.Album;
+import com.nhom6.mediaplayer.model.PlayList;
 
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class AlbumActivity extends AppCompatActivity {
-    GridView gridView;
+    private GridView gridViewAlbum;
+    private static final int MY_REQUEST_CODE = 1000;
+    final Context context=this;
     //khai báo SongManager để loadSong
     AlbumManager albumsManager = new AlbumManager();
     public ArrayList<Album> _albums = new ArrayList<Album>();
@@ -30,7 +40,7 @@ public class AlbumActivity extends AppCompatActivity {
         setContentView(R.layout.activity_album);
 
         //find id GirdView
-        gridView =  findViewById(R.id.gridViewAB);
+        gridViewAlbum =  findViewById(R.id.gridViewAB);
 
         MyDatabaseHelper db=new MyDatabaseHelper(this);
         //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
@@ -48,6 +58,21 @@ public class AlbumActivity extends AppCompatActivity {
 
         //đưa vào adapter để hiển thị
         AlbumAdapter listAlbumAdapter = new AlbumAdapter(this,R.layout.girdview_album,_albums);
-        gridView.setAdapter(listAlbumAdapter);
+        gridViewAlbum.setAdapter(listAlbumAdapter);
+        ClickItemAlbum();
+    }
+
+    //Xử lí khi click vào 1 album bất kì
+    public void ClickItemAlbum(){
+        gridViewAlbum.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            //Xem danh sách bài hát khi chọn vào 1 album
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Album album1=_albums.get(position);
+                Intent intent = new Intent(context, SongOfPlaylistActivity.class);
+                intent.putExtra("Album", album1);
+                startActivity(intent);
+            }
+        });
     }
 }
