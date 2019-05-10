@@ -119,7 +119,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
     }
 
     //xử lí khi chọn 1 trong 2 chức năng của 1 bài hát trong listview
-    public void ClickItemSong() {
+    public void ClickItemSong(){
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @SuppressLint("WrongConstant")
             @Override
