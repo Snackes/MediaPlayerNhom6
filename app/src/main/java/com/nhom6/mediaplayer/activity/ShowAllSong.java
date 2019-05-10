@@ -152,7 +152,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                         dialogAdd.setCancelable(true);
                         Window window = dialogAdd.getWindow();
                         window.setGravity(Gravity.CENTER);
-                        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                         window.setBackgroundDrawableResource(R.drawable.borderradius);
                         dialogAdd.show();
                         buttonCreatePlaylist = mView.findViewById(R.id.btnCreatePlayList);

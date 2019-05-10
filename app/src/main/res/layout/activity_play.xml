@@ -8,6 +8,7 @@
     android:background="@drawable/gardientback"
     android:orientation="vertical"
     app:layout_constraintTop_toTopOf="@+id/playHead"
+    android:screenOrientation="portrait"
     android:id="@+id/layoutPlay">
 
 
@@ -19,12 +20,12 @@
         tools:ignore="MissingConstraints">
 
         <TableLayout
+            android:id="@+id/playHead"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="#3F51B5"
+            android:background="#33CDCDDA"
             android:shrinkColumns="0"
             android:stretchColumns="1"
-            android:id="@+id/playHead"
             app:layout_constraintBottom_toTopOf="@id/playBody">
 
             <TableRow
@@ -33,7 +34,7 @@
 
                 <ImageButton
                     android:id="@+id/btnDown"
-                    android:layout_width="49dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
                     android:backgroundTint="#FFFFFF"
@@ -44,7 +45,7 @@
 
                 <Button
                     android:id="@+id/btnThemPlayList"
-                    android:layout_width="51dp"
+                    android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:layout_column="2"
                     android:layout_weight="1"
@@ -61,8 +62,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="0dp"
                     android:layout_weight="1"
-                    android:onClick="clickLove"
                     android:background="@android:color/transparent"
+                    android:onClick="clickLove"
                     android:src="@drawable/ic_heart"
                     android:tint="@color/cardview_light_background"
                     tools:ignore="OnClick" />
@@ -71,10 +72,11 @@
         </TableLayout>
 
         <LinearLayout
+            android:id="@+id/playBody"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/playBody">
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
 
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -92,7 +94,7 @@
                 android:layout_marginBottom="20dp"
                 android:text="@string/title"
                 android:textAlignment="center"
-                android:textColor="#FAF6F6"
+                android:textColor="#DCF6F0F0"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
@@ -120,8 +122,11 @@
                     android:indeterminate="false"
 
                     android:max="100"
-                    android:outlineAmbientShadowColor="@color/cardview_light_background"
-                    android:progress="15" />
+                    android:outlineAmbientShadowColor="#DED4D4"
+                    android:outlineSpotShadowColor="#00897B"
+                    android:progress="15"
+                    android:progressTint="#3949AB"
+                    android:thumbTint="#00756767" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -134,7 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="00:00"
-                        android:textColor="#F7EAEF"
+                        android:textColor="#DCF6F0F0"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -146,7 +151,7 @@
                         android:layout_weight="1"
                         android:text="10:00"
                         android:textAlignment="textEnd"
-                        android:textColor="#FBEFEF"
+                        android:textColor="#DCF6F0F0"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -154,14 +159,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="81dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="bottom"
                 android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/btnShuf"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_shuf"
@@ -169,46 +175,42 @@
 
                 <ImageButton
                     android:id="@+id/btnPre"
-                    android:onClick="PreviousSong"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
+                    android:onClick="PreviousSong"
                     android:src="@drawable/ic_pre"
                     android:tint="@color/cardview_light_background"
                     tools:ignore="OnClick" />
 
                 <ImageButton
                     android:id="@+id/btnPlayMenu"
-                    android:onClick="PlaySong"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:gravity="center_horizontal"
+                    android:onClick="PlaySong"
                     android:src="@drawable/ic_play_new"
                     android:tint="@color/cardview_light_background"
                     tools:ignore="OnClick" />
 
                 <ImageButton
                     android:id="@+id/btnNext"
-                    android:onClick="NextSong"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
+                    android:onClick="NextSong"
                     android:src="@drawable/ic_next"
                     android:tint="@color/cardview_light_background"
-                    tools:ignore="OnClick"/>
+                    tools:ignore="OnClick" />
 
                 <ImageButton
                     android:id="@+id/btnRepeat"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_repeat"

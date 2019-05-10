@@ -8,7 +8,7 @@
     android:layout_width="260dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#bdffffff">
+    android:background="@drawable/gardientblacktran">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,14 +34,17 @@
 
         <EditText
             android:id="@+id/newnamePlayList"
-            android:fontFamily="sans-serif"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="15dp"
+            android:fontFamily="sans-serif"
             android:hint="@string/playlistName"
             android:inputType="text"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColorHighlight="#00E4D9D9"
+            android:textColorLink="#0BEBDBDB"
+            android:textCursorDrawable="@color/pinkwhite" />
 
     </LinearLayout>
 
