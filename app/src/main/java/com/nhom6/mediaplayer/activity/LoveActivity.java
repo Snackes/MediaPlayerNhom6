@@ -136,7 +136,7 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
     public boolean onQueryTextChange(String newText) {
         String text = newText;
         MyDatabaseHelper db = new MyDatabaseHelper(this);
-        _lovesongs = db.SearchSong(text);
+        _lovesongs = db.SearchSong(text,1,4);
         listsongtAdapter = new ListSongAdapter(this,_lovesongs);
         listLoveSong.setAdapter(listsongtAdapter);
         setSwipeListView();

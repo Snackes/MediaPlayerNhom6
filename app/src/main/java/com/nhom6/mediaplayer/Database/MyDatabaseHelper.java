@@ -582,11 +582,38 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 
     //Tìm kiếm danh sách bài hát theo chuỗi nhập vào
-    public ArrayList<Song> SearchSong(String Chuoi){
-        String selectQuery = "SELECT  * FROM " + TABLE_SONG
-                + " WHERE "
-                + COLUMN_SONG_NAME +
-                " LIKE  '"+Chuoi+"%'";
+    public ArrayList<Song> SearchSong(String Chuoi,int idObject, int test){
+        String selectQuery="";
+        if(test==0){
+            selectQuery = "SELECT  * FROM " + TABLE_SONG
+                    + " WHERE "
+                    + COLUMN_SONG_NAME +
+                    " LIKE  '"+Chuoi+"%'";
+        }
+        if(test==1){
+            selectQuery = "SELECT  * FROM " + TABLE_SONG
+                    + " WHERE "
+                    + COLUMN_SONG_NAME +
+                    " LIKE  '"+Chuoi+"%'"+"AND "+COLUMN_PLAYLIST_ID +"="+idObject;
+        }
+        if(test==2){
+            selectQuery = "SELECT  * FROM " + TABLE_SONG
+                    + " WHERE "
+                    + COLUMN_SONG_NAME +
+                    " LIKE  '"+Chuoi+"%'"+"AND "+COLUMN_ALBUM_ID +"="+idObject;
+        }
+        if(test==3){
+            selectQuery = "SELECT  * FROM " + TABLE_SONG
+                    + " WHERE "
+                    + COLUMN_SONG_NAME +
+                    " LIKE  '"+Chuoi+"%'"+"AND "+COLUMN_ARTISTNAME_ID +"="+idObject;
+        }
+        if(test==4){
+            selectQuery = "SELECT  * FROM " + TABLE_SONG
+                    + " WHERE "
+                    + COLUMN_SONG_NAME +
+                    " LIKE  '"+Chuoi+"%'"+"AND "+COLUMN_FAVORITE +"="+idObject;
+        }
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery( selectQuery, null);
         ArrayList<Song> listSong = new ArrayList<Song>();

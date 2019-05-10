@@ -1,6 +1,8 @@
 package com.nhom6.mediaplayer;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,9 +12,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.nhom6.mediaplayer.activity.AlbumActivity;
@@ -21,10 +25,18 @@ import com.nhom6.mediaplayer.activity.PlayActivity;
 import com.nhom6.mediaplayer.activity.PlaylistActivity;
 import com.nhom6.mediaplayer.activity.ShowAllSong;
 import com.nhom6.mediaplayer.activity.SingerActivity;
+import com.nhom6.mediaplayer.adapter.ListSongAdapter;
+import com.nhom6.mediaplayer.model.Song;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int PLAYSCREEN_RESULT = 1;
+    private SearchView searchView;
+    ArrayList<Song>_songs=new ArrayList<Song>();
+    View activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_main);
+        LayoutInflater inflaterDia = getLayoutInflater();
+        activity = inflaterDia.inflate(R.layout.activity_all_song, null);
 
 
 
@@ -41,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
 
     public void ShowAllSong(View view)
@@ -115,5 +130,4 @@ public class MainActivity extends AppCompatActivity {
                 default: super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
-
 }

@@ -84,7 +84,6 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
 
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
-
     }
 
     private void setSwipeListView() {
@@ -309,7 +308,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
     public boolean onQueryTextChange(String newText) {
         String text = newText;
         MyDatabaseHelper db = new MyDatabaseHelper(this);
-        _songs = db.SearchSong(text);
+        _songs = db.SearchSong(text,0,0);
         ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);
         listView.setAdapter(listSongAdapter);
         setSwipeListView();
