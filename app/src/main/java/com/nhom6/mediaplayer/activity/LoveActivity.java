@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListAdapter;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -29,9 +30,10 @@ import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
 
-public class LoveActivity extends AppCompatActivity {
+public class LoveActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     //khai báo ListView cho adapter
     Activity activity=this;
+    private SearchView searchView;
     private SwipeMenuListView listLoveSong;
     public Context context = this;
     public ArrayList<Song> _lovesongs = new ArrayList<Song>();
@@ -58,6 +60,9 @@ public class LoveActivity extends AppCompatActivity {
         listsongtAdapter = new ListSongAdapter(this,_lovesongs);
         listLoveSong.setAdapter(listsongtAdapter);
         setSwipeListView();
+
+        searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
     }
 
     //Xét icon xóa cho từng bài hát
@@ -120,5 +125,21 @@ public class LoveActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        String text = newText;
+        MyDatabaseHelper db = new MyDatabaseHelper(this);
+        _lovesongs = db.SearchSong(text,1,4);
+        listsongtAdapter = new ListSongAdapter(this,_lovesongs);
+        listLoveSong.setAdapter(listsongtAdapter);
+        setSwipeListView();
+        return false;
     }
 }

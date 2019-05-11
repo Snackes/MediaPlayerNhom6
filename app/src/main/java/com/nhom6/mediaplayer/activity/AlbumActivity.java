@@ -9,17 +9,20 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.SearchView;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.AlbumManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.AlbumAdapter;
+import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.model.Album;
 
 import java.util.ArrayList;
 
-public class AlbumActivity extends AppCompatActivity {
+public class AlbumActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private GridView gridViewAlbum;
+    private SearchView searchView;
     private static final int MY_REQUEST_CODE = 1000;
     final Context context=this;
     //khai báo SongManager để loadSong
@@ -30,6 +33,7 @@ public class AlbumActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
+
         getSupportActionBar().hide(); // hide the title bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
@@ -56,6 +60,9 @@ public class AlbumActivity extends AppCompatActivity {
         AlbumAdapter listAlbumAdapter = new AlbumAdapter(this,R.layout.girdview_album,_albums);
         gridViewAlbum.setAdapter(listAlbumAdapter);
         ClickItemAlbum();
+
+        searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
     }
 
     //Xử lí khi click vào 1 album bất kì
@@ -70,5 +77,21 @@ public class AlbumActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        String text = newText;
+        MyDatabaseHelper db = new MyDatabaseHelper(this);
+        _albums = db.SearchAlbum(text);
+        AlbumAdapter listAlbumAdapter = new AlbumAdapter(this,R.layout.girdview_album,_albums);
+        gridViewAlbum.setAdapter(listAlbumAdapter);
+        ClickItemAlbum();
+        return false;
     }
 }
