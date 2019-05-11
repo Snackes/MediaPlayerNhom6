@@ -4,13 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/colorControlHighlight"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:background="@drawable/gardientrow"
     android:gravity="center"
     android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
         android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -22,15 +25,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="left"
+        android:layout_marginEnd="20dp"
+        android:gravity="center|left"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/name_playlist_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:gravity="center|center_horizontal"
             android:text="@string/playlistName"
             android:textColor="@android:color/background_light"
             android:textSize="18sp" />

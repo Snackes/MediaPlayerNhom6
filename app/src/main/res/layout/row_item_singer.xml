@@ -14,9 +14,11 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image_singer"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_micro"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTint="#DCF6F0F0"
+            android:src="@drawable/ic_micro"
+            android:tint="#00F4EAEA" />
     </LinearLayout>
 
     <LinearLayout
@@ -31,7 +33,7 @@
             android:layout_height="wrap_content"
             android:text="@string/singer"
             android:layout_gravity="center_vertical"
-            android:textColor="@android:color/background_light"
+            android:textColor="#DCF6F0F0"
             android:textSize="24sp" />
 
     </LinearLayout>

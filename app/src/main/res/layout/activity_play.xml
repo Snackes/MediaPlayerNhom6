@@ -7,85 +7,23 @@
     tools:context=".activity.PlayActivity"
     android:background="@drawable/gardientback"
     android:orientation="vertical"
-    app:layout_constraintTop_toTopOf="@+id/playHead"
+    app:layout_constraintTop_toTopOf="@+id/body"
     android:id="@+id/layoutPlay">
-
-
-    <TableLayout
-        android:id="@+id/playHead"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="#3F51B5"
-        android:shrinkColumns="0"
-        android:stretchColumns="1"
-        app:layout_constraintBottom_toTopOf="@+id/body"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:id="@+id/btnDown"
-                android:layout_width="49dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:backgroundTint="#FFFFFF"
-                android:onClick="showMainSreen"
-                android:src="@drawable/ic_down"
-                android:tint="#FFFFFF"
-                tools:ignore="OnClick" />
-
-            <Button
-                android:id="@+id/btnThemPlayList"
-                android:layout_width="51dp"
-                android:layout_height="match_parent"
-                android:layout_column="2"
-                android:layout_weight="1"
-                android:background="@drawable/ic_plus"
-                android:backgroundTint="#FCFCFC"
-                android:foregroundTint="#00FEFBFB"
-                android:onClick="showPlayListDialog"
-                android:tint="@color/cardview_light_background"
-                tools:ignore="OnClick" />
-
-            <ImageButton
-                android:id="@+id/btnLove"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:onClick="clickLove"
-                android:src="@drawable/ic_heart"
-                android:tint="@color/cardview_light_background"
-                tools:ignore="OnClick" />
-        </TableRow>
-
-    </TableLayout>
 
 
     <LinearLayout
         android:id="@+id/body"
         android:layout_width="match_parent"
-        android:layout_height="512dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/playbar"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/playbar"
         app:layout_constraintStart_toStartOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
 
 
     </LinearLayout>
@@ -93,20 +31,21 @@
     <LinearLayout
         android:id="@+id/playbar"
         android:layout_width="match_parent"
-        android:layout_height="81dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="60dp"
+        android:gravity="bottom|center"
         android:orientation="horizontal"
+        android:touchscreenBlocksFocus="false"
+        android:verticalScrollbarPosition="defaultPosition"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+
+        android:layout_alignParentBottom="true">
 
         <ImageButton
             android:id="@+id/btnShuf"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_shuf"
@@ -115,8 +54,7 @@
         <ImageButton
             android:id="@+id/btnPre"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:onClick="PreviousSong"
@@ -127,8 +65,7 @@
         <ImageButton
             android:id="@+id/btnPlayMenu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:gravity="center_horizontal"
@@ -140,8 +77,7 @@
         <ImageButton
             android:id="@+id/btnNext"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:onClick="NextSong"
@@ -152,8 +88,7 @@
         <ImageButton
             android:id="@+id/btnRepeat"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_repeat"

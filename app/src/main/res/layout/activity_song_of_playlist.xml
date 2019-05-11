@@ -8,7 +8,8 @@
     android:focusableInTouchMode="true"
     app:layout_constraintTop_toTopOf="@id/lnSearch"
     tools:context=".activity.SongOfPlaylistActivity"
-    android:background="@drawable/gardientback">
+    android:background="@drawable/gardientback"
+    android:screenOrientation="portrait">
 
     <LinearLayout
         android:id="@+id/lnSearch"
@@ -40,7 +41,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
             android:gravity="center_horizontal"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:textColor="#DCF6F0F0"/>
 
         <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@+id/listSongofActivity"
@@ -55,11 +57,10 @@
     <LinearLayout
         android:id="@+id/lnPlayBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="60dp"
         android:gravity="bottom"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         tools:layout_editor_absoluteX="-1dp">
 
         <include

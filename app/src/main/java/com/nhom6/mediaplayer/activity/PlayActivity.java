@@ -1,25 +1,34 @@
 package com.nhom6.mediaplayer.activity;
 
+import android.app.Dialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.design.widget.Snackbar;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ListView;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
+import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.CustomPagerAdapter;
+import com.nhom6.mediaplayer.adapter.PlaylistAdapterView;
 import com.nhom6.mediaplayer.fragment.ListPlayingSongFragment;
 import com.nhom6.mediaplayer.fragment.SongPlayingFragment;
+import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
 import com.nhom6.mediaplayer.service.BackgroundAudioService;
 
@@ -27,7 +36,12 @@ import java.util.ArrayList;
 
 
 public class PlayActivity extends AppCompatActivity implements SongPlayingFragment.OnFragmentInteractionListener, ListPlayingSongFragment.OnFragmentInteractionListener {
-
+    final Context context = this;
+    //khai báo ListView cho dialog
+    private ListView listDialog;
+    //khai báo SongManager để loadSong
+    PlayListManager playlistsManager = new PlayListManager();
+    public ArrayList<PlayList> _playlists = new ArrayList<PlayList>();
 
     //khai báo các nút
     ImageButton btn_play_pause;
@@ -109,11 +123,41 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
         //
 
+
         mediaBrowserCompat = new MediaBrowserCompat(this, new ComponentName(this, BackgroundAudioService.class),
                 connectionCallback, getIntent().getExtras());
         mediaBrowserCompat.connect();
 
     }
+    public void showPlayListDialog(View view) {
+
+        Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //load playlist len dialog
+        LayoutInflater inflaterDia = getLayoutInflater();
+        View mView = inflaterDia.inflate(R.layout.dialog_addplaylist, null);
+        listDialog = mView.findViewById(R.id.listDialogPL);
+
+        //tiến hành lấy toàn bộ song trong máy
+        _playlists = playlistsManager.loadPlayList(this);
+        //đưa vào adapter để hiển thị
+        PlaylistAdapterView listPlayListVAdapter = new PlaylistAdapterView(this, R.layout.row_item_playlist_view, _playlists);
+        listDialog.setAdapter(listPlayListVAdapter);
+        dialog.setContentView(mView);
+        dialog.setCancelable(true);
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.CENTER);
+        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawableResource(R.drawable.borderradius);
+        dialog.show();
+
+    }
+
+    public void clickLove(View view) {
+        Snackbar.make(view, "Đã đưa vào mục yêu thích", Snackbar.LENGTH_LONG)
+                .setAction("No action", null).show();
+    }
+
     public void PlaySong(View view)
     {
 

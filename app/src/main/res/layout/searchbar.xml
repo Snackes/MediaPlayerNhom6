@@ -6,7 +6,7 @@
     <LinearLayout
         android:id="@+id/lnSearch"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
 
@@ -16,7 +16,8 @@
             android:layout_height="wrap_content"
             android:iconifiedByDefault="false"
             android:queryHint="Tìm kiếm bài hát"
-            android:searchIcon="@drawable/ic_search">
+            android:searchIcon="@drawable/ic_search"
+            android:textColor="#DCF6F0F0">
 
         </SearchView>
     </LinearLayout>
