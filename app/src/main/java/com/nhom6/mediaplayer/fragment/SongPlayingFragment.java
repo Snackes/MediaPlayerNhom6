@@ -33,6 +33,7 @@ public class SongPlayingFragment extends Fragment {
     SeekBar seekBar;
     TextView startTime;
     TextView endTime;
+    Integer songID;
 
 
 
@@ -108,6 +109,7 @@ public class SongPlayingFragment extends Fragment {
         imgSong.setImageBitmap(BitmapFactory.decodeFile(getArguments().getString("Image")));
         titleSong.setText(getArguments().getString("Title"));
         artistSong.setText(getArguments().getString("Artist"));
+        songID = getArguments().getInt("SongID");
         //
         // Inflate the layout for this fragment
         return rootView;

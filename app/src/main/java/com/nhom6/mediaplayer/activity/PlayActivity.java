@@ -111,6 +111,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         fragmentPlaying.putString("Title",song.getSongname());
         fragmentPlaying.putString("Artist",song.getArtistname());
         fragmentPlaying.putString("Image",song.getAlbumArt());
+        fragmentPlaying.putInt("SongID",song.getSongid());
         //set bundle cho fragment listplaying
         Bundle fragmentListPlaying =  new Bundle();
         fragmentListPlaying.putIntegerArrayList("listID",lstIDSong);
