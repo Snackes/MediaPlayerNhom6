@@ -1,5 +1,6 @@
 package com.nhom6.mediaplayer.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -9,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
+import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -25,7 +29,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * create an instance of this fragment.
  */
 public class SongPlayingFragment extends Fragment {
-
     //view
     CircleImageView imgSong ;
     TextView titleSong;
@@ -33,7 +36,9 @@ public class SongPlayingFragment extends Fragment {
     SeekBar seekBar;
     TextView startTime;
     TextView endTime;
+    ImageButton btn_love;
     Integer songID;
+
 
 
 
@@ -102,6 +107,7 @@ public class SongPlayingFragment extends Fragment {
         seekBar = rootView.findViewById(R.id.seekBar);
         startTime = rootView.findViewById(R.id.startTime);
         endTime = rootView.findViewById(R.id.endTime);
+        btn_love=rootView.findViewById(R.id.btnLove);
 
 
         //
@@ -110,6 +116,13 @@ public class SongPlayingFragment extends Fragment {
         titleSong.setText(getArguments().getString("Title"));
         artistSong.setText(getArguments().getString("Artist"));
         songID = getArguments().getInt("SongID");
+        int check=0;
+        Context context = inflater.getContext();
+        MyDatabaseHelper db=new MyDatabaseHelper(context);
+        check=db.CheckSongFavorite(songID);
+        if(check==1){
+            btn_love.setImageResource(R.drawable.ic_loved);
+        }
         //
         // Inflate the layout for this fragment
         return rootView;

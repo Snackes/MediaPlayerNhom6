@@ -17,13 +17,6 @@ public class PlayListManager extends Activity {
     }
     //Load playlist o day
     public ArrayList<PlayList> loadPlayList(Context context) {
-/*        String playlistName = "Vu's Song";
-        int playlistid = 0001;
-        Bitmap bm = BitmapFactory.decodeResource(context.getResources(),R.drawable.adele);
-        PlayList pl = new PlayList(playlistName,playlistid,bm);
-        _playlists.add(pl);
-        return _playlists;*/
-
         MyDatabaseHelper db =new MyDatabaseHelper(context);
         db.createDefaultPlayListsIfNeed();
         return  _playlists=  db.getAllPlayLists();
