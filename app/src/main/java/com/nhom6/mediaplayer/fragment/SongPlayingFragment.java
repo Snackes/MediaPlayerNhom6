@@ -116,13 +116,7 @@ public class SongPlayingFragment extends Fragment {
         titleSong.setText(getArguments().getString("Title"));
         artistSong.setText(getArguments().getString("Artist"));
         songID = getArguments().getInt("SongID");
-        int check=0;
-        Context context = inflater.getContext();
-        MyDatabaseHelper db=new MyDatabaseHelper(context);
-        check=db.CheckSongFavorite(songID);
-        if(check==1){
-            btn_love.setImageResource(R.drawable.ic_loved);
-        }
+        ChangeIcon();
         //
         // Inflate the layout for this fragment
         return rootView;
@@ -130,6 +124,17 @@ public class SongPlayingFragment extends Fragment {
 
     }
 
+    public void ChangeIcon(){
+        int check=0;
+        MyDatabaseHelper db=new MyDatabaseHelper(getContext());
+        check=db.CheckSongFavorite(songID);
+        if(check==1){
+            btn_love.setImageResource(R.drawable.ic_loved);
+        }
+        else {
+            btn_love.setImageResource(R.drawable.ic_love);
+        }
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

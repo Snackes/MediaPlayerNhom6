@@ -319,7 +319,6 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
     @Override
     public boolean onQueryTextChange(String newText) {
         String text = newText;
-        //dựa vào id ==> list, truyền cả 2 vào tìm kiếm
         MyDatabaseHelper db = new MyDatabaseHelper(this);
         _songs = db.SearchSong(text,0,0);
         ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);

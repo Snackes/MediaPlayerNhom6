@@ -113,6 +113,7 @@ public class ListPlayingSongFragment extends Fragment {
 
         ListSongAdapter listSongAdapter = new ListSongAdapter(getActivity(),_songs);
         listView.setAdapter(listSongAdapter);
+        setSwipeListView();
         ClickItem();
 
         //

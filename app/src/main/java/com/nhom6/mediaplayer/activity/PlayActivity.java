@@ -54,7 +54,6 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     public ArrayList<PlayList> _playlists = new ArrayList<PlayList>();
 
     //khai báo các nút
-    ImageButton btn_add_love;
     ImageButton btn_play_pause;
     ImageButton btn_next;
     ImageButton btn_previous;
@@ -143,11 +142,11 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         mediaBrowserCompat.connect();
 
     }
-    public void ShowMainSreen(View view)
-    {
+    public void ShowMainSreen(View view) {
         Intent i = new Intent(this, MainActivity.class) ;
         startActivity(i);
     }
+
     public void showPlayListDialog(View view) {
         final Dialog dialogAdd = new Dialog(context);
         dialogAdd.requestWindowFeature(Window.FEATURE_CONTEXT_MENU);
@@ -238,30 +237,15 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
             db.AddSongFavorite(songID);
             Snackbar.make(view, "Đã đưa vào mục yêu thích", Snackbar.LENGTH_LONG)
                     .setAction("No action", null).show();
+
+            songPlayingFragment.ChangeIcon();
         }
         else {
-            new android.app.AlertDialog.Builder(context)
-                    .setTitle("Bài hát đã có trong yêu thích.")
-                    .setMessage("Bạn muốn xóa khỏi yêu thích..?")
-                    .setIcon(R.drawable.adele)
-                    .setPositiveButton("Đồng ý",
-                            new DialogInterface.OnClickListener() {
-                                @SuppressLint("WrongConstant")
-                                @TargetApi(11)
-                                public void onClick(DialogInterface dialog, int id) {
-                                    MyDatabaseHelper db=new MyDatabaseHelper(context);
-                                    db.deleteSongInFavorite(songID);
-                                    Toast.makeText(getApplicationContext(),
-                                            "Đã xóa khỏi Yêu Thích...", 50).show();
-                                    dialog.cancel();
-                                }
-                            })
-                    .setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
-                        @TargetApi(11)
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    }).show();
+            db=new MyDatabaseHelper(context);
+            db.deleteSongInFavorite(songID);
+            Snackbar.make(view, "Đã đưa vào mục yêu thích", Snackbar.LENGTH_LONG)
+                    .setAction("No action", null).show();
+            songPlayingFragment.ChangeIcon();
         }
 
     }
@@ -284,8 +268,8 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
     public void NextSong(View view) {
         //đổi hình theo
-        if ( position < lstIDSong.size() -1 ) // check if next song is there or not
-        {
+        // check if next song is there or not
+        if ( position < lstIDSong.size() -1 ) {
             int idNext = lstIDSong.get( position + 1);
             song = db.GetInfoSong(idNext);
             position = position +1;
@@ -397,7 +381,6 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     }
 
     private void initView() {
-        btn_add_love=(ImageButton) findViewById(R.id.btnLove);
         btn_play_pause = (ImageButton) findViewById(R.id.btnPlayMenu);
         btn_next = (ImageButton) findViewById(R.id.btnNext);
         btn_previous = (ImageButton) findViewById(R.id.btnPre);
