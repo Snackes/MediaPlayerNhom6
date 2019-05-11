@@ -22,12 +22,12 @@
 
             <ImageButton
                 android:id="@+id/btnDown"
-                android:layout_width="49dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:backgroundTint="#FFFFFF"
                 android:onClick="showMainSreen"
-                android:src="@drawable/ic_down"
+                android:src="@drawable/ic_close"
                 android:tint="#FFFFFF"
                 tools:ignore="OnClick" />
 
@@ -41,7 +41,7 @@
                 android:backgroundTint="#FCFCFC"
                 android:foregroundTint="#00FEFBFB"
                 android:onClick="showPlayListDialog"
-                android:src="@drawable/ic_plus"
+                android:src="@drawable/ic_add"
                 android:tint="@color/cardview_light_background"
                 tools:ignore="OnClick" />
 
@@ -53,7 +53,7 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:onClick="clickLove"
-                android:src="@drawable/ic_heart"
+                android:src="@drawable/ic_love"
                 android:tint="@color/cardview_light_background"
                 tools:ignore="OnClick" />
         </TableRow>

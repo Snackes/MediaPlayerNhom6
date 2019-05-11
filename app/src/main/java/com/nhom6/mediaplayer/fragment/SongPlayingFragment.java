@@ -1,6 +1,7 @@
 package com.nhom6.mediaplayer.fragment;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,9 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.nhom6.mediaplayer.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +25,18 @@ import com.nhom6.mediaplayer.R;
  * create an instance of this fragment.
  */
 public class SongPlayingFragment extends Fragment {
+    //view
+    CircleImageView imgSong ;
+    TextView titleSong;
+    TextView artistSong;
+    SeekBar seekBar;
+    TextView startTime;
+    TextView endTime;
+
+
+
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,6 +45,7 @@ public class SongPlayingFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,18 +83,34 @@ public class SongPlayingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_song_playing, container, false);
         //set animation
-        View mviewSP=inflater.inflate(R.layout.fragment_song_playing, container, false);
-        TextView txtSongTil=mviewSP.findViewById(R.id.songTitle);
+        TextView txtSongTil=rootView.findViewById(R.id.songTitle);
         TranslateAnimation animation = new TranslateAnimation(1000.0f, -1000.0f, 0.0f, 0.0f); // new TranslateAnimation (float fromXDelta,float toXDelta, float fromYDelta, float toYDelta)
 
         animation.setDuration(7000); // animation duration
         animation.setRepeatCount(100); // animation repeat count
         animation.setFillAfter(false);
         txtSongTil.startAnimation(animation);//your_view for mine is imageView
+
+        //init view
+        imgSong = rootView.findViewById(R.id.imgMusic);
+        titleSong = rootView.findViewById(R.id.songTitle);
+        artistSong = rootView.findViewById(R.id.artist);
+        seekBar = rootView.findViewById(R.id.seekBar);
+        startTime = rootView.findViewById(R.id.startTime);
+        endTime = rootView.findViewById(R.id.endTime);
+
+
+        //
+
+        imgSong.setImageBitmap(BitmapFactory.decodeFile(getArguments().getString("Image")));
+        titleSong.setText(getArguments().getString("Title"));
+        artistSong.setText(getArguments().getString("Artist"));
         //
         // Inflate the layout for this fragment
-        return mviewSP;
+        return rootView;
 
 
 
