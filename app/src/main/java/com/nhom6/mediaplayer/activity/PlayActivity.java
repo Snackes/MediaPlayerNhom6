@@ -30,6 +30,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
+import com.nhom6.mediaplayer.MainActivity;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.CustomPagerAdapter;
@@ -141,6 +142,11 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
                 connectionCallback, getIntent().getExtras());
         mediaBrowserCompat.connect();
 
+    }
+    public void ShowMainSreen(View view)
+    {
+        Intent i = new Intent(this, MainActivity.class) ;
+        startActivity(i);
     }
     public void showPlayListDialog(View view) {
         final Dialog dialogAdd = new Dialog(context);

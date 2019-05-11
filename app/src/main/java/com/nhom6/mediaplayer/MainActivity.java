@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         Intent i = new Intent(this, ShowAllSong.class) ;
         startActivity(i);
     }
+
     public void ShowPlayList(View view)
     {
         Intent i = new Intent(this, PlaylistActivity.class) ;

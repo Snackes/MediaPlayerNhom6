@@ -14,10 +14,10 @@
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#33F1E8E8"
             android:iconifiedByDefault="false"
             android:queryHint="Tìm kiếm bài hát"
-            android:searchIcon="@drawable/ic_search"
-            android:textColor="#DCF6F0F0">
+            android:searchIcon="@drawable/ic_search">
 
         </SearchView>
     </LinearLayout>
