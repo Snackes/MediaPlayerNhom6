@@ -52,6 +52,7 @@
             android:id="@+id/gridViewAB"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:columnWidth="120dp"
             android:gravity="center"
             android:numColumns="2" />

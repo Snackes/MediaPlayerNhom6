@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="20dp"
     android:layout_marginEnd="20dp"
-    android:background="@drawable/gardientrow"
+    android:background="@drawable/gardientblacktran"
     android:gravity="center"
     android:orientation="horizontal">
 
