@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ public class PlaylistAdapterView extends ArrayAdapter<PlayList> {
         PlayList playList = arrPlayList.get(position);
         imagePlayList.setImageResource(R.drawable.adele);
         playListName.setText(playList.getTitle());
+
         return convertView;
     }
 }

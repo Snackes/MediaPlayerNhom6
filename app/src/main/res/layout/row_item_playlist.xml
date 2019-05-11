@@ -19,7 +19,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="307dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center|left"
@@ -31,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center|start"
+            android:maxWidth="310dp"
             android:text="@string/playlistName"
             android:textColor="@android:color/background_light"
             android:textSize="18sp" />

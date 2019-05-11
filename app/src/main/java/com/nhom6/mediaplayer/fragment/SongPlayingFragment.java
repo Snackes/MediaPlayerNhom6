@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
+import android.widget.TextView;
 
 import com.nhom6.mediaplayer.R;
 
@@ -64,8 +66,21 @@ public class SongPlayingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //set animation
+        View mviewSP=inflater.inflate(R.layout.fragment_song_playing, container, false);
+        TextView txtSongTil=mviewSP.findViewById(R.id.songTitle);
+        TranslateAnimation animation = new TranslateAnimation(1000.0f, -1000.0f, 0.0f, 0.0f); // new TranslateAnimation (float fromXDelta,float toXDelta, float fromYDelta, float toYDelta)
+
+        animation.setDuration(7000); // animation duration
+        animation.setRepeatCount(100); // animation repeat count
+        animation.setFillAfter(false);
+        txtSongTil.startAnimation(animation);//your_view for mine is imageView
+        //
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_song_playing, container, false);
+        return mviewSP;
+
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

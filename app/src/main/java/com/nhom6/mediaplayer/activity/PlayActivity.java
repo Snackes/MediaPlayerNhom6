@@ -18,8 +18,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
@@ -111,7 +113,6 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         viewPager.setAdapter(customPagerAdapter);
 
         //
-
 
         mediaBrowserCompat = new MediaBrowserCompat(this, new ComponentName(this, BackgroundAudioService.class),
                 connectionCallback, getIntent().getExtras());
