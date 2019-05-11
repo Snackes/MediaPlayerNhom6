@@ -129,6 +129,7 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
             DeleteSongInPlaylist();
         }
     }
+
     public void DeleteSongInPlaylist(){
         LvSongInPlayList.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
@@ -175,8 +176,8 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
             }
         });
     }
-    public void ClickItem()
-    {
+
+    public void ClickItem() {
         LvSongInPlayList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -211,9 +212,9 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
         });
 
     }
+
     //TODO: input : ArrayList<Song> , output : ArrayList<String> là các Url của song
-    private ArrayList<String> GetListUrlSong()
-    {
+    private ArrayList<String> GetListUrlSong() {
         ArrayList<String> lstUrlSong = new ArrayList<String>();
 
         for (Song item : _songs)
@@ -222,9 +223,9 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
         }
         return lstUrlSong;
     }
+
     //TODO: input : ArrayList<Song> , output : ArrayList<Integer> là các ID của song
-    private ArrayList<Integer> GetListIDSong()
-    {
+    private ArrayList<Integer> GetListIDSong() {
         ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
 
         for (Song item : _songs)

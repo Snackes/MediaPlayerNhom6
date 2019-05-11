@@ -1,8 +1,6 @@
 package com.nhom6.mediaplayer;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,15 +23,17 @@ import com.nhom6.mediaplayer.activity.PlayActivity;
 import com.nhom6.mediaplayer.activity.PlaylistActivity;
 import com.nhom6.mediaplayer.activity.ShowAllSong;
 import com.nhom6.mediaplayer.activity.SingerActivity;
-import com.nhom6.mediaplayer.adapter.ListSongAdapter;
+import com.nhom6.mediaplayer.activity.SongOfPlaylistActivity;
 import com.nhom6.mediaplayer.model.Song;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     public static final int PLAYSCREEN_RESULT = 1;
     private SearchView searchView;
+    Context context=this;
     ArrayList<Song>_songs=new ArrayList<Song>();
     View activity;
 
@@ -47,17 +47,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         LayoutInflater inflaterDia = getLayoutInflater();
         activity = inflaterDia.inflate(R.layout.activity_all_song, null);
-
-
-
         //kiem tra permission
         CheckUserPermission(this);
-
-
+        searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
     }
-
-
-
     public void ShowAllSong(View view)
     {
         Intent i = new Intent(this, ShowAllSong.class) ;
@@ -94,8 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 .setAction("No action", null).show();
     }
 
-    private void CheckUserPermission(Context context)
-    {
+    private void CheckUserPermission(Context context) {
         //TODO: nếu chạy lần đầu thì sẽ vào đây xin permission
         if(Build.VERSION.SDK_INT >= 23)
         {
@@ -129,5 +122,18 @@ public class MainActivity extends AppCompatActivity {
                 break;
                 default: super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Intent intent = new Intent(context, ShowAllSong.class);
+        intent.putExtra("SearchInMain",newText);
+        startActivity(intent);
+        return false;
     }
 }

@@ -74,8 +74,6 @@ public class PlaylistActivity extends AppCompatActivity implements SearchView.On
 
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
-
-
     }
     //xử lí khi click vào 1 playlist
     public void clickItemPlaylist(){

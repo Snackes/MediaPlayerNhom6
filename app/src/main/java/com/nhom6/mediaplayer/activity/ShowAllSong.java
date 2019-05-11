@@ -32,6 +32,7 @@ import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapterView;
+import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
 
@@ -61,16 +62,27 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
         setContentView(R.layout.activity_all_song);
         //find id ListView
         listView = (SwipeMenuListView) findViewById(R.id.listViewSong);
+        searchView = findViewById(R.id.searchView);
 
         MyDatabaseHelper db = new MyDatabaseHelper(this);
-        //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
-        if (db.CheckTableSong() == 0) {
-            //tiến hành lấy toàn bộ song trong máy
-            _songs = songsManager.loadSong(this);
-            //đưa songs lấy được vào csdl
-            db.addSong(_songs);
-        } else {
-            _songs = db.GetListSong();
+
+        Intent intent = this.getIntent();
+        //TH show tất cả bài hát có trong 1 ca sĩ được chọn
+        if(intent.getSerializableExtra("SearchInMain")!=null) {
+            String NewText=intent.getSerializableExtra("SearchInMain").toString();
+            searchView.setQuery(NewText,false);
+            onQueryTextChange(NewText);
+        }
+        else {
+            //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
+            if (db.CheckTableSong() == 0) {
+                //tiến hành lấy toàn bộ song trong máy
+                _songs = songsManager.loadSong(this);
+                //đưa songs lấy được vào csdl
+                db.addSong(_songs);
+            } else {
+                _songs = db.GetListSong();
+            }
         }
 
         //đưa vào adapter để hiển thị
@@ -82,7 +94,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
         setSwipeListView();
         ClickItem();
 
-        searchView = findViewById(R.id.searchView);
+
         searchView.setOnQueryTextListener(this);
     }
 
@@ -307,6 +319,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
     @Override
     public boolean onQueryTextChange(String newText) {
         String text = newText;
+        //dựa vào id ==> list, truyền cả 2 vào tìm kiếm
         MyDatabaseHelper db = new MyDatabaseHelper(this);
         _songs = db.SearchSong(text,0,0);
         ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);
