@@ -29,11 +29,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="60dp"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="-1dp"
+        app:layout_constraintTop_toBottomOf="@id/lnSearch"
 
-        app:layout_constraintTop_toBottomOf="@id/lnSearch">
+        tools:layout_editor_absoluteX="-1dp">
 
         <TextView
             android:id="@+id/txtAllSong"
@@ -42,8 +44,8 @@
             android:fontFamily="sans-serif-black"
             android:gravity="center_horizontal"
             android:text="@string/AllSong"
-            android:textSize="30sp"
-            android:textColor="#DCF6F0F0"/>
+            android:textColor="#DCF6F0F0"
+            android:textSize="30sp" />
 
         <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@+id/listViewSong"

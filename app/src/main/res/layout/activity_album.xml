@@ -30,9 +30,12 @@
     <LinearLayout
         android:id="@+id/lnGirdView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="60dp"
         android:gravity="center"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lnSearch">
 
         <TextView
@@ -42,13 +45,13 @@
             android:fontFamily="sans-serif-black"
             android:gravity="center_horizontal"
             android:text="@string/album"
-            android:textSize="30sp"
-            android:textColor="#DCF6F0F0"/>
+            android:textColor="#DCF6F0F0"
+            android:textSize="30sp" />
 
         <GridView
             android:id="@+id/gridViewAB"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:columnWidth="120dp"
             android:gravity="center"
             android:numColumns="2" />

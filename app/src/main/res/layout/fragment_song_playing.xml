@@ -67,8 +67,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgMusic"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:src="@drawable/adele" />
