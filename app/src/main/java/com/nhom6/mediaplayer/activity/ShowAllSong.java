@@ -1,6 +1,7 @@
 package com.nhom6.mediaplayer.activity;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -28,15 +30,18 @@ import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
+import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapterView;
+import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
 
-public class ShowAllSong extends AppCompatActivity {
+public class ShowAllSong extends AppCompatActivity implements SearchView.OnQueryTextListener {
     final Context context = this;
     private Button buttonCreatePlaylist;
+    private SearchView searchView;
     //khai báo ListView cho adapter
     private SwipeMenuListView listView;
     private ListView listViewAdd;
@@ -57,29 +62,42 @@ public class ShowAllSong extends AppCompatActivity {
         setContentView(R.layout.activity_all_song);
         //find id ListView
         listView = (SwipeMenuListView) findViewById(R.id.listViewSong);
+        searchView = findViewById(R.id.searchView);
 
-        MyDatabaseHelper db=new MyDatabaseHelper(this);
-        //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
-        if(db.CheckTableSong()==0){
-            //tiến hành lấy toàn bộ song trong máy
-            _songs = songsManager.loadSong(this);
-            //đưa songs lấy được vào csdl
-            db.addSong(_songs);
+        MyDatabaseHelper db = new MyDatabaseHelper(this);
+
+        Intent intent = this.getIntent();
+        //TH show tất cả bài hát có trong 1 ca sĩ được chọn
+        if(intent.getSerializableExtra("SearchInMain")!=null) {
+            String NewText=intent.getSerializableExtra("SearchInMain").toString();
+            searchView.setQuery(NewText,false);
+            onQueryTextChange(NewText);
         }
         else {
-            _songs=db.GetListSong();
+            //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
+            if (db.CheckTableSong() == 0) {
+                //tiến hành lấy toàn bộ song trong máy
+                _songs = songsManager.loadSong(this);
+                //đưa songs lấy được vào csdl
+                db.addSong(_songs);
+            } else {
+                _songs = db.GetListSong();
+            }
         }
 
         //đưa vào adapter để hiển thị
 /*        ListSongAdapter listSongAdapter = new ListSongAdapter(context,R.layout.row_item_song,_songs);
         listView.setAdapter(listSongAdapter);*/
 
-        ListSongAdapter listSongAdapter = new ListSongAdapter(this,_songs);
+        ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);
         listView.setAdapter(listSongAdapter);
         setSwipeListView();
         ClickItem();
 
+
+        searchView.setOnQueryTextListener(this);
     }
+
     private void setSwipeListView() {
         SwipeMenuCreator creator = new SwipeMenuCreator() {
             @Override
@@ -134,8 +152,8 @@ public class ShowAllSong extends AppCompatActivity {
                             @Override
                             //lưu bài hát vào khi chọn playlist đã có
                             public void onItemClick(AdapterView<?> parent, View view, int position1, long id) {
-                                MyDatabaseHelper db= new MyDatabaseHelper(context);
-                                db.addSongForPlayList(_playlists.get(position1).getIDPlayList(),_songs.get(position).getSongid());
+                                MyDatabaseHelper db = new MyDatabaseHelper(context);
+                                db.addSongForPlayList(_playlists.get(position1).getIDPlayList(), _songs.get(position).getSongid());
                                 Toast.makeText(getApplicationContext(),
                                         "Thêm bài hát vào PlayList thành công..!", Toast.LENGTH_SHORT).show();
                                 dialogAdd.cancel();
@@ -143,21 +161,48 @@ public class ShowAllSong extends AppCompatActivity {
                         });
                         dialogAdd.setContentView(mView);
                         dialogAdd.setCancelable(true);
-                        Window window=dialogAdd.getWindow();
+                        Window window = dialogAdd.getWindow();
                         window.setGravity(Gravity.CENTER);
-                        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                         window.setBackgroundDrawableResource(R.drawable.borderradius);
                         dialogAdd.show();
                         buttonCreatePlaylist = mView.findViewById(R.id.btnCreatePlayList);
 
                         //
-                        CreatePlaylist(position,dialogAdd);
+                        CreatePlaylist(position, dialogAdd);
                         break;
                     case 1://thêm zô danh sách bài hát yêu thích
-                        MyDatabaseHelper db=new MyDatabaseHelper(context);
-                        db.AddSongFavorite(_songs.get(position).getSongid());
-                        Toast.makeText(getApplicationContext(),
-                                "Đã thêm vào Yêu Thích...", 50).show();
+                        MyDatabaseHelper db = new MyDatabaseHelper(context);
+                        int k=db.CheckSongFavorite(_songs.get(position).getSongid());
+                        if(k==0) {
+
+                            db.AddSongFavorite(_songs.get(position).getSongid());
+                            Toast.makeText(getApplicationContext(),
+                                    "Đã thêm vào Yêu Thích...", 50).show();
+                        }
+                        else {
+                            new android.app.AlertDialog.Builder(context)
+                                    .setTitle("Bài hát đã có trong yêu thích.")
+                                    .setMessage("Bạn muốn xóa khỏi yêu thích..?")
+                                    .setIcon(R.drawable.adele)
+                                    .setPositiveButton("Đồng ý",
+                                            new DialogInterface.OnClickListener() {
+                                                @TargetApi(11)
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    MyDatabaseHelper db=new MyDatabaseHelper(context);
+                                                    db.deleteSongInFavorite(_songs.get(position).getSongid());
+                                                    Toast.makeText(getApplicationContext(),
+                                                            "Đã xóa khỏi Yêu Thích...", 50).show();
+                                                    dialog.cancel();
+                                                }
+                                            })
+                                    .setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+                                        @TargetApi(11)
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    }).show();
+                        }
                         break;
                 }
                 // false : close the menu; true : not close the menu
@@ -165,8 +210,9 @@ public class ShowAllSong extends AppCompatActivity {
             }
         });
     }
+
     //tạo mới playlist đồng thời thêm bài hát đã chọn vào playlist vừa tạo
-    public  void CreatePlaylist(final int position, final Dialog dialogAdd){
+    public void CreatePlaylist(final int position, final Dialog dialogAdd) {
         buttonCreatePlaylist.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -180,9 +226,9 @@ public class ShowAllSong extends AppCompatActivity {
                 // Inflate and set the layout for the dialog
                 // Pass null as the parent view because its going in the dialog layout
                 final LayoutInflater inflatercreate = getLayoutInflater();
-                final View moduleView = inflatercreate.inflate(R.layout.create_playlist,null);
+                final View moduleView = inflatercreate.inflate(R.layout.create_playlist, null);
                 alertDialogBuilder.setView(moduleView);
-                final EditText edtPlayListName=moduleView.findViewById(R.id.namePlayList);
+                final EditText edtPlayListName = moduleView.findViewById(R.id.namePlayList);
                 // Add action buttons
                 alertDialogBuilder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
 
@@ -190,13 +236,13 @@ public class ShowAllSong extends AppCompatActivity {
                     @SuppressLint("WrongConstant")
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        String title= edtPlayListName.getText().toString();
-                        if(title.equals("")) {
+                        String title = edtPlayListName.getText().toString();
+                        if (title.equals("")) {
                             Toast.makeText(getApplicationContext(),
                                     "Vui lòng nhập tên trước khi tạo Playlist..!", 50).show();
                             return;
                         }
-                        playlistsManager.CreatePlayListAndAddSong(title,context,_songs.get(position).getSongid());
+                        playlistsManager.CreatePlayListAndAddSong(title, context, _songs.get(position).getSongid());
                         Toast.makeText(getApplicationContext(),
                                 "Đã thêm vào Playlist..!", 50).show();
                     }
@@ -211,14 +257,11 @@ public class ShowAllSong extends AppCompatActivity {
             }
         });
     }
-    public void ClickItem()
-    {
+
+    public void ClickItem() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-
 
                 //TODO: khi mình intent 1 item sang PlayActivity mình sẽ gửi 2 thứ: position của item và listID ( toàn bộ )
                 //Lấy item tại vị trí click
@@ -233,8 +276,8 @@ public class ShowAllSong extends AppCompatActivity {
                 Bundle Package = new Bundle();
                 // nhét thông tin vào bundle
                 Package.putInt("position", position);
-                Package.putStringArrayList("lstUrlSong",lstUrlSong);
-                Package.putIntegerArrayList("lstIDSong",lstIDSong);
+                Package.putStringArrayList("lstUrlSong", lstUrlSong);
+                Package.putIntegerArrayList("lstIDSong", lstIDSong);
                 //
                 //
                 Intent i = new Intent(context, PlayActivity.class);
@@ -247,26 +290,41 @@ public class ShowAllSong extends AppCompatActivity {
         });
 
     }
+
     //TODO: input : ArrayList<Song> , output : ArrayList<String> là các Url của song
-    private ArrayList<String> GetListUrlSong()
-    {
+    private ArrayList<String> GetListUrlSong() {
         ArrayList<String> lstUrlSong = new ArrayList<String>();
 
-        for (Song item : _songs)
-        {
+        for (Song item : _songs) {
             lstUrlSong.add(item.getSongUrl());
         }
         return lstUrlSong;
     }
+
     //TODO: input : ArrayList<Song> , output : ArrayList<Integer> là các ID của song
-    private ArrayList<Integer> GetListIDSong()
-    {
+    private ArrayList<Integer> GetListIDSong() {
         ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
 
-        for (Song item : _songs)
-        {
+        for (Song item : _songs) {
             lstIDSong.add(item.getSongid());
         }
         return lstIDSong;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        String text = newText;
+        //dựa vào id ==> list, truyền cả 2 vào tìm kiếm
+        MyDatabaseHelper db = new MyDatabaseHelper(this);
+        _songs = db.SearchSong(text,0,0);
+        ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);
+        listView.setAdapter(listSongAdapter);
+        setSwipeListView();
+        return false;
     }
 }

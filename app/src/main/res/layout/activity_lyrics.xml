@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     tools:context=".activity.PlayActivity"
+    android:screenOrientation="portrait"
     android:background="@drawable/gardientback"
     android:orientation="vertical">
 

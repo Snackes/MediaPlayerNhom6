@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,14 +30,18 @@ import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
 
-public class SongOfPlaylistActivity extends AppCompatActivity {
+public class SongOfPlaylistActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     Activity activity=this;
     int kt=0;
+    int test=0;
+
+    int idObject=0;
     PlayList playlist;
     Album album;
     Artist artist;
     TextView PlayListName;
+    private SearchView searchView;
     SwipeMenuListView LvSongInPlayList;
     ArrayList<Song> _songs = new ArrayList<Song>();
     final Context context = this;
@@ -56,25 +61,31 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
 
         //TH show tất cả bài hát có trong 1 playlist được chọn
         if(intent.getSerializableExtra("playlist")!=null) {
+            test=1;
             this.playlist = (PlayList) intent.getSerializableExtra("playlist");
             this.PlayListName.setText(playlist.getTitle());
             MyDatabaseHelper db = new MyDatabaseHelper(this);
-            _songs = db.GetListSongInPlayList(this.playlist.getIDPlayList());
+            idObject=this.playlist.getIDPlayList();
+            _songs = db.GetListSongInPlayList(idObject);
             kt=1;
         }
         //TH show tất cả bài hát có trong 1 album được chọn
         if(intent.getSerializableExtra("Album")!=null) {
+            test=2;
             this.album= (Album) getIntent().getSerializableExtra("Album");
             this.PlayListName.setText(album.getAlbumTitle());
             MyDatabaseHelper db = new MyDatabaseHelper(this);
-            _songs = db.GetListSongInAlbum(this.album.getAlbumID());
+            idObject=this.album.getAlbumID();
+            _songs = db.GetListSongInAlbum(idObject);
         }
         //TH show tất cả bài hát có trong 1 ca sĩ được chọn
         if(intent.getSerializableExtra("Singer")!=null) {
+            test=3;
             this.artist= (Artist) getIntent().getSerializableExtra("Singer");
             this.PlayListName.setText(artist.getArtistName());
             MyDatabaseHelper db = new MyDatabaseHelper(this);
-            _songs = db.GetListSongOfArtist(this.artist.getArtistID());
+            idObject=this.artist.getArtistID();
+            _songs = db.GetListSongOfArtist(idObject);
         }
 
         //Kiểm tra List bài hát có gì không, nếu không có thì thoát
@@ -90,6 +101,8 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
         LvSongInPlayList.setAdapter(listSongAdapter);
         setSwipeListView();
         ClickItem();
+        searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
     }
     private void setSwipeListView() {
         SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -108,12 +121,15 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
             }
         };
 
+
+        //nếu là bài hát trong playlist mới cho xóa,còn trong album hoặc ca sĩ thì không
         // set creator
         if(kt==1) {
             LvSongInPlayList.setMenuCreator(creator);
             DeleteSongInPlaylist();
         }
     }
+
     public void DeleteSongInPlaylist(){
         LvSongInPlayList.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
@@ -160,8 +176,8 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
             }
         });
     }
-    public void ClickItem()
-    {
+
+    public void ClickItem() {
         LvSongInPlayList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -196,9 +212,9 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
         });
 
     }
+
     //TODO: input : ArrayList<Song> , output : ArrayList<String> là các Url của song
-    private ArrayList<String> GetListUrlSong()
-    {
+    private ArrayList<String> GetListUrlSong() {
         ArrayList<String> lstUrlSong = new ArrayList<String>();
 
         for (Song item : _songs)
@@ -207,9 +223,9 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
         }
         return lstUrlSong;
     }
+
     //TODO: input : ArrayList<Song> , output : ArrayList<Integer> là các ID của song
-    private ArrayList<Integer> GetListIDSong()
-    {
+    private ArrayList<Integer> GetListIDSong() {
         ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
 
         for (Song item : _songs)
@@ -219,4 +235,20 @@ public class SongOfPlaylistActivity extends AppCompatActivity {
         return lstIDSong;
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        String text = newText;
+        MyDatabaseHelper db = new MyDatabaseHelper(this);
+        _songs = db.SearchSong(text,idObject,test);
+        ListSongAdapter listSongAdapter = new ListSongAdapter(this,_songs);
+        LvSongInPlayList.setAdapter(listSongAdapter);
+        setSwipeListView();
+        ClickItem();
+        return false;
+    }
 }
