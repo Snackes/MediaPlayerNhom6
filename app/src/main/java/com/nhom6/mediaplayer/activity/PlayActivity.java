@@ -243,7 +243,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         else {
             db=new MyDatabaseHelper(context);
             db.deleteSongInFavorite(songID);
-            Snackbar.make(view, "Đã đưa vào mục yêu thích", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Đã xóa khỏi mục yêu thích", Snackbar.LENGTH_LONG)
                     .setAction("No action", null).show();
             songPlayingFragment.ChangeIcon();
         }
