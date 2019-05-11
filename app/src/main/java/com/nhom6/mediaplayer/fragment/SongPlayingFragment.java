@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -84,6 +85,15 @@ public class SongPlayingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_song_playing, container, false);
+        //set animation
+        TextView txtSongTil=rootView.findViewById(R.id.songTitle);
+        TranslateAnimation animation = new TranslateAnimation(1000.0f, -1000.0f, 0.0f, 0.0f); // new TranslateAnimation (float fromXDelta,float toXDelta, float fromYDelta, float toYDelta)
+
+        animation.setDuration(7000); // animation duration
+        animation.setRepeatCount(100); // animation repeat count
+        animation.setFillAfter(false);
+        txtSongTil.startAnimation(animation);//your_view for mine is imageView
+
         //init view
         imgSong = rootView.findViewById(R.id.imgMusic);
         titleSong = rootView.findViewById(R.id.songTitle);
@@ -98,6 +108,8 @@ public class SongPlayingFragment extends Fragment {
         imgSong.setImageBitmap(BitmapFactory.decodeFile(getArguments().getString("Image")));
         titleSong.setText(getArguments().getString("Title"));
         artistSong.setText(getArguments().getString("Artist"));
+        //
+        // Inflate the layout for this fragment
         return rootView;
 
 
