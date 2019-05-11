@@ -223,9 +223,6 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
             if( !successfullyRetrievedAudioFocus() ) {
                 return;
             }
-
-
-
             mediaSessionCompat.setActive(true);
             setMediaPlayBackState(PlaybackStateCompat.STATE_PLAYING);
 
@@ -304,7 +301,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
         }
 
 
-        builder.addAction(new NotificationCompat.Action(R.drawable.ic_pause_new,"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        builder.addAction(new NotificationCompat.Action(R.drawable.ic_pause_ser,"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView().setMediaSession(mediaSessionCompat.getSessionToken()));
         builder.setSmallIcon(R.mipmap.ic_launcher);
         NotificationManagerCompat.from(BackgroundAudioService.this).notify(1, builder.build());
@@ -318,7 +315,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
         }
 
 
-        builder.addAction(new NotificationCompat.Action(R.drawable.ic_play_new,"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        builder.addAction(new NotificationCompat.Action(R.drawable.ic_play_ser,"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView().setMediaSession(mediaSessionCompat.getSessionToken()));
         builder.setSmallIcon(R.mipmap.ic_launcher);
         NotificationManagerCompat.from(BackgroundAudioService.this).notify(1, builder.build());

@@ -30,7 +30,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class SongPlayingFragment extends Fragment {
     //view
-    CircleImageView imgSong ;
+    CircleImageView imgSong;
     TextView titleSong;
     TextView artistSong;
     SeekBar seekBar;
@@ -38,10 +38,6 @@ public class SongPlayingFragment extends Fragment {
     TextView endTime;
     ImageButton btn_love;
     Integer songID;
-
-
-
-
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -92,7 +88,7 @@ public class SongPlayingFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_song_playing, container, false);
         //set animation
-        TextView txtSongTil=rootView.findViewById(R.id.songTitle);
+        TextView txtSongTil = rootView.findViewById(R.id.songTitle);
         TranslateAnimation animation = new TranslateAnimation(1000.0f, -1000.0f, 0.0f, 0.0f); // new TranslateAnimation (float fromXDelta,float toXDelta, float fromYDelta, float toYDelta)
 
         animation.setDuration(7000); // animation duration
@@ -107,12 +103,16 @@ public class SongPlayingFragment extends Fragment {
         seekBar = rootView.findViewById(R.id.seekBar);
         startTime = rootView.findViewById(R.id.startTime);
         endTime = rootView.findViewById(R.id.endTime);
-        btn_love=rootView.findViewById(R.id.btnLove);
+        btn_love = rootView.findViewById(R.id.btnLove);
 
 
         //
+        if (BitmapFactory.decodeFile(getArguments().getString("Image")) != null) {
 
-        imgSong.setImageBitmap(BitmapFactory.decodeFile(getArguments().getString("Image")));
+            imgSong.setImageBitmap(BitmapFactory.decodeFile(getArguments().getString("Image")));
+        } else {
+            imgSong.setImageResource(R.drawable.adele);
+        }
         titleSong.setText(getArguments().getString("Title"));
         artistSong.setText(getArguments().getString("Artist"));
         songID = getArguments().getInt("SongID");
@@ -124,17 +124,17 @@ public class SongPlayingFragment extends Fragment {
 
     }
 
-    public void ChangeIcon(){
-        int check=0;
-        MyDatabaseHelper db=new MyDatabaseHelper(getContext());
-        check=db.CheckSongFavorite(songID);
-        if(check==1){
+    public void ChangeIcon() {
+        int check = 0;
+        MyDatabaseHelper db = new MyDatabaseHelper(getContext());
+        check = db.CheckSongFavorite(songID);
+        if (check == 1) {
             btn_love.setImageResource(R.drawable.ic_loved);
-        }
-        else {
+        } else {
             btn_love.setImageResource(R.drawable.ic_love);
         }
     }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

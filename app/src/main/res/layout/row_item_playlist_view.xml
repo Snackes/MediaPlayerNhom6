@@ -34,9 +34,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="sans-serif-medium"
             android:gravity="center|center_horizontal"
             android:text="@string/playlistName"
-            android:textColor="@android:color/background_light"
+            android:textColor="#C4342F2F"
             android:textSize="18sp" />
 
     </LinearLayout>
