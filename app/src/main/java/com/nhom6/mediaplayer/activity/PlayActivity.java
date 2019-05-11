@@ -76,8 +76,8 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     public static CustomPagerAdapter customPagerAdapter;
     //
     //tạo 2 Fragment
-    public SongPlayingFragment songPlayingFragment;
-    public ListPlayingSongFragment listSongPlayingFragment;
+    public static SongPlayingFragment songPlayingFragment;
+    public static ListPlayingSongFragment listSongPlayingFragment;
     //
     ViewPager viewPager;
 
@@ -102,11 +102,29 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         // lấy data từ Intent
         getDataIntent();
 
+        //set bundle cho  fragment playing
+        Bundle fragmentPlaying = new Bundle();
+        fragmentPlaying.putString("Title",song.getSongname());
+        fragmentPlaying.putString("Artist",song.getArtistname());
+        fragmentPlaying.putString("Image",song.getAlbumArt());
+        //set bundle cho fragment listplaying
+        Bundle fragmentListPlaying =  new Bundle();
+        fragmentListPlaying.putIntegerArrayList("listID",lstIDSong);
+
+
+
+
         // tạo view pager
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         //init fragment
         songPlayingFragment = new SongPlayingFragment();
+        //đưa bundle chứa thông tin qua fragment
+        songPlayingFragment.setArguments(fragmentPlaying);
+        //
+
         listSongPlayingFragment = new ListPlayingSongFragment();
+        listSongPlayingFragment.setArguments(fragmentListPlaying);
+        //
         customPagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
         customPagerAdapter.AddFragment(songPlayingFragment);
         customPagerAdapter.AddFragment(listSongPlayingFragment);
