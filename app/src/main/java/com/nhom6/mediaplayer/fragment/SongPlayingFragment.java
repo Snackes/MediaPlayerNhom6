@@ -1,14 +1,19 @@
 package com.nhom6.mediaplayer.fragment;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.nhom6.mediaplayer.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,6 +24,19 @@ import com.nhom6.mediaplayer.R;
  * create an instance of this fragment.
  */
 public class SongPlayingFragment extends Fragment {
+
+    //view
+    CircleImageView imgSong ;
+    TextView titleSong;
+    TextView artistSong;
+    SeekBar seekBar;
+    TextView startTime;
+    TextView endTime;
+
+
+
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -65,7 +83,24 @@ public class SongPlayingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_song_playing, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_song_playing, container, false);
+        //init view
+        imgSong = rootView.findViewById(R.id.imgMusic);
+        titleSong = rootView.findViewById(R.id.songTitle);
+        artistSong = rootView.findViewById(R.id.artist);
+        seekBar = rootView.findViewById(R.id.seekBar);
+        startTime = rootView.findViewById(R.id.startTime);
+        endTime = rootView.findViewById(R.id.endTime);
+
+
+        //
+
+        imgSong.setImageBitmap(BitmapFactory.decodeFile(getArguments().getString("Image")));
+        titleSong.setText(getArguments().getString("Title"));
+        artistSong.setText(getArguments().getString("Artist"));
+        return rootView;
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
