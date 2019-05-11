@@ -42,13 +42,13 @@
             android:textSize="30sp"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ListView
-            android:id="@+id/listSameSong"
+        <com.baoyz.swipemenulistview.SwipeMenuListView
+            android:id="@+id/listPlaying"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
-        </ListView>
+        </com.baoyz.swipemenulistview.SwipeMenuListView>
     </LinearLayout>
 
 </FrameLayout>
