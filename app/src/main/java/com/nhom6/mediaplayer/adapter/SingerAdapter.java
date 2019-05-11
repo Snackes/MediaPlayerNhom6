@@ -42,7 +42,7 @@ public class SingerAdapter extends ArrayAdapter<Artist> {
 
         Artist artist = arrArtist.get(position);
 
-        imageArtist.setImageResource(R.drawable.ic_micro);
+        imageArtist.setImageResource(R.drawable.ic_singer);
         ArtistName.setText(artist.getArtistName());
         return convertView;
     }
