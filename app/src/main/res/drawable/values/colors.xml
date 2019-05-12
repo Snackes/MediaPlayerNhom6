@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#7B4BFF</color>
+    <color name="colorPrimaryDark">#6539ba</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="bgBottomNavigation">#fe485a</color>
+    <color name="pink">#FF66CC</color>
+    <color name="green">#00FF33</color>
+    <color name="red">#CC0000</color>
+    <color name="greenic">#498C66</color>
+    <color name="pinkwhite">#F2EDDC</color>
+    <color name="pinkic">#F2D7B6</color>
+</resources>

@@ -1,32 +1,42 @@
 package com.nhom6.mediaplayer;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.nhom6.mediaplayer.Manager.AlbumManager;
-import com.nhom6.mediaplayer.Manager.ArtistManager;
-import com.nhom6.mediaplayer.Manager.SongManager;
+import com.nhom6.mediaplayer.activity.AlbumActivity;
+import com.nhom6.mediaplayer.activity.LoveActivity;
+import com.nhom6.mediaplayer.activity.PlayActivity;
+import com.nhom6.mediaplayer.activity.PlaylistActivity;
 import com.nhom6.mediaplayer.activity.ShowAllSong;
-import com.nhom6.mediaplayer.model.Album;
-import com.nhom6.mediaplayer.model.Artist;
+import com.nhom6.mediaplayer.activity.SingerActivity;
+import com.nhom6.mediaplayer.activity.SongOfPlaylistActivity;
 import com.nhom6.mediaplayer.model.Song;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+
+    public static final int PLAYSCREEN_RESULT = 1;
+    private SearchView searchView;
+    Context context=this;
+    ArrayList<Song>_songs=new ArrayList<Song>();
+    View activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,23 +45,51 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_main);
-
-
+        LayoutInflater inflaterDia = getLayoutInflater();
+        activity = inflaterDia.inflate(R.layout.activity_all_song, null);
         //kiem tra permission
         CheckUserPermission(this);
-
-
+        searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
     }
-
-
     public void ShowAllSong(View view)
     {
         Intent i = new Intent(this, ShowAllSong.class) ;
         startActivity(i);
     }
 
-    private void CheckUserPermission(Context context)
+    public void ShowPlayList(View view)
     {
+        Intent i = new Intent(this, PlaylistActivity.class) ;
+        startActivity(i);
+    }
+    public  void ShowAlbum(View view)
+    {
+        Intent i=new Intent(this, AlbumActivity.class);
+        startActivity(i);
+    }
+    public  void ShowPlayScreen(View view)
+    {
+        Intent i=new Intent(this, PlayActivity.class);
+        startActivity(i);
+    }
+    public  void ShowSinger(View view)
+    {
+        Intent i = new Intent(this, SingerActivity.class);
+        startActivity(i);
+    }
+    public  void ShowLoveSong(View view)
+    {
+        Intent i=new Intent(this, LoveActivity.class);
+        startActivity(i);
+    }
+    public void clickScan(View view)
+    {
+        Snackbar.make(view,"Đang quét", Snackbar.LENGTH_LONG)
+                .setAction("No action", null).show();
+    }
+
+    private void CheckUserPermission(Context context) {
         //TODO: nếu chạy lần đầu thì sẽ vào đây xin permission
         if(Build.VERSION.SDK_INT >= 23)
         {
@@ -68,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
         // do something
     }
 
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode)
@@ -83,5 +123,18 @@ public class MainActivity extends AppCompatActivity {
                 break;
                 default: super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Intent intent = new Intent(context, ShowAllSong.class);
+        intent.putExtra("SearchInMain",newText);
+        startActivity(intent);
+        return false;
     }
 }

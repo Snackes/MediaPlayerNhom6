@@ -47,9 +47,9 @@ public class AlbumManager extends Activity {
                     int countSong =Integer.parseInt(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS)));
 
                     ImageOfAlbum imageAlbum = new ImageOfAlbum();
-                    Bitmap bm = imageAlbum.getAlbumArt(context,albumID);
+                    String img = imageAlbum.getAlbumArt(context,albumID);
 
-                    Album album = new Album(albumID,albumTitle,artistName,countSong,bm);
+                    Album album = new Album(albumID,albumTitle,artistName,countSong,img);
                     _album.add(album);
                 } while (cursor.moveToNext());
             }

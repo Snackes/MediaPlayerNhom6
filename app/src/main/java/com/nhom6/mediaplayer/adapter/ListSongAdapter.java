@@ -1,11 +1,12 @@
 package com.nhom6.mediaplayer.adapter;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,36 +16,70 @@ import com.nhom6.mediaplayer.model.Song;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListSongAdapter extends ArrayAdapter<Song> {
-
+public class ListSongAdapter extends BaseAdapter {
+    Activity activity;
     private Context context;
-    private int resource;
-    private ArrayList<Song> arrSong;
-
-
-    public ListSongAdapter( Context context, int resource,  ArrayList<Song> objects) {
-        super(context, resource, objects);
-        this.context = context;
-        this.resource = resource;
-        this.arrSong = objects;
+    public ArrayList<Song>arrayListsong=new ArrayList<Song>();
+    public  ListSongAdapter(Activity activity1,ArrayList<Song>arrayList){
+        this.activity=activity1;
+        this.arrayListsong=arrayList;
+    }
+    @Override
+    public int getCount() {
+        return arrayListsong.size();
     }
 
-    @NonNull
     @Override
-    public View getView(int position,  View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.row_item_song,parent,false);
+    public Object getItem(int position) {
+        return arrayListsong.get(position);
+    }
 
-        ImageView imageSong = (ImageView) convertView.findViewById(R.id.image_songs);
-        TextView songName = (TextView) convertView.findViewById(R.id.name_songs);
-        TextView artistName = (TextView) convertView.findViewById(R.id.name_artist);
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+    public static class ViewHolder{
+        ImageView imageSong;
+        TextView songName;
+        TextView artistName;
+        public ViewHolder(View view) {
+            imageSong=(ImageView) view.findViewById(R.id.image_song);
+            songName = (TextView) view.findViewById(R.id.name_song);
+            artistName = (TextView) view.findViewById(R.id.name_artist);
+            view.setTag(this);
+        }
+    }
 
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = View.inflate(activity.getApplication(),
+                    R.layout.row_item_song, null);
+            new ViewHolder(convertView);
+        }
+        ViewHolder holder = (ViewHolder) convertView.getTag();
+        Object item = getItem(position);
+        Song song=(Song)item;
+        Bitmap bm = BitmapFactory.decodeFile(song.getAlbumArt());
 
-        Song song = arrSong.get(position);
+        if (bm != null) {
+            holder.imageSong.setImageBitmap(bm);
+        }
+        else {
+            holder.imageSong.setImageResource(R.drawable.adele);
+        }
+        holder.songName.setText(song.getSongname());
+        holder.artistName.setText(song.getArtistname());
 
-        imageSong.setImageBitmap(song.getAlbumArt());
-        songName.setText(song.getSongname());
-        artistName.setText(song.getArtistname());
-
+        // Trả về view kết quả.
         return convertView;
     }
+    // refresh Adapter Method calling in Homepage Activity
+
+    public synchronized void refresAdapter(List<Song> _song) {
+        _song.clear();
+        arrayListsong.addAll(_song);
+        notifyDataSetChanged();
+    }
+
 }
