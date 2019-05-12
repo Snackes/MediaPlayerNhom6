@@ -40,7 +40,7 @@
                 android:maxWidth="80dp"
                 android:maxHeight="80dp"
                 android:scaleType="fitStart"
-                android:src="@drawable/img" />
+                android:src="@{song.albumArt}" />
         </LinearLayout>
 
         <LinearLayout
@@ -96,6 +96,7 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_play"
+                android:onClick="PlaySong"
                 android:tint="#EFEAEA" />
 
             <ImageButton
