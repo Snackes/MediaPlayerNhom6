@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,8 +24,9 @@ import com.nhom6.mediaplayer.activity.PlayActivity;
 import com.nhom6.mediaplayer.activity.PlaylistActivity;
 import com.nhom6.mediaplayer.activity.ShowAllSong;
 import com.nhom6.mediaplayer.activity.SingerActivity;
-import com.nhom6.mediaplayer.activity.SongOfPlaylistActivity;
+import com.nhom6.mediaplayer.databinding.ActivityAllSongBinding;
 import com.nhom6.mediaplayer.model.Song;
+import com.nhom6.mediaplayer.databinding.ActivityMainBinding;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     ArrayList<Song>_songs=new ArrayList<Song>();
     View activity;
 
+    //dùng để binding
+    ActivityMainBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +49,32 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_main);
+
+        //set binding
+        binding = (ActivityMainBinding) DataBindingUtil.setContentView(this,        R.layout.activity_main);
+        setSongPlayBar();
         LayoutInflater inflaterDia = getLayoutInflater();
         activity = inflaterDia.inflate(R.layout.activity_all_song, null);
         //kiem tra permission
         CheckUserPermission(this);
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
+
+    }
+    public void setSongPlayBar()
+    {
+        Song setSong=new Song();
+        if (setSong.getSongname()!=null)
+        {
+            binding.setSong(setSong);
+        }
+        else
+        {
+            setSong.setSongname("default");
+            setSong.setArtistname("default");
+            binding.setSong(setSong);
+        }
+
     }
     public void ShowAllSong(View view)
     {

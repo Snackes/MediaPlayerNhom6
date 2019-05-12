@@ -105,6 +105,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 
         mediaPlayer =  new MediaPlayer();
         mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+        mediaPlayer.setLooping(true);//set phat lien tuc
     }
     private void initMediaSession()
     {
@@ -223,9 +224,9 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
             if( !successfullyRetrievedAudioFocus() ) {
                 return;
             }
+            mediaPlayer.reset();
             mediaSessionCompat.setActive(true);
             setMediaPlayBackState(PlaybackStateCompat.STATE_PLAYING);
-
             showPlayingNotification();
             mediaPlayer.start();
         }
@@ -294,7 +295,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 
     private void showPlayingNotification()
     {
-        NotificationCompat.Builder builder = MediaStyleHelper.from(BackgroundAudioService.this, mediaSessionCompat);
+        NotificationCompat.Builder builder = (NotificationCompat.Builder) MediaStyleHelper.from(BackgroundAudioService.this, mediaSessionCompat,"");
         if(builder == null)
         {
             return;
@@ -308,7 +309,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
     }
     private void showPauseNotification()
     {
-        NotificationCompat.Builder builder = MediaStyleHelper.from(BackgroundAudioService.this, mediaSessionCompat);
+        NotificationCompat.Builder builder = MediaStyleHelper.from(BackgroundAudioService.this, mediaSessionCompat,"");
         if(builder == null)
         {
             return;

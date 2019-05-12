@@ -44,7 +44,6 @@ public class PlaylistAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-
     public static class ViewHolderPlayList{
         ImageView imagePlayList;
         TextView playListName;

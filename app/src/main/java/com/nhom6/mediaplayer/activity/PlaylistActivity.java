@@ -65,11 +65,9 @@ public class PlaylistActivity extends AppCompatActivity implements SearchView.On
         CreatePLaylist();
         //tiến hành lấy toàn bộ playlist trong máy
         _playlists = playlistsManager.loadPlayList(this);
-
         //đưa vào adapter để hiển thị
         PlaylistAdapter listPlayListAdapter = new PlaylistAdapter(this,_playlists);
         listView.setAdapter(listPlayListAdapter);
-
         //gọi hàm xử lí khi click vào 1 playlist
         clickItemPlaylist();
         setSwipeListView();

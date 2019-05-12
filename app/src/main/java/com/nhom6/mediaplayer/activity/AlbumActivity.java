@@ -53,6 +53,9 @@ public class AlbumActivity extends AppCompatActivity implements SearchView.OnQue
         else {
             _albums=db.GetListAlbums();
         }
+
+        //tiến hành lấy toàn bộ song trong máy
+
         //đưa vào adapter để hiển thị
         AlbumAdapter listAlbumAdapter = new AlbumAdapter(this,R.layout.girdview_album,_albums);
         gridViewAlbum.setAdapter(listAlbumAdapter);
@@ -88,6 +91,7 @@ public class AlbumActivity extends AppCompatActivity implements SearchView.OnQue
         _albums = db.SearchAlbum(text);
         AlbumAdapter listAlbumAdapter = new AlbumAdapter(this,R.layout.girdview_album,_albums);
         gridViewAlbum.setAdapter(listAlbumAdapter);
+        ClickItemAlbum();
         return false;
     }
 }

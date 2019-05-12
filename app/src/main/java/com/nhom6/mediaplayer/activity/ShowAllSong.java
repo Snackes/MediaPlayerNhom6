@@ -1,12 +1,12 @@
-﻿package com.nhom6.mediaplayer.activity;
+package com.nhom6.mediaplayer.activity;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -32,13 +32,15 @@ import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
+import com.nhom6.mediaplayer.adapter.PlaylistAdapterView;
+import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
+import com.nhom6.mediaplayer.databinding.ActivityAllSongBinding;
 
 import java.util.ArrayList;
 
 public class ShowAllSong extends AppCompatActivity implements SearchView.OnQueryTextListener {
-    Activity activity=this;
     final Context context = this;
     private Button buttonCreatePlaylist;
     private SearchView searchView;
@@ -52,6 +54,9 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
     public ArrayList<Song> _songs = new ArrayList<Song>();
     //
 
+    //dùng để binding
+    ActivityAllSongBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,25 +65,16 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_all_song);
+
+        binding = (ActivityAllSongBinding) DataBindingUtil.setContentView(this,        R.layout.activity_all_song);
         //find id ListView
         listView = (SwipeMenuListView) findViewById(R.id.listViewSong);
         searchView = findViewById(R.id.searchView);
 
-        getdata();
-        ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);
-        listView.setAdapter(listSongAdapter);
-        setSwipeListView();
-        ClickItem();
-
-
-        searchView.setOnQueryTextListener(this);
-    }
-
-    public void getdata(){
         MyDatabaseHelper db = new MyDatabaseHelper(this);
 
         Intent intent = this.getIntent();
-        //TH người dùng gõ vào thanh tìm kiếm bên main
+        //TH show tất cả bài hát có trong 1 ca sĩ được chọn
         if(intent.getSerializableExtra("SearchInMain")!=null) {
             String NewText=intent.getSerializableExtra("SearchInMain").toString();
             searchView.setQuery(NewText,false);
@@ -103,6 +99,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
         ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);
         listView.setAdapter(listSongAdapter);
         setSwipeListView();
+
         ClickItem();
 
 
@@ -137,21 +134,17 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
         };
         // set creator
         listView.setMenuCreator(creator);
-        ClickSwipeMenuItem();
+        ClickItemSong();
     }
 
     //xử lí khi chọn 1 trong 2 chức năng của 1 bài hát trong listview
-    public void ClickSwipeMenuItem(){
+    public void ClickItemSong(){
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @SuppressLint("WrongConstant")
             @Override
             public boolean onMenuItemClick(final int position, SwipeMenu menu, final int index) {
                 switch (index) {
-                    case 0:
-                        //chọn chức năng thêm bài hát vào playlist bao gồm:
-                        // 1/Tạo mới playlist và thêm bài hát đó vào
-                        // 2/Thêm bài hát vào playlist đã có
-
+                    case 0://chọn chức năng thêm bài hát vào playlist
                         final Dialog dialogAdd = new Dialog(context);
                         dialogAdd.requestWindowFeature(Window.FEATURE_CONTEXT_MENU);
                         //load playlist len dialog
@@ -161,9 +154,8 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                         //tiến hành lấy toàn bộ playlist trong máy
                         _playlists = playlistsManager.loadPlayList(context);
                         //đưa vào adapter để hiển thị
-                        PlaylistAdapter listPlayListAdapter = new PlaylistAdapter(activity,_playlists);
-                        listViewAdd.setAdapter(listPlayListAdapter);
-
+                        PlaylistAdapterView listPlayListVAdapter = new PlaylistAdapterView(context, R.layout.row_item_playlist_view, _playlists);
+                        listViewAdd.setAdapter(listPlayListVAdapter);
                         listViewAdd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             //lưu bài hát vào khi chọn playlist đã có
@@ -282,6 +274,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                 //TODO: khi mình intent 1 item sang PlayActivity mình sẽ gửi 2 thứ: position của item và listID ( toàn bộ )
                 //Lấy item tại vị trí click
                 Song newsong = (Song) parent.getItemAtPosition(position);
+                binding.setSong(newsong);
 
                 //lấy listID
                 ArrayList<String> lstUrlSong = GetListUrlSong();
@@ -294,7 +287,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                 Package.putInt("position", position);
                 Package.putStringArrayList("lstUrlSong", lstUrlSong);
                 Package.putIntegerArrayList("lstIDSong", lstIDSong);
-                //
+
                 //
                 Intent i = new Intent(context, PlayActivity.class);
 

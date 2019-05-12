@@ -34,7 +34,7 @@ import com.nhom6.mediaplayer.MainActivity;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.CustomPagerAdapter;
-import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
+import com.nhom6.mediaplayer.adapter.PlaylistAdapterView;
 import com.nhom6.mediaplayer.fragment.ListPlayingSongFragment;
 import com.nhom6.mediaplayer.fragment.SongPlayingFragment;
 import com.nhom6.mediaplayer.model.PlayList;
@@ -157,10 +157,8 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         //tiến hành lấy toàn bộ playlist trong máy
         _playlists = playlistsManager.loadPlayList(context);
         //đưa vào adapter để hiển thị
-
-        PlaylistAdapter listPlayListAdapter = new PlaylistAdapter(this,_playlists);
-        listDialog.setAdapter(listPlayListAdapter);
-
+        PlaylistAdapterView listPlayListVAdapter = new PlaylistAdapterView(context, R.layout.row_item_playlist_view, _playlists);
+        listDialog.setAdapter(listPlayListVAdapter);
         listDialog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             //lưu bài hát vào khi chọn playlist đã có
@@ -180,6 +178,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         window.setBackgroundDrawableResource(R.drawable.borderradius);
         dialogAdd.show();
         buttonCreatePlaylist = mView.findViewById(R.id.btnCreatePlayList);
+
         //
         CreatePlaylist(position, dialogAdd);
 
