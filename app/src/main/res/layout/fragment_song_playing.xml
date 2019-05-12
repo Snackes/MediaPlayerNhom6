@@ -54,6 +54,7 @@
                 android:background="@android:color/transparent"
                 android:onClick="clickLove"
                 android:src="@drawable/ic_love"
+                android:tint="@color/cardview_light_background"
                 tools:ignore="OnClick" />
         </TableRow>
 

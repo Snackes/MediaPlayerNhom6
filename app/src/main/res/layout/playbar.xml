@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:bind="http://schemas.android.com/apk/res/android">
-
-    <data>
-
-        <import type="com.nhom6.mediaplayer.utils.BindingUtils" />
-
-        <variable
-            name="song"
-            type="com.nhom6.mediaplayer.model.Song" />
-    </data>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,6 +13,8 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/layoutPlaybar">
+
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -58,7 +50,7 @@
                 android:fontFamily="sans-serif-black"
                 android:gravity="center|start"
                 android:maxLines="1"
-                android:text="@{song.Songname}"
+                android:text="Nguoi hay quen em di - tam 9"
                 android:textColor="#DCF6F0F0"
                 android:textSize="14sp"
                 android:textStyle="normal" />
@@ -67,7 +59,7 @@
                 android:id="@+id/singer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{song.Artistname}"
+                android:text="My Tam"
                 android:textColor="#DCF6F0F0"
                 android:textSize="10sp"
                 android:textStyle="italic" />
@@ -113,4 +105,3 @@
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
-</layout>
