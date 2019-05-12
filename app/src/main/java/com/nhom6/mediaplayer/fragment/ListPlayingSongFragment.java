@@ -105,8 +105,15 @@ public class ListPlayingSongFragment extends Fragment {
             _songs.add(newsong);
         }
 
+
+
+        //đưa vào adapter để hiển thị
+/*        ListSongAdapter listSongAdapter = new ListSongAdapter(context,R.layout.row_item_song,_songs);
+        listView.setAdapter(listSongAdapter);*/
+
         ListSongAdapter listSongAdapter = new ListSongAdapter(getActivity(),_songs);
         listView.setAdapter(listSongAdapter);
+        setSwipeListView();
         ClickItem();
 
         //
@@ -157,7 +164,91 @@ public class ListPlayingSongFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    public void ClickItem() {
+    private void setSwipeListView() {
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                // create "add playlist" item
+                SwipeMenuItem plusItem = new SwipeMenuItem(getContext());
+                // set item background
+                plusItem.setBackground(R.color.greenic);
+                // set item width
+                plusItem.setWidth(100);
+                // set a icon
+                plusItem.setIcon(R.drawable.ic_add);
+                // add to menu
+                menu.addMenuItem(plusItem);
+
+                SwipeMenuItem loveItem = new SwipeMenuItem(getContext());
+                // set item background
+                loveItem.setBackground(R.color.pinkwhite);
+                // set item width
+                loveItem.setWidth(100);
+                // set a icon
+                loveItem.setIcon(R.drawable.ic_love);
+                // add to menu
+                menu.addMenuItem(loveItem);
+            }
+        };
+        // set creator
+        listView.setMenuCreator(creator);
+        ClickItemSong();
+    }
+    public void ClickItemSong(){
+//        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+////            @SuppressLint("WrongConstant")
+//            @Override
+//            public boolean onMenuItemClick(final int position, SwipeMenu menu, final int index) {
+//                switch (index) {
+//                    case 0://chọn chức năng thêm bài hát vào playlist
+//                        final Dialog dialogAdd = new Dialog(getContext());
+//                        dialogAdd.requestWindowFeature(Window.FEATURE_CONTEXT_MENU);
+//                        //load playlist len dialog
+//                        LayoutInflater inflaterDia = getLayoutInflater();
+//                        View mView = inflaterDia.inflate(R.layout.dialog_addplaylist, null);
+//                        listViewAdd = mView.findViewById(R.id.listDialogPL);
+//                        //tiến hành lấy toàn bộ playlist trong máy
+//                        _playlists = playlistsManager.loadPlayList(context);
+//                        //đưa vào adapter để hiển thị
+//                        PlaylistAdapterView listPlayListVAdapter = new PlaylistAdapterView(context, R.layout.row_item_playlist_view, _playlists);
+//                        listViewAdd.setAdapter(listPlayListVAdapter);
+//                        listViewAdd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                            @Override
+//                            //lưu bài hát vào khi chọn playlist đã có
+//                            public void onItemClick(AdapterView<?> parent, View view, int position1, long id) {
+//                                MyDatabaseHelper db= new MyDatabaseHelper(context);
+//                                db.addSongForPlayList(_playlists.get(position1).getIDPlayList(),_songs.get(position).getSongid());
+//                                Toast.makeText(getApplicationContext(),
+//                                        "Thêm bài hát vào PlayList thành công..!", Toast.LENGTH_SHORT).show();
+//                                dialogAdd.cancel();
+//                            }
+//                        });
+//                        dialogAdd.setContentView(mView);
+//                        dialogAdd.setCancelable(true);
+//                        Window window=dialogAdd.getWindow();
+//                        window.setGravity(Gravity.CENTER);
+//                        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//                        window.setBackgroundDrawableResource(R.drawable.borderradius);
+//                        dialogAdd.show();
+//                        buttonCreatePlaylist = mView.findViewById(R.id.btnCreatePlayList);
+//
+//                        //
+//                        CreatePlaylist(position,dialogAdd);
+//                        break;
+//                    case 1://thêm zô danh sách bài hát yêu thích
+//                        MyDatabaseHelper db=new MyDatabaseHelper(context);
+//                        db.AddSongFavorite(_songs.get(position).getSongid());
+//                        Toast.makeText(getApplicationContext(),
+//                                "Đã thêm vào Yêu Thích...", 50).show();
+//                        break;
+//                }
+//                // false : close the menu; true : not close the menu
+//                return false;
+//            }
+//        });
+    }
+    public void ClickItem()
+    {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 

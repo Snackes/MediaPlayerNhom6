@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.SearchView;
@@ -57,6 +58,7 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
         listsongtAdapter = new ListSongAdapter(this,_lovesongs);
         listLoveSong.setAdapter(listsongtAdapter);
         setSwipeListView();
+        ClickItem();
 
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
@@ -123,7 +125,58 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
             }
         });
     }
+    public void ClickItem() {
+        listLoveSong.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                //TODO: khi mình intent 1 item sang PlayActivity mình sẽ gửi 2 thứ: position của item và listID ( toàn bộ )
+                //Lấy item tại vị trí click
+                Song newsong = (Song) parent.getItemAtPosition(position);
+
+                //lấy listID
+                ArrayList<String> lstUrlSong = GetListUrlSong();
+                ArrayList<Integer> lstIDSong = GetListIDSong();
+
+                //tạo bundle
+
+                Bundle Package = new Bundle();
+                // nhét thông tin vào bundle
+                Package.putInt("position", position);
+                Package.putStringArrayList("lstUrlSong", lstUrlSong);
+                Package.putIntegerArrayList("lstIDSong", lstIDSong);
+
+                //
+                Intent i = new Intent(context, PlayActivity.class);
+
+//                Intent i1 = new Intent(context, PlayActivity.class);
+//                i1.putExtras(Package);
+                i.putExtras(Package);
+                startActivity(i);
+            }
+        });
+
+    }
+
+    //TODO: input : ArrayList<Song> , output : ArrayList<String> là các Url của song
+    private ArrayList<String> GetListUrlSong() {
+        ArrayList<String> lstUrlSong = new ArrayList<String>();
+
+        for (Song item : _lovesongs) {
+            lstUrlSong.add(item.getSongUrl());
+        }
+        return lstUrlSong;
+    }
+
+    //TODO: input : ArrayList<Song> , output : ArrayList<Integer> là các ID của song
+    private ArrayList<Integer> GetListIDSong() {
+        ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
+
+        for (Song item : _lovesongs) {
+            lstIDSong.add(item.getSongid());
+        }
+        return lstIDSong;
+    }
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;

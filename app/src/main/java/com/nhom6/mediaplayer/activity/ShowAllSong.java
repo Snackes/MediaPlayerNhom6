@@ -1,4 +1,4 @@
-package com.nhom6.mediaplayer.activity;
+﻿package com.nhom6.mediaplayer.activity;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,7 @@ import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
 import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
+import com.nhom6.mediaplayer.databinding.ActivityAllSongBinding;
 
 import java.util.ArrayList;
 
@@ -52,6 +54,9 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
     public ArrayList<Song> _songs = new ArrayList<Song>();
     //
 
+    //dùng để binding
+    ActivityAllSongBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +66,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_all_song);
 
+        binding = (ActivityAllSongBinding) DataBindingUtil.setContentView(this,        R.layout.activity_all_song);
         //find id ListView
         listView = (SwipeMenuListView) findViewById(R.id.listViewSong);
         searchView = findViewById(R.id.searchView);
@@ -96,6 +102,19 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                 _songs = db.GetListSong();
             }
         }
+
+        //đưa vào adapter để hiển thị
+/*        ListSongAdapter listSongAdapter = new ListSongAdapter(context,R.layout.row_item_song,_songs);
+        listView.setAdapter(listSongAdapter);*/
+
+        ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);
+        listView.setAdapter(listSongAdapter);
+        setSwipeListView();
+
+        ClickItem();
+
+
+        searchView.setOnQueryTextListener(this);
     }
 
     private void setSwipeListView() {
@@ -271,6 +290,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                 //TODO: khi mình intent 1 item sang PlayActivity mình sẽ gửi 2 thứ: position của item và listID ( toàn bộ )
                 //Lấy item tại vị trí click
                 Song newsong = (Song) parent.getItemAtPosition(position);
+                binding.setSong(newsong);
 
                 //lấy listID
                 ArrayList<String> lstUrlSong = GetListUrlSong();
@@ -283,7 +303,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                 Package.putInt("position", position);
                 Package.putStringArrayList("lstUrlSong", lstUrlSong);
                 Package.putIntegerArrayList("lstIDSong", lstIDSong);
-                //
+
                 //
                 Intent i = new Intent(context, PlayActivity.class);
 
