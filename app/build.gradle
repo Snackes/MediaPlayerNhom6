@@ -2,6 +2,9 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
+    dataBinding {
+        enabled = true
+    }
     defaultConfig {
         applicationId "com.nhom6.mediaplayer"
         minSdkVersion 23
@@ -10,6 +13,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
