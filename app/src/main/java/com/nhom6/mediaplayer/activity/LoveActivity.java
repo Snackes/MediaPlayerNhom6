@@ -53,9 +53,6 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
 
         MyDatabaseHelper db=new MyDatabaseHelper(context);
         _lovesongs=db.GetListSongFavorite();
-        //đưa vào adapter để hiển thị
-/*        listsongtAdapter = new ListSongAdapter(this,R.layout.row_item_lovesong,_lovesongs);
-        listLoveSong.setAdapter(listsongtAdapter);*/
         activity=this;
         listsongtAdapter = new ListSongAdapter(this,_lovesongs);
         listLoveSong.setAdapter(listsongtAdapter);

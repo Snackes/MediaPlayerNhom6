@@ -16,8 +16,7 @@ public class ImageOfAlbum extends Activity {
     public ImageOfAlbum(){}
 
     //TODO: lấy hình của album với đầu vào là albumID
-    public String getAlbumArt(Context context , int albumID)
-    {
+    public String getAlbumArt(Context context , int albumID) {
         String path =null ;
 
 
@@ -36,7 +35,4 @@ public class ImageOfAlbum extends Activity {
         return path;
 
     }
-
-
-
 }
