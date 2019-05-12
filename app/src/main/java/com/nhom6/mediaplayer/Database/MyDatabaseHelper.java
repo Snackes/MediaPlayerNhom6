@@ -591,10 +591,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     " LIKE  '"+Chuoi+"%'";
         }
         if(test==1){
-            selectQuery = "SELECT  * FROM " + TABLE_SONG
-                    + " WHERE "
-                    + COLUMN_SONG_NAME +
-                    " LIKE  '"+Chuoi+"%'"+"AND "+COLUMN_PLAYLIST_ID +"="+idObject;
+            selectQuery = "SELECT  * FROM " + TABLE_SONG + " ts, "
+                    + TABLE_SONG_PLAYLIST + " sp WHERE sp."
+                    + COLUMN_PLAYLIST_ID + " = '" + idObject
+                    + "'" + " AND "
+                    + COLUMN_SONG_NAME + " LIKE  '"+Chuoi+"%'"+"AND"+
+                    " ts." + COLUMN_SONG_ID + " = "+ "sp." + COLUMN_SONG_ID;
         }
         if(test==2){
             selectQuery = "SELECT  * FROM " + TABLE_SONG

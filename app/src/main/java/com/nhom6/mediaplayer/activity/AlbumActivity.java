@@ -23,7 +23,6 @@ import java.util.ArrayList;
 public class AlbumActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private GridView gridViewAlbum;
     private SearchView searchView;
-    private static final int MY_REQUEST_CODE = 1000;
     final Context context=this;
     //khai báo SongManager để loadSong
     AlbumManager albumsManager = new AlbumManager();
@@ -42,6 +41,18 @@ public class AlbumActivity extends AppCompatActivity implements SearchView.OnQue
         //find id GirdView
         gridViewAlbum =  findViewById(R.id.gridViewAB);
 
+        getdata();
+
+        //đưa vào adapter để hiển thị
+        AlbumAdapter listAlbumAdapter = new AlbumAdapter(this,R.layout.girdview_album,_albums);
+        gridViewAlbum.setAdapter(listAlbumAdapter);
+        ClickItemAlbum();
+
+        searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
+    }
+
+    public void getdata(){
         MyDatabaseHelper db=new MyDatabaseHelper(this);
         //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
         if(db.CheckTableAlbum()==0){
@@ -53,16 +64,6 @@ public class AlbumActivity extends AppCompatActivity implements SearchView.OnQue
         else {
             _albums=db.GetListAlbums();
         }
-
-        //tiến hành lấy toàn bộ song trong máy
-
-        //đưa vào adapter để hiển thị
-        AlbumAdapter listAlbumAdapter = new AlbumAdapter(this,R.layout.girdview_album,_albums);
-        gridViewAlbum.setAdapter(listAlbumAdapter);
-        ClickItemAlbum();
-
-        searchView = findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(this);
     }
 
     //Xử lí khi click vào 1 album bất kì
@@ -91,7 +92,6 @@ public class AlbumActivity extends AppCompatActivity implements SearchView.OnQue
         _albums = db.SearchAlbum(text);
         AlbumAdapter listAlbumAdapter = new AlbumAdapter(this,R.layout.girdview_album,_albums);
         gridViewAlbum.setAdapter(listAlbumAdapter);
-        ClickItemAlbum();
         return false;
     }
 }

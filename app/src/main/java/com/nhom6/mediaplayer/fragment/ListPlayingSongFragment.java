@@ -210,7 +210,7 @@ public class ListPlayingSongFragment extends Fragment {
 //                        //tiến hành lấy toàn bộ playlist trong máy
 //                        _playlists = playlistsManager.loadPlayList(context);
 //                        //đưa vào adapter để hiển thị
-//                        PlaylistAdapterView listPlayListVAdapter = new PlaylistAdapterView(context, R.layout.row_item_playlist_view, _playlists);
+//                        PlaylistAdapter listPlayListVAdapter = new PlaylistAdapter(context, R.layout.row_item_playlist_view, _playlists);
 //                        listViewAdd.setAdapter(listPlayListVAdapter);
 //                        listViewAdd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //                            @Override

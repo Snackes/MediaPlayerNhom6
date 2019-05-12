@@ -2,6 +2,7 @@ package com.nhom6.mediaplayer.activity;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,8 +33,6 @@ import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
-import com.nhom6.mediaplayer.adapter.PlaylistAdapterView;
-import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
 import com.nhom6.mediaplayer.databinding.ActivityAllSongBinding;
@@ -41,6 +40,7 @@ import com.nhom6.mediaplayer.databinding.ActivityAllSongBinding;
 import java.util.ArrayList;
 
 public class ShowAllSong extends AppCompatActivity implements SearchView.OnQueryTextListener {
+    Activity activity=this;
     final Context context = this;
     private Button buttonCreatePlaylist;
     private SearchView searchView;
@@ -70,7 +70,17 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
         //find id ListView
         listView = (SwipeMenuListView) findViewById(R.id.listViewSong);
         searchView = findViewById(R.id.searchView);
+        //lấy danh sách bài hát
+        getdata();
+        ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);
+        listView.setAdapter(listSongAdapter);
+        setSwipeListView();
 
+        ClickItem();
+        searchView.setOnQueryTextListener(this);
+    }
+
+    public void getdata(){
         MyDatabaseHelper db = new MyDatabaseHelper(this);
 
         Intent intent = this.getIntent();
@@ -91,19 +101,6 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                 _songs = db.GetListSong();
             }
         }
-
-        //đưa vào adapter để hiển thị
-/*        ListSongAdapter listSongAdapter = new ListSongAdapter(context,R.layout.row_item_song,_songs);
-        listView.setAdapter(listSongAdapter);*/
-
-        ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);
-        listView.setAdapter(listSongAdapter);
-        setSwipeListView();
-
-        ClickItem();
-
-
-        searchView.setOnQueryTextListener(this);
     }
 
     private void setSwipeListView() {
@@ -134,11 +131,11 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
         };
         // set creator
         listView.setMenuCreator(creator);
-        ClickItemSong();
+        ClickSwipeMenuItem();
     }
 
     //xử lí khi chọn 1 trong 2 chức năng của 1 bài hát trong listview
-    public void ClickItemSong(){
+    public void ClickSwipeMenuItem(){
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @SuppressLint("WrongConstant")
             @Override
@@ -154,8 +151,9 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                         //tiến hành lấy toàn bộ playlist trong máy
                         _playlists = playlistsManager.loadPlayList(context);
                         //đưa vào adapter để hiển thị
-                        PlaylistAdapterView listPlayListVAdapter = new PlaylistAdapterView(context, R.layout.row_item_playlist_view, _playlists);
-                        listViewAdd.setAdapter(listPlayListVAdapter);
+                        PlaylistAdapter listPlayListAdapter = new PlaylistAdapter(activity,_playlists);
+                        listViewAdd.setAdapter(listPlayListAdapter);
+
                         listViewAdd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             //lưu bài hát vào khi chọn playlist đã có
