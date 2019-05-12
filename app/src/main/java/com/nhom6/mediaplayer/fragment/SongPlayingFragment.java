@@ -34,8 +34,8 @@ public class SongPlayingFragment extends Fragment {
     TextView titleSong;
     TextView artistSong;
     SeekBar seekBar;
-    TextView startTime;
-    TextView endTime;
+    TextView playingTime;
+    TextView totalTime;
     ImageButton btn_love;
     Integer songID;
 
@@ -101,10 +101,9 @@ public class SongPlayingFragment extends Fragment {
         titleSong = rootView.findViewById(R.id.songTitle);
         artistSong = rootView.findViewById(R.id.artist);
         seekBar = rootView.findViewById(R.id.seekBar);
-        startTime = rootView.findViewById(R.id.startTime);
-        endTime = rootView.findViewById(R.id.endTime);
-        btn_love = rootView.findViewById(R.id.btnLove);
-
+        playingTime = rootView.findViewById(R.id.playingTime);
+        totalTime = rootView.findViewById(R.id.totalTime);
+        btn_love=rootView.findViewById(R.id.btnLove);
 
         //
         if (BitmapFactory.decodeFile(getArguments().getString("Image")) != null) {
