@@ -32,6 +32,7 @@ import com.nhom6.mediaplayer.model.Song;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class BackgroundAudioService extends MediaBrowserServiceCompat implements MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 
@@ -51,6 +52,13 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
     public Integer Duration;
     public Integer Songid;
     //
+    public int returnPosition;
+    //
+    public boolean isShuffle;
+    public boolean isRepeat;
+
+    //
+    public Random rand;
 
     public ArrayList<String> lstUrl = new ArrayList<String>();
     //list danh sách ID
@@ -130,11 +138,13 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 
     private MediaSessionCompat.Callback mediaSessionCallBack = new MediaSessionCompat.Callback() {
 
-
+        //play prev song
         @Override
         public void onSkipToPrevious() {
             super.onSkipToPrevious();
-            if ( position > 0 ) // check if next song is there or not
+
+            // kiểm tra vị trí có đang ở đầu danh sách hay ko
+            if ( position > 0 )
             {
                 //tạo song mới để cập nhật
 
@@ -145,11 +155,15 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
                     mediaPlayer.start();
                     position = position  - 1 ;
                     song = db.GetInfoSong(lstID.get(position));
+                    //return position to activity
+                    returnPosition=position;
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+
+            //nếu đang ở đầu danh sách, play bài cuối cùng của danh sách
             else // play last song
             {
                 mediaPlayer.reset();
@@ -162,6 +176,8 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
                     position = lstUrl.size() - 1 ;
                     //tạo song mới để cập nhật
                     song = db.GetInfoSong(lstID.get(position));
+                    //return position to activity
+                    returnPosition = position;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -172,57 +188,108 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 
         }
 
+        //play next song
         @Override
         public void onSkipToNext() {
             super.onSkipToNext();
 
-            if ( position < lstID.size() -1 ) // check if next song is there or not
+            //kiểm tra repeat một bài hát
+            if (isRepeat)
             {
-                //tạo song mới để cập nhật
-
+                //lặp lại position
                 try {
                     mediaPlayer.reset();
-                    mediaPlayer.setDataSource(lstUrl.get(position +1));
+                    mediaPlayer.setDataSource(lstUrl.get(position));
                     mediaPlayer.prepareAsync();
                     mediaPlayer.start();
-                    position = position +1 ;
                     song = db.GetInfoSong(lstID.get(position));
+                    //return position to activity
+                    returnPosition = position;
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            else // play first song
-            {
-                mediaPlayer.reset();
-                try {
-                    mediaPlayer.reset();
+            else {
+                if (isShuffle)
+                {
+                    //random ngẫu nhiên vị trí bài hát trong list
+                    int newSong = position;
+                    while(newSong==position){
+                        newSong=rand.nextInt(lstUrl.size());
+                    }
+                    position=newSong;
 
-                    mediaPlayer.setDataSource(lstUrl.get(0));
-                    mediaPlayer.prepareAsync();
-                    mediaPlayer.start();
-                    position = 0 ;
                     //tạo song mới để cập nhật
-                    song = db.GetInfoSong(lstID.get(position));
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+                    try {
+                        mediaPlayer.reset();
+                        mediaPlayer.setDataSource(lstUrl.get(position));
+                        mediaPlayer.prepareAsync();
+                        mediaPlayer.start();
+                        song = db.GetInfoSong(lstID.get(position));
+                        //return position to activity
+                        returnPosition = position;
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    // kiểm tra vị trí đã nằm cuối danh sách hay chưa
+                    if (position < lstID.size() - 1)
+                    {
+                        //tạo song mới để cập nhật
+
+                        try {
+                            mediaPlayer.reset();
+                            mediaPlayer.setDataSource(lstUrl.get(position + 1));
+                            mediaPlayer.prepareAsync();
+                            mediaPlayer.start();
+                            position = position + 1;
+                            song = db.GetInfoSong(lstID.get(position));
+                            //return position to activity
+                            returnPosition = position;
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    //nếu nằm cuối, play bài đầu tiên trong danh sách
+                    else // play first song
+                    {
+                        mediaPlayer.reset();
+                        try {
+                            mediaPlayer.reset();
+
+                            mediaPlayer.setDataSource(lstUrl.get(0));
+                            mediaPlayer.prepareAsync();
+                            mediaPlayer.start();
+                            position = 0;
+                            //tạo song mới để cập nhật
+                            song = db.GetInfoSong(lstID.get(position));
+                            //return position to activity
+                            returnPosition = position;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
 
             initMediaSessionMetadata();
             showPauseNotification();
 
-
-
-
         }
 
+        //play song after prepare
         @Override
         public void onPlay() {
             super.onPlay();
             if( !successfullyRetrievedAudioFocus() ) {
                 return;
             }
+
             mediaSessionCompat.setActive(true);
             setMediaPlayBackState(PlaybackStateCompat.STATE_PLAYING);
 
@@ -230,6 +297,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
             mediaPlayer.start();
         }
 
+        //pause song
         @Override
         public void onPause() {
             super.onPause();
@@ -240,10 +308,10 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
             }
         }
 
+        //prepare song for play
         @Override
         public void onPlayFromMediaId(String mediaId, Bundle Package) {
             super.onPlayFromMediaId(mediaId, Package);
-
 
             lstUrl = Package.getStringArrayList("lstUrlSong");
             lstID = Package.getIntegerArrayList("lstIDSong");
@@ -263,7 +331,6 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
                     mediaPlayer.setDataSource(lstUrl.get(position));
                 }
 
-
                 initMediaSessionMetadata();
 
             } catch (IOException e) {
@@ -276,8 +343,52 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
                 e.printStackTrace();
             }
         }
+
+        //repeat mode
+        @Override
+        public void onSetRepeatMode(int repeatMode) {
+            super.onSetRepeatMode(repeatMode);
+            if (repeatMode==PlaybackStateCompat.REPEAT_MODE_ONE)
+            {
+                isRepeat= true;
+            }
+            else {
+                isRepeat = false;
+            }
+        }
+
+        //shuffle mode
+        @Override
+        public void onSetShuffleMode(int shuffleMode) {
+            super.onSetShuffleMode(shuffleMode);
+            if (shuffleMode==PlaybackStateCompat.SHUFFLE_MODE_ALL)
+            {
+                isShuffle = true;
+            }
+            else {
+                isShuffle = false;
+            }
+        }
+
+        //seek song to
+        @Override
+        public void onSeekTo(long pos) {
+            super.onSeekTo(pos);
+            mediaPlayer.seekTo((int)pos);
+        }
     };
 
+    //trả về vị trí bài đang phát
+    public int returnPosition()
+    {
+        return returnPosition;
+    }
+
+    //lấy thời gian đang chạy
+    public int getCurrentPositionSong()
+    {
+        return mediaPlayer.getCurrentPosition();
+    }
 
     @Override
     public void onDestroy() {
@@ -301,7 +412,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
         }
 
 
-        builder.addAction(new NotificationCompat.Action(R.drawable.ic_pause_ser,"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        builder.addAction(new NotificationCompat.Action(R.drawable.ic_pause_new,"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView().setMediaSession(mediaSessionCompat.getSessionToken()));
         builder.setSmallIcon(R.mipmap.ic_launcher);
         NotificationManagerCompat.from(BackgroundAudioService.this).notify(1, builder.build());
@@ -315,7 +426,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
         }
 
 
-        builder.addAction(new NotificationCompat.Action(R.drawable.ic_play_ser,"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        builder.addAction(new NotificationCompat.Action(R.drawable.ic_play_new,"Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle().setShowActionsInCompactView().setMediaSession(mediaSessionCompat.getSessionToken()));
         builder.setSmallIcon(R.mipmap.ic_launcher);
         NotificationManagerCompat.from(BackgroundAudioService.this).notify(1, builder.build());
@@ -402,10 +513,10 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if( this.mediaPlayer != null ) {
+        /*if( this.mediaPlayer != null ) {
             this.mediaPlayer.release();
-        }
-
+        }*/
+        mediaSessionCallBack.onSkipToNext();
     }
 
     @Nullable

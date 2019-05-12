@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -41,6 +42,7 @@ import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
 import com.nhom6.mediaplayer.service.BackgroundAudioService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -52,6 +54,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     //khai báo SongManager để loadSong
     PlayListManager playlistsManager = new PlayListManager();
     public ArrayList<PlayList> _playlists = new ArrayList<PlayList>();
+    private BackgroundAudioService serviceClass;
 
     //khai báo các nút
     ImageButton btn_play_pause;
@@ -79,7 +82,13 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     private MediaControllerCompat mediaControllerCompat;
 
 
+    //format time
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("mm:ss");
 
+    //boolean shuffle
+    private boolean isShuff;
+    //boolean repeat
+    private boolean isRepeat;
     // tạo adapter pager
     public static CustomPagerAdapter customPagerAdapter;
     //
@@ -107,13 +116,13 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
         //set bundle cho  fragment playing
         Bundle fragmentPlaying = new Bundle();
-        fragmentPlaying.putString("Title",song.getSongname());
-        fragmentPlaying.putString("Artist",song.getArtistname());
-        fragmentPlaying.putString("Image",song.getAlbumArt());
-        fragmentPlaying.putInt("SongID",song.getSongid());
+        fragmentPlaying.putString("Title", song.getSongname());
+        fragmentPlaying.putString("Artist", song.getArtistname());
+        fragmentPlaying.putString("Image", song.getAlbumArt());
+        fragmentPlaying.putInt("SongID", song.getSongid());
         //set bundle cho fragment listplaying
-        Bundle fragmentListPlaying =  new Bundle();
-        fragmentListPlaying.putIntegerArrayList("listID",lstIDSong);
+        Bundle fragmentListPlaying = new Bundle();
+        fragmentListPlaying.putIntegerArrayList("listID", lstIDSong);
         //
         //init fragment
         songPlayingFragment = new SongPlayingFragment();
@@ -123,8 +132,6 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         listSongPlayingFragment = new ListPlayingSongFragment();
         listSongPlayingFragment.setArguments(fragmentListPlaying);
         //
-
-
 
 
         // tạo view pager
@@ -142,8 +149,9 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         mediaBrowserCompat.connect();
 
     }
+
     public void ShowMainSreen(View view) {
-        Intent i = new Intent(this, MainActivity.class) ;
+        Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
     }
 
@@ -157,7 +165,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         //tiến hành lấy toàn bộ playlist trong máy
         _playlists = playlistsManager.loadPlayList(context);
         //đưa vào adapter để hiển thị
-        PlaylistAdapter listPlayListAdapter = new PlaylistAdapter(this,_playlists);
+        PlaylistAdapter listPlayListAdapter = new PlaylistAdapter(this, _playlists);
         listDialog.setAdapter(listPlayListAdapter);
 
         listDialog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -184,6 +192,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         CreatePlaylist(position, dialogAdd);
 
     }
+
     //tạo mới playlist đồng thời thêm bài hát đã chọn vào playlist vừa tạo
     public void CreatePlaylist(final int position, final Dialog dialogAdd) {
         buttonCreatePlaylist.setOnClickListener(new View.OnClickListener() {
@@ -215,7 +224,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
                                     "Vui lòng nhập tên trước khi tạo Playlist..!", 50).show();
                             return;
                         }
-                        playlistsManager.CreatePlayListAndAddSong(title, context,songID);
+                        playlistsManager.CreatePlayListAndAddSong(title, context, songID);
                         Toast.makeText(getApplicationContext(),
                                 "Đã thêm vào Playlist..!", 50).show();
                     }
@@ -232,17 +241,16 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     }
 
     public void clickLove(View view) {
-        MyDatabaseHelper db=new MyDatabaseHelper(context);
-        int k=db.CheckSongFavorite(songID);
-        if(k==0){
+        MyDatabaseHelper db = new MyDatabaseHelper(context);
+        int k = db.CheckSongFavorite(songID);
+        if (k == 0) {
             db.AddSongFavorite(songID);
             Snackbar.make(view, "Đã đưa vào mục yêu thích", Snackbar.LENGTH_LONG)
                     .setAction("No action", null).show();
 
             songPlayingFragment.ChangeIcon();
-        }
-        else {
-            db=new MyDatabaseHelper(context);
+        } else {
+            db = new MyDatabaseHelper(context);
             db.deleteSongInFavorite(songID);
             Snackbar.make(view, "Đã xóa khỏi mục yêu thích", Snackbar.LENGTH_LONG)
                     .setAction("No action", null).show();
@@ -253,14 +261,11 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
     public void PlaySong(View view) {
 
-        if(currentState == STATE_PAUSED)
-        {
+        if (currentState == STATE_PAUSED) {
             mediaControllerCompat.getTransportControls().play();
             currentState = STATE_PLAYING;
-        }else
-        {
-            if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING)
-            {
+        } else {
+            if (mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
                 mediaControllerCompat.getTransportControls().pause();
             }
             currentState = STATE_PAUSED;
@@ -270,7 +275,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     public void NextSong(View view) {
         //đổi hình theo
         // check if next song is there or not
-        if ( position < lstIDSong.size() -1 ) {
+        /*if ( position < lstIDSong.size() -1 ) {
             int idNext = lstIDSong.get( position + 1);
             song = db.GetInfoSong(idNext);
             position = position +1;
@@ -282,8 +287,10 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
             song = db.GetInfoSong(idNext);
             position = 0;
             //Screen(song);
-        }
+        }*/
 
+        int idNext = serviceClass.returnPosition();
+        song = db.GetInfoSong(idNext);
 
         //mỗi lần next Song sẽ tiến hành pause =>> start lại
 
@@ -292,16 +299,13 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         currentState = STATE_PAUSED;
         //next
 
-        if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PAUSED)
-        {
+        if (mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PAUSED) {
             mediaControllerCompat.getTransportControls().skipToNext();
             currentState = STATE_PAUSED;
 
 
-        }else
-        {
-            if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING)
-            {
+        } else {
+            if (mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
                 mediaControllerCompat.getTransportControls().skipToNext();
                 currentState = STATE_PLAYING;
             }
@@ -311,8 +315,8 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     }
 
     public void PreviousSong(View view) {
-        //đổi hình theo
-        if ( position > 0 ) // check if next song is there or not
+//       đổi hình theo
+        /*if ( position > 0 ) // check if next song is there or not
         {
             int idNext = lstIDSong.get( position -1 );
             song = db.GetInfoSong(idNext);
@@ -325,8 +329,10 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
             song = db.GetInfoSong(idNext);
             position = lstIDSong.size() -1 ;
             //Screen(song);
-        }
+        }*/
 
+        int idPre = serviceClass.returnPosition();
+        song = db.GetInfoSong(idPre);
 
         //mỗi lần next Song sẽ tiến hành pause =>> start lại
 
@@ -335,16 +341,13 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         currentState = STATE_PAUSED;
         //next
 
-        if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PAUSED)
-        {
+        if (mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PAUSED) {
             mediaControllerCompat.getTransportControls().skipToPrevious();
             currentState = STATE_PAUSED;
 
 
-        }else
-        {
-            if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING)
-            {
+        } else {
+            if (mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
                 mediaControllerCompat.getTransportControls().skipToPrevious();
                 currentState = STATE_PLAYING;
             }
@@ -386,7 +389,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         btn_next = (ImageButton) findViewById(R.id.btnNext);
         btn_previous = (ImageButton) findViewById(R.id.btnPre);
         btn_repeat = (ImageButton) findViewById(R.id.btnRepeat);
-        btn_shuffle =  (ImageButton) findViewById(R.id.btnShuf);
+        btn_shuffle = (ImageButton) findViewById(R.id.btnShuf);
     }
 
     private MediaBrowserCompat.ConnectionCallback connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
@@ -400,8 +403,8 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
                 mediaControllerCompat.setMediaController(PlayActivity.this, mediaControllerCompat);
 
                 mediaControllerCompat.getMediaController(PlayActivity.this);
-                mediaControllerCompat.getTransportControls().playFromMediaId("chokhoinull" ,Package);
-            } catch( RemoteException e ) {
+                mediaControllerCompat.getTransportControls().playFromMediaId("chokhoinull", Package);
+            } catch (RemoteException e) {
                 e.printStackTrace();
             }
         }
@@ -411,11 +414,11 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
             super.onPlaybackStateChanged(state);
-            if( state == null ) {
+            if (state == null) {
                 return;
             }
 
-            switch( state.getState() ) {
+            switch (state.getState()) {
                 case PlaybackStateCompat.STATE_PLAYING: {
                     currentState = STATE_PLAYING;
                     btn_play_pause.setImageResource(R.drawable.ic_pause_new);
@@ -429,5 +432,31 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
             }
         }
     };
+
+    //shuffle click
+    public void isShuffle(View view) {
+        if (isShuff) {
+            isShuff = false;
+            mediaControllerCompat.getTransportControls().setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_NONE);
+            btn_shuffle.setColorFilter(ContextCompat.getColor(context, R.color.pinkwhite));
+        } else {
+            isShuff = true;
+            mediaControllerCompat.getTransportControls().setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_ALL);
+            btn_shuffle.setColorFilter(ContextCompat.getColor(context, R.color.colorchange));
+        }
+    }
+
+    //repeat click
+    public void isRepeat(View view) {
+        if (isRepeat) {
+            isRepeat = false;
+            mediaControllerCompat.getTransportControls().setRepeatMode(PlaybackStateCompat.REPEAT_MODE_NONE);
+            btn_repeat.setColorFilter(ContextCompat.getColor(context, R.color.pinkwhite));
+        } else {
+            isRepeat = true;
+            mediaControllerCompat.getTransportControls().setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ONE);
+            btn_repeat.setColorFilter(ContextCompat.getColor(context, R.color.colorchange));
+        }
+    }
 
 }

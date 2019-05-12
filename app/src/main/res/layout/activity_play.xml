@@ -54,7 +54,8 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_shuf"
-            android:tint="@color/cardview_light_background" />
+            android:onClick="isShuffle"
+            android:tint="@color/pinkwhite" />
 
         <ImageButton
             android:id="@+id/btnPre"
@@ -64,7 +65,7 @@
             android:background="@android:color/transparent"
             android:onClick="PreviousSong"
             android:src="@drawable/ic_pre"
-            android:tint="@color/cardview_light_background"
+            android:tint="@color/pinkwhite"
             tools:ignore="OnClick" />
 
         <ImageButton
@@ -76,7 +77,7 @@
             android:gravity="center_horizontal"
             android:onClick="PlaySong"
             android:src="@drawable/ic_play_new"
-            android:tint="@color/cardview_light_background"
+            android:tint="@color/pinkwhite"
             tools:ignore="OnClick" />
 
         <ImageButton
@@ -87,7 +88,7 @@
             android:background="@android:color/transparent"
             android:onClick="NextSong"
             android:src="@drawable/ic_next"
-            android:tint="@color/cardview_light_background"
+            android:tint="@color/pinkwhite"
             tools:ignore="OnClick" />
 
         <ImageButton
@@ -97,6 +98,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_repeat"
-            android:tint="@color/cardview_light_background" />
+            android:onClick="isRepeat"
+            android:tint="@color/pinkwhite" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
