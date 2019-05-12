@@ -56,7 +56,18 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
 
         this.PlayListName=this.findViewById(R.id.txtPlaylistname);
         this.LvSongInPlayList=this.findViewById(R.id.listSongofActivity);
+        getdata();
+        //đưa vào adapter để hiển thị
+        //ListSongAdapter listSongAdapter = new ListSongAdapter(this, R.layout.row_item_song, _songs);
+        ListSongAdapter listSongAdapter = new ListSongAdapter(this,_songs);
+        LvSongInPlayList.setAdapter(listSongAdapter);
+        setSwipeListView();
+        ClickItem();
+        searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
+    }
 
+    public void getdata(){
         Intent intent = this.getIntent();
 
         //TH show tất cả bài hát có trong 1 playlist được chọn
@@ -95,15 +106,8 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
             this.onBackPressed();
             return;
         }
-        //đưa vào adapter để hiển thị
-        //ListSongAdapter listSongAdapter = new ListSongAdapter(this, R.layout.row_item_song, _songs);
-        ListSongAdapter listSongAdapter = new ListSongAdapter(this,_songs);
-        LvSongInPlayList.setAdapter(listSongAdapter);
-        setSwipeListView();
-        ClickItem();
-        searchView = findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(this);
     }
+
     private void setSwipeListView() {
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
@@ -248,7 +252,6 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
         ListSongAdapter listSongAdapter = new ListSongAdapter(this,_songs);
         LvSongInPlayList.setAdapter(listSongAdapter);
         setSwipeListView();
-        ClickItem();
         return false;
     }
 }

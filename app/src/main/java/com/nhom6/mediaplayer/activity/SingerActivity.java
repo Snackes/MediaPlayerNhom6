@@ -42,10 +42,19 @@ public class SingerActivity extends AppCompatActivity implements SearchView.OnQu
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_singer);
 
-
         //find id ListView
         listViewSinger = (ListView) findViewById(R.id.listViewSinger);
-        //tiến hành lấy toàn bộ song trong máy
+        //lấy danh sách ca sĩ
+        getdata();
+        //đưa vào adapter để hiển thị
+        SingerAdapter listArtistAdapter = new SingerAdapter(this,R.layout.row_item_singer,_artists);
+        listViewSinger.setAdapter(listArtistAdapter);
+        ClickItemArtist();
+
+        searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
+    }
+    public void getdata(){
         MyDatabaseHelper db=new MyDatabaseHelper(this);
         //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
         if(db.CheckTableSinger()==0){
@@ -57,15 +66,8 @@ public class SingerActivity extends AppCompatActivity implements SearchView.OnQu
         else {
             _artists=db.GetListSinger();
         }
-
-        //đưa vào adapter để hiển thị
-        SingerAdapter listArtistAdapter = new SingerAdapter(this,R.layout.row_item_singer,_artists);
-        listViewSinger.setAdapter(listArtistAdapter);
-        ClickItemArtist();
-
-        searchView = findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(this);
     }
+
     //Xử lí khi click vào 1 ca sĩ bất kì
     public void ClickItemArtist(){
         listViewSinger.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -92,7 +94,6 @@ public class SingerActivity extends AppCompatActivity implements SearchView.OnQu
         _artists = db.SearchSinger(text);
         SingerAdapter listArtistAdapter = new SingerAdapter(this,R.layout.row_item_singer,_artists);
         listViewSinger.setAdapter(listArtistAdapter);
-        ClickItemArtist();
         return false;
     }
 }
