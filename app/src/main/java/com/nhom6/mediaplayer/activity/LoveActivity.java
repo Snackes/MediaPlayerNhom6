@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 public class LoveActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     //khai báo ListView cho adapter
     Activity activity=this;
+    Boolean Refresh=true;
     private SearchView searchView;
     private SwipeMenuListView listLoveSong;
     public Context context = this;
@@ -49,6 +51,7 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_love);
 
+        Refresh=false;
         //find id ListView
         listLoveSong = (SwipeMenuListView) findViewById(R.id.listLoveSong);
 
@@ -86,6 +89,15 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
         // set creator
         listLoveSong.setMenuCreator(creator);
         DeleteSongInFavorite();
+    }
+
+    @Override
+    protected void onResume() {
+        if(Refresh==true){
+            RefreshLoveActivity();
+        }
+        Refresh=true;
+        super.onResume();
     }
 
     //Xóa 1 bài hát được chọn khỏi danh sách bài hát yêu thích
@@ -126,6 +138,7 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
             }
         });
     }
+
     public void ClickItem() {
         listLoveSong.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -192,5 +205,12 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
         listLoveSong.setAdapter(listsongtAdapter);
         setSwipeListView();
         return false;
+    }
+
+    public void RefreshLoveActivity(){
+        MyDatabaseHelper db=new MyDatabaseHelper(context);
+        _lovesongs=db.GetListSongFavorite();
+        listsongtAdapter = new ListSongAdapter(this,_lovesongs);
+        listLoveSong.setAdapter(listsongtAdapter);
     }
 }
