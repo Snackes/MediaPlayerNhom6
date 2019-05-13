@@ -1,7 +1,6 @@
 package com.nhom6.mediaplayer.activity;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -63,7 +61,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     //khai báo SongManager để loadSong
     PlayListManager playlistsManager = new PlayListManager();
     public ArrayList<PlayList> _playlists = new ArrayList<PlayList>();
-    private BackgroundAudioService serviceClass;
+
 
     //khai báo các nút
 
@@ -335,17 +333,17 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         //metaDataCompat.clearMediaMetadataCompat();
 
         //metaDataCompat.music.clear();
-        if(metaDataCompat.music != null)
-        {
+//        if(metaDataCompat.music != null)
+//        {
             //nạp lại
             for (Integer item: lstIDSong) {
                 Song song = db.GetInfoSong(item);
                 //nạp vào metadata
                 metaDataCompat.createMediaMetadataCompat(song);
             }
-        }
-
-        metaDataCompat.getMediaItems();
+//        }
+//
+//        metaDataCompat.getMediaItems();
 
     }
 
