@@ -124,6 +124,7 @@ public class MediaPlayerAdapter extends PlayerAdapter {
             setNewState(PlaybackStateCompat.STATE_PLAYING);
         }
 
+
     }
 
     @Override

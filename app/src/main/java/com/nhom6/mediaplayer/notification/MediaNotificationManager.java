@@ -186,6 +186,8 @@ public class MediaNotificationManager {
 
     private PendingIntent createContentIntent() {
         Intent openUI = new Intent(mService, PlayActivity.class);
+        openUI.setAction(Intent.ACTION_MAIN);
+        openUI.addCategory(Intent.CATEGORY_LAUNCHER);
         openUI.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         return PendingIntent.getActivity(
                 mService, REQUEST_CODE, openUI, PendingIntent.FLAG_CANCEL_CURRENT);

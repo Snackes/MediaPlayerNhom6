@@ -55,7 +55,7 @@ public class MusicService extends MediaBrowserServiceCompat {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        stopSelf();
+        //stopSelf();
     }
 
     @Override
@@ -164,6 +164,18 @@ public class MusicService extends MediaBrowserServiceCompat {
                 mSession.setActive(true);
             }
 
+
+        }
+
+        @Override
+        public void onSetRepeatMode(int repeatMode) {
+            super.onSetRepeatMode(repeatMode);
+
+        }
+
+        @Override
+        public void onSetShuffleMode(int shuffleMode) {
+            super.onSetShuffleMode(shuffleMode);
 
         }
 

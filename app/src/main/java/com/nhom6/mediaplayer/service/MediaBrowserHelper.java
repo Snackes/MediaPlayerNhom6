@@ -98,6 +98,10 @@ public class MediaBrowserHelper {
                                     @NonNull List<MediaBrowserCompat.MediaItem> children) {
     }
 
+    protected void onClearQueue (@NonNull String parentId,
+                                    @NonNull List<MediaBrowserCompat.MediaItem> children) {
+    }
+
     /**
      * Called when the {@link MediaBrowserServiceCompat} connection is lost.
      */
@@ -204,9 +208,13 @@ public class MediaBrowserHelper {
     // that is ready for playback.
     public class MediaBrowserSubscriptionCallback extends MediaBrowserCompat.SubscriptionCallback {
 
+
         @Override
         public void onChildrenLoaded(@NonNull String parentId,
                                      @NonNull List<MediaBrowserCompat.MediaItem> children) {
+            //
+            //MediaBrowserHelper.this.onClearQueue(parentId,children);
+            //
             MediaBrowserHelper.this.onChildrenLoaded(parentId, children);
         }
     }

@@ -106,6 +106,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     private MediaBrowserHelper mMediaBrowserHelper;
     private final MetaDataCompat metaDataCompat = new MetaDataCompat();
 
+
     private boolean mIsPlaying;
 
 
@@ -119,7 +120,9 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
         //init View
         initView();
+        //
 
+        //
         // lấy data từ Intent
         getDataIntent();
 
@@ -153,11 +156,9 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
 
 
-        //
+
         mMediaBrowserHelper = new MediaBrowserConnection(this);
         mMediaBrowserHelper.registerCallback(new MediaBrowserListener());
-        //
-
 
 
     }
@@ -283,11 +284,13 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     }
 
 
+
     @Override
     protected void onStop() {
         super.onStop();
         songPlayingFragment.getSeekBar().disconnectController();
         mMediaBrowserHelper.onStop();
+        Toast.makeText(this, "hahaha", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -308,6 +311,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         //nhận intent từ activity kia
         Intent i = getIntent();
         //lấy bundle
+
         Package = i.getExtras();
         lstUrlSong = Package.getStringArrayList("lstUrlSong");
         lstIDSong = Package.getIntegerArrayList("lstIDSong");
@@ -326,13 +330,9 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         if(mMediaBrowserHelper != null)
         {
             mMediaBrowserHelper.onStop();
+            metaDataCompat.music.clear();
         }
 
-        // thêm danh sách các song vào metadata
-        // ta phải xóa đi list cũ
-        //metaDataCompat.clearMediaMetadataCompat();
-
-        //metaDataCompat.music.clear();
 //        if(metaDataCompat.music != null)
 //        {
             //nạp lại
@@ -408,6 +408,19 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         }
 
         @Override
+        protected void onClearQueue(@NonNull String parentId, @NonNull List<MediaBrowserCompat.MediaItem> children) {
+            super.onClearQueue(parentId, children);
+            final MediaControllerCompat mediaController = getMediaController();
+
+
+            // Queue up all media items for this simple sample.
+            for (final MediaBrowserCompat.MediaItem mediaItem : children) {
+                mediaController.removeQueueItem(mediaItem.getDescription());
+
+            }
+        }
+
+        @Override
         protected void onDisconnected() {
             super.onDisconnected();
         }
@@ -416,6 +429,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
         protected void onConnected(@NonNull MediaControllerCompat mediaController) {
             songPlayingFragment.getSeekBar().setMediaController(mediaController);
+
         }
 
         @Override
