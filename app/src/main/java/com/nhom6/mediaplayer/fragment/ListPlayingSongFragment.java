@@ -95,7 +95,7 @@ public class ListPlayingSongFragment extends Fragment {
         listView = rootview.findViewById(R.id.listPlaying);
 
         //
-        MyDatabaseHelper db=new MyDatabaseHelper(getContext());
+        MyDatabaseHelper db = new MyDatabaseHelper(getContext());
         //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
 
         lstIDSong = getArguments().getIntegerArrayList("listID");

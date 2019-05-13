@@ -29,4 +29,12 @@
     <string name="choose">Choose</string>
     <string name="SameSong">Danh sách phát</string>
     <string name="lovesong">Bài hát yêu thích</string>
+
+
+    <string name="label_stop">Stop</string>
+    <string name="label_pause">Pause</string>
+    <string name="label_play">Play</string>
+    <string name="label_play_pause">Play and pause toggle</string>
+    <string name="label_previous">Previous track</string>
+    <string name="label_next">Next track</string>
 </resources>

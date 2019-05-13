@@ -1,7 +1,7 @@
 package com.nhom6.mediaplayer.fragment;
 
-import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,12 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
-import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.R;
+import com.nhom6.mediaplayer.service.MediaSeekBar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,7 +32,10 @@ public class SongPlayingFragment extends Fragment {
     CircleImageView imgSong ;
     TextView titleSong;
     TextView artistSong;
-    SeekBar seekBar;
+
+
+
+    MediaSeekBar seekBar;
     TextView startTime;
     TextView endTime;
     ImageButton btn_love;
@@ -104,7 +106,10 @@ public class SongPlayingFragment extends Fragment {
         imgSong = rootView.findViewById(R.id.imgMusic);
         titleSong = rootView.findViewById(R.id.songTitle);
         artistSong = rootView.findViewById(R.id.artist);
+        //
+        seekBar = new MediaSeekBar(getContext());
         seekBar = rootView.findViewById(R.id.seekBar);
+        //
         startTime = rootView.findViewById(R.id.startTime);
         endTime = rootView.findViewById(R.id.endTime);
         btn_love=rootView.findViewById(R.id.btnLove);
@@ -167,5 +172,26 @@ public class SongPlayingFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void ChangeTitleSong(String title)
+    {
+        titleSong.setText(title);
+    }
+    public void ChangeArtistSong(String artist)
+    {
+        artistSong.setText(artist);
+    }
+    public void ChangeImg(Bitmap bm)
+    {
+        imgSong.setImageBitmap(bm);
+    }
+
+    public MediaSeekBar getSeekBar() {
+        return seekBar;
+    }
+
+    public void setSeekBar(MediaSeekBar seekBar) {
+        this.seekBar = seekBar;
     }
 }

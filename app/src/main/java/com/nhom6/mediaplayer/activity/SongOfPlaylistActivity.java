@@ -202,7 +202,7 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
                 Package.putIntegerArrayList("lstIDSong",lstIDSong);
                 //
                 //
-                Intent i = new Intent(context, PlayActivity.class);
+                final Intent i = new Intent(context, PlayActivity.class);
 
 //                Intent i1 = new Intent(context, PlayActivity.class);
 //                i1.putExtras(Package);

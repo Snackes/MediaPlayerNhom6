@@ -3,16 +3,17 @@ package com.nhom6.mediaplayer.activity;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.RemoteException;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -39,27 +40,36 @@ import com.nhom6.mediaplayer.fragment.ListPlayingSongFragment;
 import com.nhom6.mediaplayer.fragment.SongPlayingFragment;
 import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
-import com.nhom6.mediaplayer.service.BackgroundAudioService;
+import com.nhom6.mediaplayer.service.MediaBrowserHelper;
+import com.nhom6.mediaplayer.service.MediaSeekBar;
+import com.nhom6.mediaplayer.service.MetaDataCompat;
+import com.nhom6.mediaplayer.service.MusicService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PlayActivity extends AppCompatActivity implements SongPlayingFragment.OnFragmentInteractionListener, ListPlayingSongFragment.OnFragmentInteractionListener {
+
     final Context context = this;
+
     //khai báo ListView cho dialog
     private ListView listDialog;
     private Button buttonCreatePlaylist;
+
+
     //khai báo SongManager để loadSong
     PlayListManager playlistsManager = new PlayListManager();
     public ArrayList<PlayList> _playlists = new ArrayList<PlayList>();
 
     //khai báo các nút
-    ImageButton btn_add_love;
-    ImageButton btn_play_pause;
-    ImageButton btn_next;
-    ImageButton btn_previous;
-    ImageButton btn_repeat;
-    ImageButton btn_shuffle;
+    private ImageButton btn_add_love;
+    private ImageButton btn_play_pause;
+    private ImageButton btn_next;
+    private ImageButton btn_previous;
+    private ImageButton btn_repeat;
+    private ImageButton btn_shuffle;
+    public MediaSeekBar seekBar  ;
 
     //khai báo các thứ cần thiết để chơi nhạc
     private static Song song;
@@ -72,13 +82,6 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
     //tạo object Database
     MyDatabaseHelper db = new MyDatabaseHelper(this);
-    //các state
-    private static final int STATE_PAUSED = 0;
-    private static final int STATE_PLAYING = 1;
-    private int currentState;
-    private MediaBrowserCompat mediaBrowserCompat;
-    private MediaControllerCompat mediaControllerCompat;
-
 
 
     // tạo adapter pager
@@ -90,6 +93,12 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     //
     ViewPager viewPager;
 
+    //các khai báo cho service
+    private MediaBrowserHelper mMediaBrowserHelper;
+    private final MetaDataCompat metaDataCompat = new MetaDataCompat();
+
+    private boolean mIsPlaying;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +108,6 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_play);
 
-
         //init View
         initView();
 
@@ -108,13 +116,13 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
         //set bundle cho  fragment playing
         Bundle fragmentPlaying = new Bundle();
-        fragmentPlaying.putString("Title",song.getSongname());
-        fragmentPlaying.putString("Artist",song.getArtistname());
-        fragmentPlaying.putString("Image",song.getAlbumArt());
-        fragmentPlaying.putInt("SongID",song.getSongid());
+        fragmentPlaying.putString("Title", song.getSongname());
+        fragmentPlaying.putString("Artist", song.getArtistname());
+        fragmentPlaying.putString("Image", song.getAlbumArt());
+        fragmentPlaying.putInt("SongID", song.getSongid());
         //set bundle cho fragment listplaying
-        Bundle fragmentListPlaying =  new Bundle();
-        fragmentListPlaying.putIntegerArrayList("listID",lstIDSong);
+        Bundle fragmentListPlaying = new Bundle();
+        fragmentListPlaying.putIntegerArrayList("listID", lstIDSong);
         //
         //init fragment
         songPlayingFragment = new SongPlayingFragment();
@@ -126,8 +134,6 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         //
 
 
-
-
         // tạo view pager
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         customPagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
@@ -135,19 +141,23 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         customPagerAdapter.AddFragment(listSongPlayingFragment);
         viewPager.setAdapter(customPagerAdapter);
 
+
+
+
+        //
+        mMediaBrowserHelper = new MediaBrowserConnection(this);
+        mMediaBrowserHelper.registerCallback(new MediaBrowserListener());
         //
 
 
-        mediaBrowserCompat = new MediaBrowserCompat(this, new ComponentName(this, BackgroundAudioService.class),
-                connectionCallback, getIntent().getExtras());
-        mediaBrowserCompat.connect();
 
     }
-    public void ShowMainSreen(View view)
-    {
-        Intent i = new Intent(this, MainActivity.class) ;
+
+    public void ShowMainSreen(View view) {
+        Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
     }
+
     public void showPlayListDialog(View view) {
         final Dialog dialogAdd = new Dialog(context);
         dialogAdd.requestWindowFeature(Window.FEATURE_CONTEXT_MENU);
@@ -184,6 +194,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         CreatePlaylist(position, dialogAdd);
 
     }
+
     //tạo mới playlist đồng thời thêm bài hát đã chọn vào playlist vừa tạo
     public void CreatePlaylist(final int position, final Dialog dialogAdd) {
         buttonCreatePlaylist.setOnClickListener(new View.OnClickListener() {
@@ -215,7 +226,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
                                     "Vui lòng nhập tên trước khi tạo Playlist..!", 50).show();
                             return;
                         }
-                        playlistsManager.CreatePlayListAndAddSong(title, context,songID);
+                        playlistsManager.CreatePlayListAndAddSong(title, context, songID);
                         Toast.makeText(getApplicationContext(),
                                 "Đã thêm vào Playlist..!", 50).show();
                     }
@@ -232,14 +243,13 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     }
 
     public void clickLove(View view) {
-        MyDatabaseHelper db=new MyDatabaseHelper(context);
-        int k=db.CheckSongFavorite(songID);
-        if(k==0){
+        MyDatabaseHelper db = new MyDatabaseHelper(context);
+        int k = db.CheckSongFavorite(songID);
+        if (k == 0) {
             db.AddSongFavorite(songID);
             Snackbar.make(view, "Đã đưa vào mục yêu thích", Snackbar.LENGTH_LONG)
                     .setAction("No action", null).show();
-        }
-        else {
+        } else {
             new android.app.AlertDialog.Builder(context)
                     .setTitle("Bài hát đã có trong yêu thích.")
                     .setMessage("Bạn muốn xóa khỏi yêu thích..?")
@@ -249,7 +259,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
                                 @SuppressLint("WrongConstant")
                                 @TargetApi(11)
                                 public void onClick(DialogInterface dialog, int id) {
-                                    MyDatabaseHelper db=new MyDatabaseHelper(context);
+                                    MyDatabaseHelper db = new MyDatabaseHelper(context);
                                     db.deleteSongInFavorite(songID);
                                     Toast.makeText(getApplicationContext(),
                                             "Đã xóa khỏi Yêu Thích...", 50).show();
@@ -266,111 +276,27 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
     }
 
-    public void PlaySong(View view) {
 
-        if(currentState == STATE_PAUSED)
-        {
-            mediaControllerCompat.getTransportControls().play();
-            currentState = STATE_PLAYING;
-        }else
-        {
-            if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING)
-            {
-                mediaControllerCompat.getTransportControls().pause();
-            }
-            currentState = STATE_PAUSED;
-        }
-    }
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-    public void NextSong(View view) {
-        //đổi hình theo
-        if ( position < lstIDSong.size() -1 ) // check if next song is there or not
-        {
-            int idNext = lstIDSong.get( position + 1);
-            song = db.GetInfoSong(idNext);
-            position = position +1;
-            //Screen(song);
-        }
-        else
-        {
-            int idNext = lstIDSong.get(0);
-            song = db.GetInfoSong(idNext);
-            position = 0;
-            //Screen(song);
-        }
-
-
-        //mỗi lần next Song sẽ tiến hành pause =>> start lại
-
-        //pause
-        mediaControllerCompat.getTransportControls().pause();
-        currentState = STATE_PAUSED;
-        //next
-
-        if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PAUSED)
-        {
-            mediaControllerCompat.getTransportControls().skipToNext();
-            currentState = STATE_PAUSED;
-
-
-        }else
-        {
-            if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING)
-            {
-                mediaControllerCompat.getTransportControls().skipToNext();
-                currentState = STATE_PLAYING;
-            }
-        }
-
+        mMediaBrowserHelper.onStart();
 
     }
 
-    public void PreviousSong(View view) {
-        //đổi hình theo
-        if ( position > 0 ) // check if next song is there or not
-        {
-            int idNext = lstIDSong.get( position -1 );
-            song = db.GetInfoSong(idNext);
-            position = position - 1;
-            //Screen(song);
-        }
-        else
-        {
-            int idNext = lstIDSong.get(lstIDSong.size() -1);
-            song = db.GetInfoSong(idNext);
-            position = lstIDSong.size() -1 ;
-            //Screen(song);
-        }
-
-
-        //mỗi lần next Song sẽ tiến hành pause =>> start lại
-
-        //pause
-        mediaControllerCompat.getTransportControls().pause();
-        currentState = STATE_PAUSED;
-        //next
-
-        if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PAUSED)
-        {
-            mediaControllerCompat.getTransportControls().skipToPrevious();
-            currentState = STATE_PAUSED;
-
-
-        }else
-        {
-            if(mediaControllerCompat.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING)
-            {
-                mediaControllerCompat.getTransportControls().skipToPrevious();
-                currentState = STATE_PLAYING;
-            }
-        }
-
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        songPlayingFragment.getSeekBar().disconnectController();
+        mMediaBrowserHelper.onStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //mSeekBarAudio.disconnectController();
+
 
     }
 
@@ -386,6 +312,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         Package = i.getExtras();
         lstUrlSong = Package.getStringArrayList("lstUrlSong");
         lstIDSong = Package.getIntegerArrayList("lstIDSong");
+        position = 0;
         position = Package.getInt("position");
 
         //lấy id theo position
@@ -393,57 +320,158 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
         //tạo object Song để chứa
         song = db.GetInfoSong(songID);
+
+
+
         //
+//        if(mMediaBrowserHelper != null)
+//        {
+//            mMediaBrowserHelper.onStop();
+//        }
+        //
+        // thêm danh sách các song vào metadata
+        // ta phải xóa đi list cũ
+        //metaDataCompat.clearMediaMetadataCompat();
+
+        if(metaDataCompat.music != null)
+        {
+            //nạp lại
+            for (Integer item: lstIDSong) {
+                Song song = db.GetInfoSong(item);
+                //nạp vào metadata
+                metaDataCompat.createMediaMetadataCompat(song);
+            }
+        }
+
+        //metaDataCompat.getMediaItems();
+
     }
 
     private void initView() {
-        btn_add_love=(ImageButton) findViewById(R.id.btnLove);
+
+        final ClickListener clickListener = new ClickListener();
+        findViewById(R.id.btnPre).setOnClickListener(clickListener);
+        findViewById(R.id.btnPlayMenu).setOnClickListener(clickListener);
+        findViewById(R.id.btnNext).setOnClickListener(clickListener);
+
+        //
+
+        //
+
+        btn_add_love = (ImageButton) findViewById(R.id.btnLove);
         btn_play_pause = (ImageButton) findViewById(R.id.btnPlayMenu);
         btn_next = (ImageButton) findViewById(R.id.btnNext);
         btn_previous = (ImageButton) findViewById(R.id.btnPre);
         btn_repeat = (ImageButton) findViewById(R.id.btnRepeat);
-        btn_shuffle =  (ImageButton) findViewById(R.id.btnShuf);
+        btn_shuffle = (ImageButton) findViewById(R.id.btnShuf);
     }
 
-    private MediaBrowserCompat.ConnectionCallback connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
+    /**
+     * Convenience class to collect the click listeners together.
+     * <p>
+     * In a larger app it's better to split the listeners out or to use your favorite
+     * library.
+     */
+    private class ClickListener implements View.OnClickListener {
         @Override
-        public void onConnected() {
-            super.onConnected();
-            try {
-                mediaControllerCompat = new MediaControllerCompat(PlayActivity.this, mediaBrowserCompat.getSessionToken());
-                mediaControllerCompat.registerCallback(mediaControllerCompatCallback);
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btnPre:
+                    mMediaBrowserHelper.getTransportControls().skipToPrevious();
+                    break;
+                case R.id.btnPlayMenu:
+                    if (mIsPlaying) {
+                        mMediaBrowserHelper.getTransportControls().pause();
+                    } else {
+                        mMediaBrowserHelper.getTransportControls().play();
+                    }
+                    break;
+                case R.id.btnNext:
+                    mMediaBrowserHelper.getTransportControls().skipToNext();
 
-                mediaControllerCompat.setMediaController(PlayActivity.this, mediaControllerCompat);
-
-                mediaControllerCompat.getMediaController(PlayActivity.this);
-                mediaControllerCompat.getTransportControls().playFromMediaId("chokhoinull" ,Package);
-            } catch( RemoteException e ) {
-                e.printStackTrace();
+                    break;
             }
         }
-    };
-    private MediaControllerCompat.Callback mediaControllerCompatCallback = new MediaControllerCompat.Callback() {
+    }
+    /**
+     * Customize the connection to our {@link android.support.v4.media.MediaBrowserServiceCompat}
+     * and implement our app specific desires.
+     */
+    private class MediaBrowserConnection extends MediaBrowserHelper {
+        private MediaBrowserConnection(Context context) {
+            super(context, MusicService.class);
+        }
 
         @Override
-        public void onPlaybackStateChanged(PlaybackStateCompat state) {
-            super.onPlaybackStateChanged(state);
-            if( state == null ) {
+        protected void onDisconnected() {
+            super.onDisconnected();
+        }
+
+        @Override
+        protected void onConnected(@NonNull MediaControllerCompat mediaController) {
+            songPlayingFragment.getSeekBar().setMediaController(mediaController);
+        }
+
+        @Override
+        protected void onChildrenLoaded(@NonNull String parentId,
+                                        @NonNull List<MediaBrowserCompat.MediaItem> children) {
+            super.onChildrenLoaded(parentId, children);
+
+            final MediaControllerCompat mediaController = getMediaController();
+
+
+            // Queue up all media items for this simple sample.
+            for (final MediaBrowserCompat.MediaItem mediaItem : children) {
+                mediaController.addQueueItem(mediaItem.getDescription());
+            }
+
+            // Call prepare now so pressing play just works.
+            mediaController.getTransportControls().prepareFromMediaId(String.valueOf(position)  ,null);
+            //curr song
+            //mMediaBrowserHelper.getTransportControls().prepareFromMediaId(String.valueOf(position),null);
+
+        }
+    }
+
+    /**
+     * Implementation of the {@link MediaControllerCompat.Callback} methods we're interested in.
+     * <p>
+     * Here would also be where one could override
+     * {@code onQueueChanged(List<MediaSessionCompat.QueueItem> queue)} to get informed when items
+     * are added or removed from the queue. We don't do this here in order to keep the UI
+     * simple.
+     */
+    private class MediaBrowserListener extends MediaControllerCompat.Callback {
+        @Override
+        public void onPlaybackStateChanged(PlaybackStateCompat playbackState) {
+            mIsPlaying = playbackState != null &&
+                    playbackState.getState() == PlaybackStateCompat.STATE_PLAYING;
+            //mMediaControlsImage.setPressed(mIsPlaying);
+        }
+
+        @Override
+        public void onMetadataChanged(MediaMetadataCompat mediaMetadata) {
+            if (mediaMetadata == null) {
                 return;
             }
-
-            switch( state.getState() ) {
-                case PlaybackStateCompat.STATE_PLAYING: {
-                    currentState = STATE_PLAYING;
-                    btn_play_pause.setImageResource(R.drawable.ic_pause_new);
-                    break;
-                }
-                case PlaybackStateCompat.STATE_PAUSED: {
-                    currentState = STATE_PAUSED;
-                    btn_play_pause.setImageResource(R.drawable.ic_play_new);
-                    break;
-                }
-            }
+            songPlayingFragment.ChangeTitleSong(
+                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
+            songPlayingFragment.ChangeArtistSong(
+                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST));
+            songPlayingFragment.ChangeImg(MetaDataCompat.getAlbumBitmap(
+                    context,
+                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)));
         }
-    };
+
+        @Override
+        public void onSessionDestroyed() {
+            super.onSessionDestroyed();
+        }
+
+        @Override
+        public void onQueueChanged(List<MediaSessionCompat.QueueItem> queue) {
+            super.onQueueChanged(queue);
+        }
+    }
 
 }

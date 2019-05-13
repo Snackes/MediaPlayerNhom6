@@ -11,4 +11,8 @@
     <color name="pinkwhite">#F2EDDC</color>
     <color name="pinkic">#F2D7B6</color>
     <color name="transparent">#8033b5e5</color>
+    <color name="notification_bg">#e91e63</color>
+
+
+
 </resources>
