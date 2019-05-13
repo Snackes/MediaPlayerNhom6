@@ -117,7 +117,8 @@ public class MusicService extends MediaBrowserServiceCompat {
         public void onPrepareFromMediaId(String position, Bundle extras) {
             super.onPrepareFromMediaId(position, extras);
 
-            mQueueIndex =  Integer.valueOf(position);
+            if( position == null  && extras == null )
+            {
 
                 if (mQueueIndex < 0 && mPlaylist.isEmpty()) {
                     // Nothing to play.
@@ -127,6 +128,20 @@ public class MusicService extends MediaBrowserServiceCompat {
                 final String mediaId = mPlaylist.get(mQueueIndex).getDescription().getMediaId();
                 mPreparedMedia = MetaDataCompat.getMetadata(MusicService.this, mediaId);
                 mSession.setMetadata(mPreparedMedia);
+            }
+            else{
+
+                if (Integer.valueOf(position) < 0 && mPlaylist.isEmpty()) {
+                    // Nothing to play.
+                    return;
+                }
+
+                final String mediaId = mPlaylist.get(Integer.valueOf(position)).getDescription().getMediaId();
+                mPreparedMedia = MetaDataCompat.getMetadata(MusicService.this, mediaId);
+                mSession.setMetadata(mPreparedMedia);
+            }
+
+
 
 
             if (!mSession.isActive()) {

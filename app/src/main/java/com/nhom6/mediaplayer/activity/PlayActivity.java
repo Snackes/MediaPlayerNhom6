@@ -323,16 +323,17 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
 
 
-        //
-//        if(mMediaBrowserHelper != null)
-//        {
-//            mMediaBrowserHelper.onStop();
-//        }
-        //
+
+        if(mMediaBrowserHelper != null)
+        {
+            mMediaBrowserHelper.onStop();
+        }
+
         // thêm danh sách các song vào metadata
         // ta phải xóa đi list cũ
         //metaDataCompat.clearMediaMetadataCompat();
 
+        //metaDataCompat.music.clear();
         if(metaDataCompat.music != null)
         {
             //nạp lại
@@ -343,7 +344,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
             }
         }
 
-        //metaDataCompat.getMediaItems();
+        metaDataCompat.getMediaItems();
 
     }
 

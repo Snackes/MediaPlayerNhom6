@@ -15,15 +15,7 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 public class MetaDataCompat {
-
-
-
-
-    public static TreeMap<String, MediaMetadataCompat> music = new TreeMap<>();
-
-
-
-
+    public static final TreeMap<String, MediaMetadataCompat> music = new TreeMap<>();
 
     public static String getRoot(){
         return "root";
@@ -41,7 +33,7 @@ public class MetaDataCompat {
         return BitmapFactory.decodeFile(song.getAlbumArt());
     }
 
-    public static   List<MediaBrowserCompat.MediaItem> getMediaItems(){
+    public static List<MediaBrowserCompat.MediaItem> getMediaItems(){
         List<MediaBrowserCompat.MediaItem> result = new ArrayList<>();
         for (MediaMetadataCompat metadata : music.values()) {
             result.add(
@@ -71,11 +63,9 @@ public class MetaDataCompat {
 
         }
 
-            builder.putLong(
+        builder.putLong(
                     MediaMetadataCompat.METADATA_KEY_DURATION,
                     metadataWithoutBitmap.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
-
-
         builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt);
         return builder.build();
     }
@@ -83,7 +73,7 @@ public class MetaDataCompat {
     public void clearMediaMetadataCompat()
     {
         music.clear();
-        music = new TreeMap<>();
+
     }
 
     public void createMediaMetadataCompat(Song song){
