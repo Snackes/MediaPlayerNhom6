@@ -32,7 +32,9 @@ import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
+
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
+
 import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
 import com.nhom6.mediaplayer.databinding.ActivityAllSongBinding;
@@ -287,7 +289,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                 Package.putIntegerArrayList("lstIDSong", lstIDSong);
 
                 //
-                Intent i = new Intent(context, PlayActivity.class);
+                final Intent i = new Intent(context, PlayActivity.class);
 
 //                Intent i1 = new Intent(context, PlayActivity.class);
 //                i1.putExtras(Package);

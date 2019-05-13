@@ -114,7 +114,7 @@
         android:layout_marginTop="20dp"
         android:orientation="vertical">
 
-        <SeekBar
+        <com.nhom6.mediaplayer.service.MediaSeekBar
             android:id="@+id/seekBar"
             android:layout_width="268dp"
             android:layout_height="25dp"
