@@ -114,6 +114,16 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         // lấy data từ Intent
         getDataIntent();
 
+
+
+
+        mediaBrowserCompat = new MediaBrowserCompat(this, new ComponentName(this, BackgroundAudioService.class),
+                connectionCallback, getIntent().getExtras());
+        mediaBrowserCompat.connect();
+
+    }
+    public void setDataIntent(View view)
+    {
         //set bundle cho  fragment playing
         Bundle fragmentPlaying = new Bundle();
         fragmentPlaying.putString("Title", song.getSongname());
@@ -142,12 +152,6 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         viewPager.setAdapter(customPagerAdapter);
 
         //
-
-
-        mediaBrowserCompat = new MediaBrowserCompat(this, new ComponentName(this, BackgroundAudioService.class),
-                connectionCallback, getIntent().getExtras());
-        mediaBrowserCompat.connect();
-
     }
 
     public void ShowMainSreen(View view) {

@@ -28,6 +28,7 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
+import com.nhom6.mediaplayer.MainActivity;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.R;
@@ -74,6 +75,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
         getdata();
         ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);
         listView.setAdapter(listSongAdapter);
+
         setSwipeListView();
 
         ClickItem();
@@ -286,12 +288,14 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                 Package.putStringArrayList("lstUrlSong", lstUrlSong);
                 Package.putIntegerArrayList("lstIDSong", lstIDSong);
 
-                //
+
+
                 Intent i = new Intent(context, PlayActivity.class);
 
 //                Intent i1 = new Intent(context, PlayActivity.class);
 //                i1.putExtras(Package);
                 i.putExtras(Package);
+
                 startActivity(i);
             }
         });

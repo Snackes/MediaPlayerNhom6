@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.activity.AlbumActivity;
 import com.nhom6.mediaplayer.activity.LoveActivity;
 import com.nhom6.mediaplayer.activity.PlayActivity;
@@ -35,12 +36,27 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     public static final int PLAYSCREEN_RESULT = 1;
     private SearchView searchView;
-    Context context=this;
-    ArrayList<Song>_songs=new ArrayList<Song>();
+    Context context = this;
+    ArrayList<Song> _songs = new ArrayList<Song>();
     View activity;
 
     //dùng để binding
     ActivityMainBinding binding;
+
+
+    //khai báo các thứ cần thiết để chơi nhạc
+    private static Song song;
+    private static Integer songID;
+    // bundle nhận intent
+    Bundle Package;
+    // position của bài hát trong list mà intent gửi qua
+    public Integer position;
+    ArrayList<String> lstUrlSong = new ArrayList<String>();
+    ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
+    //tạo object Database
+    MyDatabaseHelper db = new MyDatabaseHelper(this);
+
+    //các state
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +67,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         setContentView(R.layout.activity_main);
 
         //set binding
-        binding = (ActivityMainBinding) DataBindingUtil.setContentView(this,        R.layout.activity_main);
+        binding = (ActivityMainBinding) DataBindingUtil.setContentView(this, R.layout.activity_main);
+        getDataIntent();
         setSongPlayBar();
         LayoutInflater inflaterDia = getLayoutInflater();
         activity = inflaterDia.inflate(R.layout.activity_all_song, null);
@@ -60,67 +77,84 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
 
+
     }
-    public void setSongPlayBar()
-    {
-        Song setSong=new Song();
-        if (setSong.getSongname()!=null)
-        {
-            binding.setSong(setSong);
-        }
-        else
-        {
+
+    private void getDataIntent() {
+        //nhận intent từ activity kia
+        Intent i = getIntent();
+        if (i != null) {
+            //lấy bundle
+            Package = i.getExtras();
+            if (Package != null) {
+                lstUrlSong = Package.getStringArrayList("lstUrlSong");
+                lstIDSong = Package.getIntegerArrayList("lstIDSong");
+                position = Package.getInt("position");
+
+                //lấy id theo position
+                songID = lstIDSong.get(position);
+
+                //tạo object Song để chứa
+                song = db.GetInfoSong(songID);
+            }
+        } else song = new Song();
+        //
+    }
+
+    public void setSongPlayBar() {
+        if (song!= null) {
+            binding.setSong(song);
+        } else {
+            Song setSong=new Song();
             setSong.setSongname("default");
             setSong.setArtistname("default");
             binding.setSong(setSong);
         }
 
+
     }
-    public void ShowAllSong(View view)
-    {
-        Intent i = new Intent(this, ShowAllSong.class) ;
+
+    public void ShowAllSong(View view) {
+        Intent i = new Intent(this, ShowAllSong.class);
         startActivity(i);
     }
 
-    public void ShowPlayList(View view)
-    {
-        Intent i = new Intent(this, PlaylistActivity.class) ;
+    public void ShowPlayList(View view) {
+        Intent i = new Intent(this, PlaylistActivity.class);
         startActivity(i);
     }
-    public  void ShowAlbum(View view)
-    {
-        Intent i=new Intent(this, AlbumActivity.class);
+
+    public void ShowAlbum(View view) {
+        Intent i = new Intent(this, AlbumActivity.class);
         startActivity(i);
     }
-    public  void ShowPlayScreen(View view)
-    {
-        Intent i=new Intent(this, PlayActivity.class);
+
+    public void ShowPlayScreen(View view) {
+        Intent i = new Intent(this, PlayActivity.class);
         startActivity(i);
     }
-    public  void ShowSinger(View view)
-    {
+
+    public void ShowSinger(View view) {
         Intent i = new Intent(this, SingerActivity.class);
         startActivity(i);
     }
-    public  void ShowLoveSong(View view)
-    {
-        Intent i=new Intent(this, LoveActivity.class);
+
+    public void ShowLoveSong(View view) {
+        Intent i = new Intent(this, LoveActivity.class);
         startActivity(i);
     }
-    public void clickScan(View view)
-    {
-        Snackbar.make(view,"Đang quét", Snackbar.LENGTH_LONG)
+
+    public void clickScan(View view) {
+        Snackbar.make(view, "Đang quét", Snackbar.LENGTH_LONG)
                 .setAction("No action", null).show();
     }
 
     private void CheckUserPermission(Context context) {
         //TODO: nếu chạy lần đầu thì sẽ vào đây xin permission
-        if(Build.VERSION.SDK_INT >= 23)
-        {
-            if(ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
-                  != PackageManager.PERMISSION_GRANTED)
-            {
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},111);
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 111);
                 return;
             }
         }
@@ -131,21 +165,19 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case 111:
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Permission ok", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
                     CheckUserPermission(this);
                 }
                 break;
-                default: super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
@@ -157,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextChange(String newText) {
         Intent intent = new Intent(context, ShowAllSong.class);
-        intent.putExtra("SearchInMain",newText);
+        intent.putExtra("SearchInMain", newText);
         startActivity(intent);
         return false;
     }

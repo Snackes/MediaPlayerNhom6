@@ -3,6 +3,7 @@ package com.nhom6.mediaplayer.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -48,7 +49,7 @@ public class SongPlayingFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private MediaPlayer mPlayer = null;
     private OnFragmentInteractionListener mListener;
 
     public SongPlayingFragment() {
@@ -104,6 +105,7 @@ public class SongPlayingFragment extends Fragment {
         playingTime = rootView.findViewById(R.id.playingTime);
         totalTime = rootView.findViewById(R.id.totalTime);
         btn_love=rootView.findViewById(R.id.btnLove);
+
 
         //
         if (BitmapFactory.decodeFile(getArguments().getString("Image")) != null) {
