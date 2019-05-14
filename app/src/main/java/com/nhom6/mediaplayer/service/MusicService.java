@@ -17,18 +17,25 @@ import com.nhom6.mediaplayer.notification.MediaNotificationManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MusicService extends MediaBrowserServiceCompat {
 
     private static final String TAG = MusicService.class.getSimpleName();
+
+    public static final String REPEAT_ACTION = "com.nhom6.mediaplayer.service.repeat";
+    public static final String SHUFFLE_ACTION = "com.nhom6.mediaplayer.service.shuffle";
+
 
     private MediaSessionCompat mSession;
     private PlayerAdapter mPlayback;
     private MediaNotificationManager mMediaNotificationManager;
     private MediaSessionCallback mCallback;
     private boolean mServiceInStartedState;
+    private Random rand = new Random();
 
     //
+
 
 
 
@@ -98,6 +105,8 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         private MediaMetadataCompat mPreparedMedia;
 
+
+
         @Override
         public void onAddQueueItem(MediaDescriptionCompat description) {
             mPlaylist.add(new MediaSessionCompat.QueueItem(description, description.hashCode()));
@@ -135,15 +144,11 @@ public class MusicService extends MediaBrowserServiceCompat {
                     // Nothing to play.
                     return;
                 }
-
+                mQueueIndex = Integer.valueOf(position);
                 final String mediaId = mPlaylist.get(Integer.valueOf(position)).getDescription().getMediaId();
                 mPreparedMedia = MetaDataCompat.getMetadata(MusicService.this, mediaId);
                 mSession.setMetadata(mPreparedMedia);
             }
-
-
-
-
             if (!mSession.isActive()) {
                 mSession.setActive(true);
             }
@@ -167,17 +172,11 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         }
 
-        @Override
-        public void onSetRepeatMode(int repeatMode) {
-            super.onSetRepeatMode(repeatMode);
 
-        }
 
-        @Override
-        public void onSetShuffleMode(int shuffleMode) {
-            super.onSetShuffleMode(shuffleMode);
 
-        }
+
+
 
         @Override
         public void onPlay() {
@@ -193,6 +192,8 @@ public class MusicService extends MediaBrowserServiceCompat {
             mPlayback.playFromMedia(mPreparedMedia);
             Log.d(TAG, "onPlayFromMediaId: MediaSession active");
         }
+
+
 
         @Override
         public void onPause() {
@@ -217,6 +218,31 @@ public class MusicService extends MediaBrowserServiceCompat {
             mQueueIndex = mQueueIndex > 0 ? mQueueIndex - 1 : mPlaylist.size() - 1;
             mPreparedMedia = null;
             onPlay();
+        }
+
+        @Override
+        public void onSetRepeatMode(int repeatMode) {
+            super.onSetRepeatMode(repeatMode);
+            if(repeatMode == 0 )//false
+            {
+                mPlayback.onLooping(false);
+            }
+            else
+            {
+                mPlayback.onLooping(true);
+            }
+
+        }
+
+        @Override
+        public void onSetShuffleMode(int shuffleMode) {
+            super.onSetShuffleMode(shuffleMode);
+            if(shuffleMode != 0) //true
+            {
+                mQueueIndex = rand.nextInt(mPlaylist.size()-1);
+            }
+
+
         }
 
         @Override
@@ -248,16 +274,34 @@ public class MusicService extends MediaBrowserServiceCompat {
 
             // Manage the started state of this service.
             switch (state.getState()) {
-                case PlaybackStateCompat.STATE_PLAYING:
+                case PlaybackStateCompat.STATE_PLAYING: {
                     mServiceManager.moveServiceToStartedState(state);
                     break;
+                }
+
                 case PlaybackStateCompat.STATE_PAUSED:
                     mServiceManager.updateNotificationForPause(state);
                     break;
                 case PlaybackStateCompat.STATE_STOPPED:
                     mServiceManager.moveServiceOutOfStartedState(state);
                     break;
+                case PlaybackStateCompat.STATE_CONNECTING:
+                    mCallback.onSkipToNext();
+                    break;
+//                case PlaybackStateCompat.REPEAT_MODE_NONE:
+//                    mCallback.onRepeatMode(false);
+//                    break;
+//                case PlaybackStateCompat.REPEAT_MODE_GROUP:
+
+
+
             }
+        }
+
+        @Override
+        public void onPlaybackCompleted() {
+
+
         }
 
         class ServiceManager {

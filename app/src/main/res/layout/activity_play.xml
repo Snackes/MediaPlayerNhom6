@@ -68,7 +68,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_shuf"
-            android:onClick="isShuffle"
+
             android:tint="@color/pinkwhite" />
 
         <ImageButton
@@ -112,7 +112,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_repeat"
-            android:onClick="isRepeat"
+
             android:tint="@color/pinkwhite" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

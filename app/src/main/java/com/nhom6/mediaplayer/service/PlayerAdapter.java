@@ -82,6 +82,9 @@ public abstract class PlayerAdapter {
      * Called when the media must be stopped. The player should clean up resources at this
      * point.
      */
+
+    public  abstract  void onLooping(boolean loop);
+
     protected abstract void onStop();
 
     public abstract void seekTo(long position);

@@ -44,6 +44,7 @@ public class MediaPlayerAdapter extends PlayerAdapter {
     private void initializeMediaPlayer() {
         if (mMediaPlayer == null) {
             mMediaPlayer = new MediaPlayer();
+
             mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
@@ -54,7 +55,8 @@ public class MediaPlayerAdapter extends PlayerAdapter {
                     // to "stop".
                     // Paused allows: seekTo(), start(), pause(), stop()
                     // Stop allows: stop()
-                    setNewState(PlaybackStateCompat.STATE_PAUSED);
+                    //setNewState(PlaybackStateCompat.STATE_PAUSED);
+                    setNewState(PlaybackStateCompat.STATE_CONNECTING);
                 }
             });
         }
@@ -127,6 +129,7 @@ public class MediaPlayerAdapter extends PlayerAdapter {
 
     }
 
+
     @Override
     protected void onPause() {
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
@@ -135,6 +138,8 @@ public class MediaPlayerAdapter extends PlayerAdapter {
         }
 
     }
+
+
 
     @Override
     protected void onStop() {
@@ -148,6 +153,13 @@ public class MediaPlayerAdapter extends PlayerAdapter {
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
             mMediaPlayer = null;
+        }
+    }
+    public void onLooping(boolean loop)
+    {
+        if(mMediaPlayer != null)
+        {
+            mMediaPlayer.setLooping(loop);
         }
     }
 
@@ -165,7 +177,9 @@ public class MediaPlayerAdapter extends PlayerAdapter {
             setNewState(mState);
         }
 
+
     }
+
 
     @Override
     public void setVolume(float volume) {
@@ -216,26 +230,51 @@ public class MediaPlayerAdapter extends PlayerAdapter {
         long actions = PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID
                 | PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH
                 | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
-                | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS;
+                | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+                | PlaybackStateCompat.REPEAT_MODE_NONE
+                | PlaybackStateCompat.REPEAT_MODE_ONE
+                | PlaybackStateCompat.REPEAT_MODE_ALL
+                | PlaybackStateCompat.SHUFFLE_MODE_NONE
+                | PlaybackStateCompat.SHUFFLE_MODE_ALL;
         switch (mState) {
             case PlaybackStateCompat.STATE_STOPPED:
                 actions |= PlaybackStateCompat.ACTION_PLAY
-                        | PlaybackStateCompat.ACTION_PAUSE;
+                        | PlaybackStateCompat.ACTION_PAUSE
+                        | PlaybackStateCompat.REPEAT_MODE_NONE
+                        | PlaybackStateCompat.REPEAT_MODE_ONE
+                        | PlaybackStateCompat.REPEAT_MODE_ALL
+                        | PlaybackStateCompat.SHUFFLE_MODE_NONE
+                        | PlaybackStateCompat.SHUFFLE_MODE_ALL;
                 break;
             case PlaybackStateCompat.STATE_PLAYING:
                 actions |= PlaybackStateCompat.ACTION_STOP
                         | PlaybackStateCompat.ACTION_PAUSE
-                        | PlaybackStateCompat.ACTION_SEEK_TO;
+                        | PlaybackStateCompat.ACTION_SEEK_TO
+                        | PlaybackStateCompat.REPEAT_MODE_NONE
+                        | PlaybackStateCompat.REPEAT_MODE_ONE
+                        | PlaybackStateCompat.REPEAT_MODE_ALL
+                        | PlaybackStateCompat.SHUFFLE_MODE_NONE
+                        | PlaybackStateCompat.SHUFFLE_MODE_ALL;
                 break;
             case PlaybackStateCompat.STATE_PAUSED:
                 actions |= PlaybackStateCompat.ACTION_PLAY
-                        | PlaybackStateCompat.ACTION_STOP;
+                        | PlaybackStateCompat.ACTION_STOP
+                        | PlaybackStateCompat.REPEAT_MODE_NONE
+                        | PlaybackStateCompat.REPEAT_MODE_ONE
+                        | PlaybackStateCompat.REPEAT_MODE_ALL
+                        | PlaybackStateCompat.SHUFFLE_MODE_NONE
+                        | PlaybackStateCompat.SHUFFLE_MODE_ALL;
                 break;
             default:
                 actions |= PlaybackStateCompat.ACTION_PLAY
                         | PlaybackStateCompat.ACTION_PLAY_PAUSE
                         | PlaybackStateCompat.ACTION_STOP
-                        | PlaybackStateCompat.ACTION_PAUSE;
+                        | PlaybackStateCompat.ACTION_PAUSE
+                        | PlaybackStateCompat.REPEAT_MODE_NONE
+                        | PlaybackStateCompat.REPEAT_MODE_ONE
+                        | PlaybackStateCompat.REPEAT_MODE_ALL
+                        | PlaybackStateCompat.SHUFFLE_MODE_NONE
+                        | PlaybackStateCompat.SHUFFLE_MODE_ALL;
         }
         return actions;
     }

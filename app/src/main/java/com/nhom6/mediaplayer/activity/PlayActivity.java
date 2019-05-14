@@ -108,6 +108,8 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
 
     private boolean mIsPlaying;
+    private boolean mIsRepeat = false;
+    private boolean mIsShuffe = false;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -355,6 +357,8 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         findViewById(R.id.btnPre).setOnClickListener(clickListener);
         findViewById(R.id.btnPlayMenu).setOnClickListener(clickListener);
         findViewById(R.id.btnNext).setOnClickListener(clickListener);
+        findViewById(R.id.btnShuf).setOnClickListener(clickListener);
+        findViewById(R.id.btnRepeat).setOnClickListener(clickListener);
 
         //
 
@@ -362,11 +366,11 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
         btn_add_love = (ImageButton) findViewById(R.id.btnLove);
 
-        btn_play_pause = (ImageButton) findViewById(R.id.btnPlayMenu);
-        btn_next = (ImageButton) findViewById(R.id.btnNext);
-        btn_previous = (ImageButton) findViewById(R.id.btnPre);
-        btn_repeat = (ImageButton) findViewById(R.id.btnRepeat);
-        btn_shuffle = (ImageButton) findViewById(R.id.btnShuf);
+//        btn_play_pause = (ImageButton) findViewById(R.id.btnPlayMenu);
+//        btn_next = (ImageButton) findViewById(R.id.btnNext);
+//        btn_previous = (ImageButton) findViewById(R.id.btnPre);
+//        btn_repeat = (ImageButton) findViewById(R.id.btnRepeat);
+//        btn_shuffle = (ImageButton) findViewById(R.id.btnShuf);
 
     }
 
@@ -392,8 +396,38 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
                     break;
                 case R.id.btnNext:
                     mMediaBrowserHelper.getTransportControls().skipToNext();
+                    break;
+                case R.id.btnRepeat:
+                    if(isRepeat == true)
+                    {
+                        mMediaBrowserHelper.getTransportControls().setRepeatMode(PlaybackStateCompat.REPEAT_MODE_NONE);
+                        isRepeat = false;
+                        Toast.makeText(context, "repeatMode off", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        mMediaBrowserHelper.getTransportControls().setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ONE);
+                        isRepeat = true;
+                        Toast.makeText(context, "repeatMode on", Toast.LENGTH_SHORT).show();
+                    }
 
                     break;
+                case R.id.btnShuf:
+                    if(isShuff == true)
+                    {
+                        mMediaBrowserHelper.getTransportControls().setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_NONE);
+                        isShuff = false;
+                        Toast.makeText(context, "shuffMode off", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        mMediaBrowserHelper.getTransportControls().setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_ALL);
+                        isShuff = true;
+                        Toast.makeText(context, "shuffMode on", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                    break;
+
+
             }
         }
 
@@ -448,6 +482,9 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
             // Call prepare now so pressing play just works.
             mediaController.getTransportControls().prepareFromMediaId(String.valueOf(position)  ,null);
+            // playsong
+            mediaController.getTransportControls().play();
+
             //curr song
             //mMediaBrowserHelper.getTransportControls().prepareFromMediaId(String.valueOf(position),null);
 
