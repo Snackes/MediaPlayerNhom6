@@ -101,7 +101,7 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
 
         //Kiểm tra List bài hát có gì không, nếu không có thì thoát
         if (_songs.size() == 0) {
-            Toast.makeText(getApplicationContext(), "Méo có gì trong này", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "không có gì trong này", Toast.LENGTH_LONG).show();
             // Trở lại MainActivity.
             this.onBackPressed();
             return;

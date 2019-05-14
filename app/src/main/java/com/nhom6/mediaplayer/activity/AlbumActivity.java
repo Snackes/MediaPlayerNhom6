@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.AlbumManager;
@@ -38,11 +39,13 @@ public class AlbumActivity extends AppCompatActivity implements SearchView.OnQue
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_album);
 
+        int kt=getdata();
+        //nếu không có danh sách album thì khỏi làm gì cho mệt
+        if(kt==0){
+            return;
+        }
         //find id GirdView
         gridViewAlbum =  findViewById(R.id.gridViewAB);
-
-        getdata();
-
         //đưa vào adapter để hiển thị
         AlbumAdapter listAlbumAdapter = new AlbumAdapter(this,R.layout.girdview_album,_albums);
         gridViewAlbum.setAdapter(listAlbumAdapter);
@@ -52,17 +55,16 @@ public class AlbumActivity extends AppCompatActivity implements SearchView.OnQue
         searchView.setOnQueryTextListener(this);
     }
 
-    public void getdata(){
+    public int getdata(){
         MyDatabaseHelper db=new MyDatabaseHelper(this);
         //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
         if(db.CheckTableAlbum()==0){
-            //tiến hành lấy toàn bộ album trong máy
-            _albums = albumsManager.loadAlbum(this);
-            //đưa songs lấy được vào csdl
-            db.addAlbum(_albums);
+            Toast.makeText(getApplicationContext(), "Album trống, chọn Scan để quét album có trong máy..!", Toast.LENGTH_LONG).show();
+            return 0;
         }
         else {
             _albums=db.GetListAlbums();
+            return 1;
         }
     }
 

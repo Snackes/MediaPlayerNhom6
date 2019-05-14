@@ -68,39 +68,57 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
         setContentView(R.layout.activity_all_song);
 
         binding = (ActivityAllSongBinding) DataBindingUtil.setContentView(this,        R.layout.activity_all_song);
-        //find id ListView
+
+        //INIT VIEW
         listView = (SwipeMenuListView) findViewById(R.id.listViewSong);
         searchView = findViewById(R.id.searchView);
-        //lấy danh sách bài hát
-        getdata();
+
+        int kt=getdata();
+        if(kt==0){
+            return;
+        }
+
+        //đưa vào adapter để hiển thị
         ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);
         listView.setAdapter(listSongAdapter);
 
         setSwipeListView();
-
+        //
         ClickItem();
         searchView.setOnQueryTextListener(this);
+        //xét dữ liệu cho thanh playbar
+        SetPlaybar();
+
+    }
+    public void SetPlaybar(){
+        Intent intent = this.getIntent();
+        //TH show tất cả bài hát có trong 1 playlist được chọn
+        if(intent.getSerializableExtra("song")!=null) {
+            Song newsong  = (Song) intent.getSerializableExtra("song");
+            binding.setSong(newsong);
+        }
     }
 
-    public void getdata(){
+    public int getdata(){
         MyDatabaseHelper db = new MyDatabaseHelper(this);
 
         Intent intent = this.getIntent();
         //TH show tất cả bài hát có trong 1 ca sĩ được chọn
         if(intent.getSerializableExtra("SearchInMain")!=null) {
+            _songs = db.GetListSong();
             String NewText=intent.getSerializableExtra("SearchInMain").toString();
             searchView.setQuery(NewText,false);
             onQueryTextChange(NewText);
+            return 1;
         }
         else {
-            //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
-            if (db.CheckTableSong() == 0) {
-                //tiến hành lấy toàn bộ song trong máy
-                _songs = songsManager.loadSong(this);
-                //đưa songs lấy được vào csdl
-                db.addSong(_songs);
-            } else {
+            if(db.CheckTableSong()==0){
+                Toast.makeText(getApplicationContext(), "Không có bài hát, chọn Scan để quét các bài hát có trong máy..!", Toast.LENGTH_LONG).show();
+                return 0;
+            }
+            else {
                 _songs = db.GetListSong();
+                return 1;
             }
         }
     }
@@ -272,9 +290,6 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 //TODO: khi mình intent 1 item sang PlayActivity mình sẽ gửi 2 thứ: position của item và listID ( toàn bộ )
-                //Lấy item tại vị trí click
-                Song newsong = (Song) parent.getItemAtPosition(position);
-                binding.setSong(newsong);
 
                 //lấy listID
                 ArrayList<String> lstUrlSong = GetListUrlSong();

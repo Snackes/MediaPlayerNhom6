@@ -19,13 +19,22 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
+<<<<<<< HEAD
+=======
+import com.nhom6.mediaplayer.Manager.AlbumManager;
+import com.nhom6.mediaplayer.Manager.ArtistManager;
+import com.nhom6.mediaplayer.Manager.SongManager;
+>>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
 import com.nhom6.mediaplayer.activity.AlbumActivity;
 import com.nhom6.mediaplayer.activity.LoveActivity;
 import com.nhom6.mediaplayer.activity.PlayActivity;
 import com.nhom6.mediaplayer.activity.PlaylistActivity;
 import com.nhom6.mediaplayer.activity.ShowAllSong;
 import com.nhom6.mediaplayer.activity.SingerActivity;
+import com.nhom6.mediaplayer.activity.SongOfPlaylistActivity;
 import com.nhom6.mediaplayer.databinding.ActivityAllSongBinding;
+import com.nhom6.mediaplayer.model.Album;
+import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.Song;
 import com.nhom6.mediaplayer.databinding.ActivityMainBinding;
 
@@ -38,11 +47,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private SearchView searchView;
     Context context = this;
     ArrayList<Song> _songs = new ArrayList<Song>();
+<<<<<<< HEAD
     View activity;
+=======
+    ArrayList<Album> _albums=new ArrayList<Album>();
+    ArrayList<Artist> _artists =new ArrayList<Artist>();
+>>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
 
     //dùng để binding
     ActivityMainBinding binding;
 
+<<<<<<< HEAD
 
     //khai báo các thứ cần thiết để chơi nhạc
     private static Song song;
@@ -57,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     MyDatabaseHelper db = new MyDatabaseHelper(this);
 
     //các state
+=======
+>>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,10 +85,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         //set binding
         binding = (ActivityMainBinding) DataBindingUtil.setContentView(this, R.layout.activity_main);
+<<<<<<< HEAD
         getDataIntent();
+=======
+>>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
         setSongPlayBar();
         LayoutInflater inflaterDia = getLayoutInflater();
-        activity = inflaterDia.inflate(R.layout.activity_all_song, null);
         //kiem tra permission
         CheckUserPermission(this);
         searchView = findViewById(R.id.searchView);
@@ -80,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     }
 
+<<<<<<< HEAD
     private void getDataIntent() {
         //nhận intent từ activity kia
         Intent i = getIntent();
@@ -109,14 +129,38 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             setSong.setSongname("default");
             setSong.setArtistname("default");
             binding.setSong(setSong);
+=======
+    public void setSongPlayBar() {
+        MyDatabaseHelper db=new MyDatabaseHelper(context);
+        _songs=db.GetListSong();
+        Song song = new Song();
+        if (_songs.size()!=0) {
+            song=_songs.get(0);
+            binding.setSong(song);
+        } else {
+            song.setSongname("default");
+            song.setArtistname("default");
+            binding.setSong(song);
+>>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
         }
 
 
     }
 
     public void ShowAllSong(View view) {
+<<<<<<< HEAD
         Intent i = new Intent(this, ShowAllSong.class);
         startActivity(i);
+=======
+        Song song=new Song();
+        if (_songs.size()!=0) {
+            song=_songs.get(0);
+        }
+
+        Intent intent = new Intent(context, ShowAllSong.class);
+        intent.putExtra("song", song);
+        startActivity(intent);
+>>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
     }
 
     public void ShowPlayList(View view) {
@@ -147,6 +191,32 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public void clickScan(View view) {
         Snackbar.make(view, "Đang quét", Snackbar.LENGTH_LONG)
                 .setAction("No action", null).show();
+
+        MyDatabaseHelper db = new MyDatabaseHelper(this);
+        //tiến hành lấy toàn bộ song trong máy
+        SongManager songManager=new SongManager();
+        AlbumManager albumManager=new AlbumManager();
+        ArtistManager artistManager=new ArtistManager();
+
+        _songs = songManager.loadSong(this);
+        _albums = albumManager.loadAlbum(this);
+        _artists=artistManager.loadArtist(this);
+
+        if(_songs.size()==0){
+            Snackbar.make(view, "Không có bài hát trong máy", Snackbar.LENGTH_LONG)
+                    .setAction("No action", null).show();
+        }
+        else {
+            Snackbar.make(view, "Quét hoàn tất", Snackbar.LENGTH_LONG)
+                    .setAction("No action", null).show();
+            //đưa songs lấy được vào csdl
+            db.addSong(_songs);
+            db.addAlbum(_albums);
+            db.addSinger(_artists);
+            Song song=new Song();
+            song=_songs.get(0);
+            binding.setSong(song);
+        }
     }
 
     private void CheckUserPermission(Context context) {
@@ -183,14 +253,20 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        Intent intent = new Intent(context, ShowAllSong.class);
+        intent.putExtra("SearchInMain", query);
+        startActivity(intent);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+<<<<<<< HEAD
         Intent intent = new Intent(context, ShowAllSong.class);
         intent.putExtra("SearchInMain", newText);
         startActivity(intent);
+=======
+>>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
         return false;
     }
 }
