@@ -252,7 +252,6 @@ public class PlaylistActivity extends AppCompatActivity implements SearchView.On
 
     }
 
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;

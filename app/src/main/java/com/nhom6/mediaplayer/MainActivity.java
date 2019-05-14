@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     ArrayList<Song> _songs = new ArrayList<Song>();
     ArrayList<Album> _albums=new ArrayList<Album>();
     ArrayList<Artist> _artists =new ArrayList<Artist>();
-    View activity;
 
     //dùng để binding
     ActivityMainBinding binding;
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         binding = (ActivityMainBinding) DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSongPlayBar();
         LayoutInflater inflaterDia = getLayoutInflater();
-        activity = inflaterDia.inflate(R.layout.activity_all_song, null);
         //kiem tra permission
         CheckUserPermission(this);
         searchView = findViewById(R.id.searchView);
@@ -88,7 +86,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     public void ShowAllSong(View view) {
-        Song song=_songs.get(0);
+        Song song=new Song();
+        if (_songs.size()!=0) {
+            song=_songs.get(0);
+        }
+
         Intent intent = new Intent(context, ShowAllSong.class);
         intent.putExtra("song", song);
         startActivity(intent);
@@ -144,6 +146,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             db.addSong(_songs);
             db.addAlbum(_albums);
             db.addSinger(_artists);
+            Song song=new Song();
+            song=_songs.get(0);
+            binding.setSong(song);
         }
     }
 
