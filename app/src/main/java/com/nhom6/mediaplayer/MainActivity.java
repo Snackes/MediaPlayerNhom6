@@ -18,13 +18,20 @@ import android.view.WindowManager;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
+import com.nhom6.mediaplayer.Manager.AlbumManager;
+import com.nhom6.mediaplayer.Manager.ArtistManager;
+import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.activity.AlbumActivity;
 import com.nhom6.mediaplayer.activity.LoveActivity;
 import com.nhom6.mediaplayer.activity.PlayActivity;
 import com.nhom6.mediaplayer.activity.PlaylistActivity;
 import com.nhom6.mediaplayer.activity.ShowAllSong;
 import com.nhom6.mediaplayer.activity.SingerActivity;
+import com.nhom6.mediaplayer.activity.SongOfPlaylistActivity;
 import com.nhom6.mediaplayer.databinding.ActivityAllSongBinding;
+import com.nhom6.mediaplayer.model.Album;
+import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.Song;
 import com.nhom6.mediaplayer.databinding.ActivityMainBinding;
 
@@ -35,12 +42,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     public static final int PLAYSCREEN_RESULT = 1;
     private SearchView searchView;
-    Context context=this;
-    ArrayList<Song>_songs=new ArrayList<Song>();
+    Context context = this;
+    ArrayList<Song> _songs = new ArrayList<Song>();
+    ArrayList<Album> _albums=new ArrayList<Album>();
+    ArrayList<Artist> _artists =new ArrayList<Artist>();
     View activity;
 
     //dùng để binding
     ActivityMainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         setContentView(R.layout.activity_main);
 
         //set binding
-        binding = (ActivityMainBinding) DataBindingUtil.setContentView(this,        R.layout.activity_main);
+        binding = (ActivityMainBinding) DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSongPlayBar();
         LayoutInflater inflaterDia = getLayoutInflater();
         activity = inflaterDia.inflate(R.layout.activity_all_song, null);
@@ -61,66 +71,88 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         searchView.setOnQueryTextListener(this);
 
     }
-    public void setSongPlayBar()
-    {
-        Song setSong=new Song();
-        if (setSong.getSongname()!=null)
-        {
-            binding.setSong(setSong);
-        }
-        else
-        {
-            setSong.setSongname("default");
-            setSong.setArtistname("default");
-            binding.setSong(setSong);
+
+    public void setSongPlayBar() {
+        MyDatabaseHelper db=new MyDatabaseHelper(context);
+        _songs=db.GetListSong();
+        Song song = new Song();
+        if (_songs.size()!=0) {
+            song=_songs.get(0);
+            binding.setSong(song);
+        } else {
+            song.setSongname("default");
+            song.setArtistname("default");
+            binding.setSong(song);
         }
 
     }
-    public void ShowAllSong(View view)
-    {
-        Intent i = new Intent(this, ShowAllSong.class) ;
+
+    public void ShowAllSong(View view) {
+        Song song=_songs.get(0);
+        Intent intent = new Intent(context, ShowAllSong.class);
+        intent.putExtra("song", song);
+        startActivity(intent);
+    }
+
+    public void ShowPlayList(View view) {
+        Intent i = new Intent(this, PlaylistActivity.class);
         startActivity(i);
     }
 
-    public void ShowPlayList(View view)
-    {
-        Intent i = new Intent(this, PlaylistActivity.class) ;
+    public void ShowAlbum(View view) {
+        Intent i = new Intent(this, AlbumActivity.class);
         startActivity(i);
     }
-    public  void ShowAlbum(View view)
-    {
-        Intent i=new Intent(this, AlbumActivity.class);
+
+    public void ShowPlayScreen(View view) {
+        Intent i = new Intent(this, PlayActivity.class);
         startActivity(i);
     }
-    public  void ShowPlayScreen(View view)
-    {
-        Intent i=new Intent(this, PlayActivity.class);
-        startActivity(i);
-    }
-    public  void ShowSinger(View view)
-    {
+
+    public void ShowSinger(View view) {
         Intent i = new Intent(this, SingerActivity.class);
         startActivity(i);
     }
-    public  void ShowLoveSong(View view)
-    {
-        Intent i=new Intent(this, LoveActivity.class);
+
+    public void ShowLoveSong(View view) {
+        Intent i = new Intent(this, LoveActivity.class);
         startActivity(i);
     }
-    public void clickScan(View view)
-    {
-        Snackbar.make(view,"Đang quét", Snackbar.LENGTH_LONG)
+
+    public void clickScan(View view) {
+        Snackbar.make(view, "Đang quét", Snackbar.LENGTH_LONG)
                 .setAction("No action", null).show();
+
+        MyDatabaseHelper db = new MyDatabaseHelper(this);
+        //tiến hành lấy toàn bộ song trong máy
+        SongManager songManager=new SongManager();
+        AlbumManager albumManager=new AlbumManager();
+        ArtistManager artistManager=new ArtistManager();
+
+        _songs = songManager.loadSong(this);
+        _albums = albumManager.loadAlbum(this);
+        _artists=artistManager.loadArtist(this);
+
+        if(_songs.size()==0){
+            Snackbar.make(view, "Không có bài hát trong máy", Snackbar.LENGTH_LONG)
+                    .setAction("No action", null).show();
+        }
+        else {
+            Snackbar.make(view, "Quét hoàn tất", Snackbar.LENGTH_LONG)
+                    .setAction("No action", null).show();
+            //đưa songs lấy được vào csdl
+            db.addSong(_songs);
+            db.addAlbum(_albums);
+            db.addSinger(_artists);
+        }
     }
 
     private void CheckUserPermission(Context context) {
         //TODO: nếu chạy lần đầu thì sẽ vào đây xin permission
-        if(Build.VERSION.SDK_INT >= 23)
-        {
-            if(ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
-                  != PackageManager.PERMISSION_GRANTED)
-            {
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},111);
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 111);
                 return;
             }
         }
@@ -131,34 +163,32 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case 111:
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Permission ok", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
                     CheckUserPermission(this);
                 }
                 break;
-                default: super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        Intent intent = new Intent(context, ShowAllSong.class);
+        intent.putExtra("SearchInMain", query);
+        startActivity(intent);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        Intent intent = new Intent(context, ShowAllSong.class);
-        intent.putExtra("SearchInMain",newText);
-        startActivity(intent);
         return false;
     }
 }

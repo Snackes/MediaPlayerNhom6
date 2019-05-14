@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.ArtistManager;
@@ -42,10 +43,15 @@ public class SingerActivity extends AppCompatActivity implements SearchView.OnQu
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_singer);
 
+        int kt=getdata();
+        //nếu không có danh sách album thì khỏi làm gì cho mệt
+        if(kt==0){
+            return;
+        }
+
         //find id ListView
         listViewSinger = (ListView) findViewById(R.id.listViewSinger);
         //lấy danh sách ca sĩ
-        getdata();
         //đưa vào adapter để hiển thị
         SingerAdapter listArtistAdapter = new SingerAdapter(this,R.layout.row_item_singer,_artists);
         listViewSinger.setAdapter(listArtistAdapter);
@@ -54,17 +60,16 @@ public class SingerActivity extends AppCompatActivity implements SearchView.OnQu
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
     }
-    public void getdata(){
+    public int getdata(){
         MyDatabaseHelper db=new MyDatabaseHelper(this);
         //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
         if(db.CheckTableSinger()==0){
-            //tiến hành lấy toàn bộ song trong máy
-            _artists = artistsManager.loadArtist(this);
-            //đưa songs lấy được vào csdl
-            db.addSinger(_artists);
+            Toast.makeText(getApplicationContext(), "Singer trống, chọn Scan để quét ca sĩ trong máy..!", Toast.LENGTH_LONG).show();
+            return 0;
         }
         else {
             _artists=db.GetListSinger();
+            return 1;
         }
     }
 

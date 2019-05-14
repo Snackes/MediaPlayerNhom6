@@ -51,11 +51,14 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_love);
 
+        MyDatabaseHelper db=new MyDatabaseHelper(context);
         Refresh=false;
+        if(db.CheckTableSong()==0){
+            Toast.makeText(getApplicationContext(), "Không có bài hát...!", Toast.LENGTH_LONG).show();
+            return;
+        }
         //find id ListView
         listLoveSong = (SwipeMenuListView) findViewById(R.id.listLoveSong);
-
-        MyDatabaseHelper db=new MyDatabaseHelper(context);
         _lovesongs=db.GetListSongFavorite();
 
         activity=this;

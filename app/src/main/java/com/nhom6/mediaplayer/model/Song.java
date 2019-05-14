@@ -2,7 +2,9 @@ package com.nhom6.mediaplayer.model;
 
 import android.graphics.Bitmap;
 
-public class Song {
+import java.io.Serializable;
+
+public class Song implements Serializable {
     private String Songname;
     private String Artistname;
     private int ArtistnameId;
