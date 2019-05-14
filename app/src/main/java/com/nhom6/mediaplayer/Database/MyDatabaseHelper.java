@@ -178,7 +178,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 + TABLE_SONG_PLAYLIST + " sp WHERE sp."
                 + COLUMN_PLAYLIST_ID + " = '" + idPlayList
                 + "'" + " AND ts." + COLUMN_SONG_ID + " = "
-                + "sp." + COLUMN_SONG_ID;
+                + "sp." + COLUMN_SONG_ID
+                + " ORDER BY +" +COLUMN_SONG_NAME+" ASC";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery( selectQuery, null);
         ArrayList<Song> listSong = new ArrayList<Song>();
@@ -207,7 +208,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         //        String selectQuery = "select * from "+TABLE_SONG_PLAYLIST+" where PlayList_Id="+idPlayList;
         String selectQuery = "SELECT  * FROM " + TABLE_SONG+
                 " WHERE "
-                + COLUMN_ALBUM_ID + " = " + idAlbum;
+                + COLUMN_ALBUM_ID + " = " + idAlbum
+                + " ORDER BY +" +COLUMN_SONG_NAME+" ASC";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery( selectQuery, null);
         ArrayList<Song> listSong = new ArrayList<Song>();
@@ -236,7 +238,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         //        String selectQuery = "select * from "+TABLE_SONG_PLAYLIST+" where PlayList_Id="+idPlayList;
         String selectQuery = "SELECT  * FROM " + TABLE_SONG+
                 " WHERE "
-                + COLUMN_ARTISTNAME_ID + " = " + idArtist;
+                + COLUMN_ARTISTNAME_ID + " = " + idArtist
+                + " ORDER BY +" +COLUMN_SONG_NAME+" ASC";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery( selectQuery, null);
         ArrayList<Song> listSong = new ArrayList<Song>();
@@ -282,7 +285,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     //Lấy tất cả bài hát có trong csdl
     public ArrayList<Song> GetListSong() {
-        String selectQuery = "select distinct * from "+TABLE_SONG;
+        String selectQuery = "select distinct * from "
+                +TABLE_SONG + " ORDER BY +" +COLUMN_SONG_NAME+" ASC" ;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery( selectQuery, null);
 
@@ -331,7 +335,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     //Lấy ra danh sách bài hát yêu thích(Tức có thuộc tính Favorite=1)
     public ArrayList<Song> GetListSongFavorite(){
-        String selectQuery = "select * from "+TABLE_SONG+" WHERE "+COLUMN_FAVORITE+"=1";
+        String selectQuery = "select * from "+TABLE_SONG+" WHERE "+COLUMN_FAVORITE+"=1"
+                + " ORDER BY +" +COLUMN_SONG_NAME+" ASC";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery( selectQuery, null);
 
@@ -381,7 +386,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     //Lấy tất cả ca sĩ có trong csdl
     public ArrayList<Artist> GetListSinger() {
-        String selectQuery = "select * from "+TABLE_SINGER;
+        String selectQuery = "select * from "+TABLE_SINGER + " ORDER BY +" +COLUMN_ARTIST_NAME+" ASC";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery( selectQuery, null);
 

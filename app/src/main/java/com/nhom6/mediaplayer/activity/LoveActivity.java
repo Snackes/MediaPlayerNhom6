@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class LoveActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     //khai báo ListView cho adapter
     Activity activity=this;
-    Boolean Refresh=true;
+    Boolean Refresh=true;  //refresh lại listview hiển thị khi =true;
     private SearchView searchView;
     private SwipeMenuListView listLoveSong;
     public Context context = this;
