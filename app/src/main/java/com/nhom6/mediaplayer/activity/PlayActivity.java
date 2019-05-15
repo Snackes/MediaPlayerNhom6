@@ -107,6 +107,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     private final MetaDataCompat metaDataCompat = new MetaDataCompat();
 
 
+
     private boolean mIsPlaying;
     private boolean mIsRepeat = false;
     private boolean mIsShuffe = false;
@@ -285,7 +286,13 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+
+
+    }
 
     @Override
     protected void onStop() {
@@ -463,6 +470,10 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
         protected void onConnected(@NonNull MediaControllerCompat mediaController) {
             songPlayingFragment.getSeekBar().setMediaController(mediaController);
+            //songPlayingFragment.setTotalTime(mMediaBrowserHelper.getTransportControls().)
+//            songPlayingFragment.setPlayingTime();
+
+
 
         }
 
@@ -500,12 +511,13 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
      * simple.
      */
     private class MediaBrowserListener extends MediaControllerCompat.Callback {
-        @Override
 
+
+        @Override
         public void onPlaybackStateChanged(PlaybackStateCompat playbackState) {
             mIsPlaying = playbackState != null &&
                     playbackState.getState() == PlaybackStateCompat.STATE_PLAYING;
-            //mMediaControlsImage.setPressed(mIsPlaying);
+
         }
 
         @Override

@@ -83,6 +83,8 @@ public abstract class PlayerAdapter {
      * point.
      */
 
+
+
     public  abstract  void onLooping(boolean loop);
 
     protected abstract void onStop();

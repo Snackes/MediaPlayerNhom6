@@ -19,10 +19,11 @@ import android.widget.Toast;
  */
 
 
-public class MediaSeekBar extends AppCompatSeekBar {
+public class MediaSeekBar extends AppCompatSeekBar  {
 
     private MediaControllerCompat mMediaController;
     private ControllerCallback mControllerCallback;
+
 
     private boolean mIsTracking = false;
     private OnSeekBarChangeListener mOnSeekBarChangeListener = new OnSeekBarChangeListener() {
@@ -114,6 +115,11 @@ public class MediaSeekBar extends AppCompatSeekBar {
             // way to do that is to create a ValueAnimator to update it so the bar reaches
             // the end of the media the same time as playback gets there (or close enough).
             if (state != null && state.getState() == PlaybackStateCompat.STATE_PLAYING) {
+
+
+
+
+
                 final int timeToEnd = (int) ((getMax() - progress) / state.getPlaybackSpeed());
 
                 mProgressAnimator = ValueAnimator.ofInt(progress, getMax())
@@ -121,6 +127,7 @@ public class MediaSeekBar extends AppCompatSeekBar {
                 mProgressAnimator.setInterpolator(new LinearInterpolator());
                 mProgressAnimator.addUpdateListener(this);
                 mProgressAnimator.start();
+
             }
         }
 
@@ -144,7 +151,16 @@ public class MediaSeekBar extends AppCompatSeekBar {
             }
 
             final int animatedIntValue = (int) valueAnimator.getAnimatedValue();
-            setProgress(animatedIntValue);
+            if(animatedIntValue < getMax())
+            {
+                setProgress(animatedIntValue);
+            }
+//            else
+//            {
+//                setProgress(0);
+//                mProgressAnimator = null;
+//
+//            }
         }
     }
 }

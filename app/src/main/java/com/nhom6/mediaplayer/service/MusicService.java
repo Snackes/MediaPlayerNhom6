@@ -33,6 +33,7 @@ public class MusicService extends MediaBrowserServiceCompat {
     private MediaSessionCallback mCallback;
     private boolean mServiceInStartedState;
     private Random rand = new Random();
+    private boolean isShuff = false;
 
     //
 
@@ -178,6 +179,9 @@ public class MusicService extends MediaBrowserServiceCompat {
 
 
 
+
+
+
         @Override
         public void onPlay() {
             if (!isReadyToPlay()) {
@@ -208,7 +212,16 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         @Override
         public void onSkipToNext() {
-            mQueueIndex = (++mQueueIndex % mPlaylist.size());
+
+            if(isShuff == true)
+            {
+                mQueueIndex = rand.nextInt(mPlaylist.size()-1);
+            }
+            else
+            {
+                mQueueIndex = (++mQueueIndex % mPlaylist.size());
+            }
+
             mPreparedMedia = null;
             onPlay();
         }
@@ -226,10 +239,12 @@ public class MusicService extends MediaBrowserServiceCompat {
             if(repeatMode == 0 )//false
             {
                 mPlayback.onLooping(false);
+
             }
             else
             {
                 mPlayback.onLooping(true);
+
             }
 
         }
@@ -237,19 +252,33 @@ public class MusicService extends MediaBrowserServiceCompat {
         @Override
         public void onSetShuffleMode(int shuffleMode) {
             super.onSetShuffleMode(shuffleMode);
-            if(shuffleMode != 0) //true
+
+            if(shuffleMode == 1 ) //true
             {
-                mQueueIndex = rand.nextInt(mPlaylist.size()-1);
+                isShuff = true;
+            }
+            else{
+                isShuff = false;
             }
 
 
+//            if(shuffleMode != 0) //true
+//            {
+//                mQueueIndex = rand.nextInt(mPlaylist.size()-1);
+//            }
+
+
         }
+
+
 
         @Override
         public void onSeekTo(long pos) {
             mPlayback.seekTo(pos);
             onPlay();
         }
+
+
 
         private boolean isReadyToPlay() {
             return (!mPlaylist.isEmpty());

@@ -203,4 +203,28 @@ public class SongPlayingFragment extends Fragment {
     public void setSeekBar(MediaSeekBar seekBar) {
         this.seekBar = seekBar;
     }
+    public void ChangeTotalTime(long totalTime )
+    {
+        this.totalTime.setText("" + totalTime);
+    }
+    public void ChangePlayingTime(long playingTime)
+    {
+        this.playingTime.setText("" + playingTime);
+    }
+
+    public TextView getPlayingTime() {
+        return playingTime;
+    }
+
+    public void setPlayingTime(TextView playingTime) {
+        this.playingTime = playingTime;
+    }
+
+    public TextView getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(TextView totalTime) {
+        this.totalTime = totalTime;
+    }
 }
