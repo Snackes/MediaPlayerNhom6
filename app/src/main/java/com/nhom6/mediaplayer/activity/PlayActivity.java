@@ -283,6 +283,8 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     protected void onStart() {
         super.onStart();
         mMediaBrowserHelper.onStart();
+        //
+
 
     }
 
@@ -470,7 +472,10 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
         protected void onConnected(@NonNull MediaControllerCompat mediaController) {
             songPlayingFragment.getSeekBar().setMediaController(mediaController);
-            //songPlayingFragment.setTotalTime(mMediaBrowserHelper.getTransportControls().)
+
+            songPlayingFragment.getSeekBar().setCurrentTime(songPlayingFragment.getPlayingTime());
+            songPlayingFragment.getSeekBar().setDurationTime(songPlayingFragment.getTotalTime());
+
 //            songPlayingFragment.setPlayingTime();
 
 

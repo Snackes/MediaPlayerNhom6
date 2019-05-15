@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.service.MediaSeekBar;
+import com.nhom6.mediaplayer.service.MediaTextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -34,8 +35,8 @@ public class SongPlayingFragment extends Fragment {
     TextView artistSong;
 
     
-    TextView playingTime;
-    TextView totalTime;
+    MediaTextView playingTime;
+    MediaTextView totalTime;
 
 
 
@@ -212,19 +213,19 @@ public class SongPlayingFragment extends Fragment {
         this.playingTime.setText("" + playingTime);
     }
 
-    public TextView getPlayingTime() {
+    public MediaTextView getPlayingTime() {
         return playingTime;
     }
 
-    public void setPlayingTime(TextView playingTime) {
+    public void setPlayingTime(MediaTextView playingTime) {
         this.playingTime = playingTime;
     }
 
-    public TextView getTotalTime() {
+    public MediaTextView getTotalTime() {
         return totalTime;
     }
 
-    public void setTotalTime(TextView totalTime) {
+    public void setTotalTime(MediaTextView totalTime) {
         this.totalTime = totalTime;
     }
 }

@@ -12,6 +12,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.nhom6.mediaplayer.utils.Utils;
+
 
 /**
  * SeekBar that can be used with a {@link MediaSessionCompat} to track and seek in playing
@@ -23,12 +25,33 @@ public class MediaSeekBar extends AppCompatSeekBar  {
 
     private MediaControllerCompat mMediaController;
     private ControllerCallback mControllerCallback;
+    //private SongPlayingFragment songPlayingFragment  = new SongPlayingFragment();
+    private MediaTextView durationTime;
+    private MediaTextView currentTime;
+    private Utils utils = new Utils();
 
+    public MediaTextView getDurationTime() {
+        return durationTime;
+    }
+
+    public void setDurationTime(MediaTextView durationTime) {
+        this.durationTime = durationTime;
+    }
+
+    public MediaTextView getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(MediaTextView currentTime) {
+        this.currentTime = currentTime;
+    }
 
     private boolean mIsTracking = false;
     private OnSeekBarChangeListener mOnSeekBarChangeListener = new OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            currentTime.getDuration(utils.milliSecondsToTimer(getProgress()));
+            durationTime.getDuration(utils.milliSecondsToTimer(getMax()));
         }
 
         @Override
@@ -39,6 +62,7 @@ public class MediaSeekBar extends AppCompatSeekBar  {
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             mMediaController.getTransportControls().seekTo(getProgress());
+
             mIsTracking = false;
         }
     };
@@ -71,25 +95,31 @@ public class MediaSeekBar extends AppCompatSeekBar  {
         if (mediaController != null) {
             mControllerCallback = new ControllerCallback();
             mediaController.registerCallback(mControllerCallback);
+            //
+            //
         } else if (mMediaController != null) {
             mMediaController.unregisterCallback(mControllerCallback);
             mControllerCallback = null;
         }
         mMediaController = mediaController;
+
     }
 
     public void disconnectController() {
         if (mMediaController != null) {
             mMediaController.unregisterCallback(mControllerCallback);
+            //
+
+            //
             mControllerCallback = null;
             mMediaController = null;
         }
     }
 
 
-    private class ControllerCallback
-            extends MediaControllerCompat.Callback
-            implements ValueAnimator.AnimatorUpdateListener {
+        private class ControllerCallback
+                extends MediaControllerCompat.Callback
+                implements ValueAnimator.AnimatorUpdateListener {
 
         @Override
         public void onSessionDestroyed() {
@@ -128,6 +158,8 @@ public class MediaSeekBar extends AppCompatSeekBar  {
                 mProgressAnimator.addUpdateListener(this);
                 mProgressAnimator.start();
 
+
+
             }
         }
 
@@ -139,7 +171,9 @@ public class MediaSeekBar extends AppCompatSeekBar  {
                     ? (int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
                     : 0;
             setProgress(0);
+
             setMax(max);
+
         }
 
         @Override

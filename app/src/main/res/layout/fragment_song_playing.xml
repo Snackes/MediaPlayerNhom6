@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
+            <com.nhom6.mediaplayer.service.MediaTextView
                 android:id="@+id/playingTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.nhom6.mediaplayer.service.MediaTextView
                 android:id="@+id/totalTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
