@@ -90,7 +90,7 @@
             android:background="@android:color/transparent"
             android:gravity="center_horizontal"
             android:onClick="PlaySong"
-            android:src="@drawable/ic_play_new"
+            android:src="@drawable/ic_pause_new"
             android:tint="@color/pinkwhite"
             tools:ignore="OnClick" />
 

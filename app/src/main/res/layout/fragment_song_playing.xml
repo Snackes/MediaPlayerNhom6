@@ -120,13 +120,11 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:indeterminate="false"
-
             android:max="100"
             android:outlineAmbientShadowColor="#DED4D4"
             android:outlineSpotShadowColor="#00897B"
-            android:progress="15"
-            android:progressTint="#3949AB"
-            android:thumbTint="#00756767" />
+            android:progressTint="#DED4D4"
+            android:thumbTint="#DED4D4" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -138,7 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="00:00"
+
                 android:textColor="#F7EAEF"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -149,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_weight="1"
-                android:text="10:00"
+
                 android:textAlignment="textEnd"
                 android:textColor="#FBEFEF"
                 android:textSize="16sp"

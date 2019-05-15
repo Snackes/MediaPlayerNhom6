@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,6 +116,8 @@ public class SongPlayingFragment extends Fragment {
         totalTime = rootView.findViewById(R.id.totalTime);
 
         btn_love=rootView.findViewById(R.id.btnLove);
+        //set màu đen thành trắng -- lấy icon màu đen chi zậy ??? dcm!!
+        btn_love.setColorFilter(ContextCompat.getColor(getContext(),R.color.pinkwhite));
 
         //
         if (BitmapFactory.decodeFile(getArguments().getString("Image")) != null) {
@@ -194,7 +197,14 @@ public class SongPlayingFragment extends Fragment {
     }
     public void ChangeImg(Bitmap bm)
     {
-        imgSong.setImageBitmap(bm);
+        if(bm != null)
+        {
+            imgSong.setImageBitmap(bm);
+        }
+        else{
+            imgSong.setImageResource(R.drawable.adele);
+        }
+
     }
 
     public MediaSeekBar getSeekBar() {

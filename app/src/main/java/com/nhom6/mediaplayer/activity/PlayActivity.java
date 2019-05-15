@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -375,11 +376,11 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
         btn_add_love = (ImageButton) findViewById(R.id.btnLove);
 
-//        btn_play_pause = (ImageButton) findViewById(R.id.btnPlayMenu);
-//        btn_next = (ImageButton) findViewById(R.id.btnNext);
-//        btn_previous = (ImageButton) findViewById(R.id.btnPre);
-//        btn_repeat = (ImageButton) findViewById(R.id.btnRepeat);
-//        btn_shuffle = (ImageButton) findViewById(R.id.btnShuf);
+        btn_play_pause = (ImageButton) findViewById(R.id.btnPlayMenu);
+        btn_next = (ImageButton) findViewById(R.id.btnNext);
+        btn_previous = (ImageButton) findViewById(R.id.btnPre);
+        btn_repeat = (ImageButton) findViewById(R.id.btnRepeat);
+        btn_shuffle = (ImageButton) findViewById(R.id.btnShuf);
 
     }
 
@@ -411,11 +412,14 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
                     {
                         mMediaBrowserHelper.getTransportControls().setRepeatMode(PlaybackStateCompat.REPEAT_MODE_NONE);
                         isRepeat = false;
+                        btn_repeat.setColorFilter(ContextCompat.getColor(context,R.color.pinkwhite));
                         Toast.makeText(context, "repeatMode off", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         mMediaBrowserHelper.getTransportControls().setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ONE);
                         isRepeat = true;
+
+                        btn_repeat.setColorFilter(ContextCompat.getColor(context,R.color.pinkic));
                         Toast.makeText(context, "repeatMode on", Toast.LENGTH_SHORT).show();
                     }
 
@@ -520,8 +524,15 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat playbackState) {
-            mIsPlaying = playbackState != null &&
-                    playbackState.getState() == PlaybackStateCompat.STATE_PLAYING;
+            mIsPlaying = playbackState != null && playbackState.getState() == PlaybackStateCompat.STATE_PLAYING;
+
+            if(mIsPlaying == true)
+            {
+                btn_play_pause.setImageResource(R.drawable.ic_pause_new);
+            }
+            else{
+                btn_play_pause.setImageResource(R.drawable.ic_play_new);
+            }
 
         }
 

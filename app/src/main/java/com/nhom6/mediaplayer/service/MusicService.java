@@ -305,6 +305,7 @@ public class MusicService extends MediaBrowserServiceCompat {
             switch (state.getState()) {
                 case PlaybackStateCompat.STATE_PLAYING: {
                     mServiceManager.moveServiceToStartedState(state);
+
                     break;
                 }
 

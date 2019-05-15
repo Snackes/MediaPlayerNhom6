@@ -33,7 +33,7 @@ public class MediaNotificationManager {
     public static final int NOTIFICATION_ID = 412;
 
     private static final String TAG = MediaNotificationManager.class.getSimpleName();
-    private static final String CHANNEL_ID = "com.example.android.musicplayer.channel";
+    private static final String CHANNEL_ID = "com.nhom6.mediaplayer.channel";
     private static final int REQUEST_CODE = 501;
 
     private final MusicService mService;
@@ -123,7 +123,7 @@ public class MediaNotificationManager {
                                 MediaButtonReceiver.buildMediaButtonPendingIntent(
                                         mService,
                                         PlaybackStateCompat.ACTION_STOP)))
-                .setColor(ContextCompat.getColor(mService, R.color.notification_bg))
+                .setColor(ContextCompat.getColor(mService, R.color.greenic))
                 .setSmallIcon(R.drawable.ic_stat_image_audiotrack)
                 // Pending intent that is fired when user clicks on notification.
                 .setContentIntent(createContentIntent())

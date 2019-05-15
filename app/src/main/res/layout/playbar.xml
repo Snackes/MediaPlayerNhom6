@@ -85,7 +85,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_pre"
+                android:src="@drawable/ic_skip_previous_white_24dp"
                 android:tint="#EFEAEA" />
 
             <ImageButton
@@ -95,7 +95,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_play"
+                android:src="@drawable/ic_play_arrow_white_24dp"
                 android:onClick="PlaySong"
                 android:tint="#EFEAEA" />
 
@@ -106,7 +106,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_next"
+                android:src="@drawable/ic_skip_next_white_24dp"
                 android:tint="#EFEAEA" />
         </LinearLayout>
 

@@ -10,9 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.baoyz.swipemenulistview.SwipeMenu;
-import com.baoyz.swipemenulistview.SwipeMenuCreator;
-import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.Manager.SongManager;
@@ -165,34 +162,34 @@ public class ListPlayingSongFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
     private void setSwipeListView() {
-        SwipeMenuCreator creator = new SwipeMenuCreator() {
-            @Override
-            public void create(SwipeMenu menu) {
-                // create "add playlist" item
-                SwipeMenuItem plusItem = new SwipeMenuItem(getContext());
-                // set item background
-                plusItem.setBackground(R.color.greenic);
-                // set item width
-                plusItem.setWidth(100);
-                // set a icon
-                plusItem.setIcon(R.drawable.ic_add);
-                // add to menu
-                menu.addMenuItem(plusItem);
-
-                SwipeMenuItem loveItem = new SwipeMenuItem(getContext());
-                // set item background
-                loveItem.setBackground(R.color.pinkwhite);
-                // set item width
-                loveItem.setWidth(100);
-                // set a icon
-                loveItem.setIcon(R.drawable.ic_love);
-                // add to menu
-                menu.addMenuItem(loveItem);
-            }
-        };
-        // set creator
-        listView.setMenuCreator(creator);
-        ClickItemSong();
+//        SwipeMenuCreator creator = new SwipeMenuCreator() {
+//            @Override
+//            public void create(SwipeMenu menu) {
+//                // create "add playlist" item
+//                SwipeMenuItem plusItem = new SwipeMenuItem(getContext());
+//                // set item background
+//                plusItem.setBackground(R.color.greenic);
+//                // set item width
+//                plusItem.setWidth(100);
+//                // set a icon
+//                plusItem.setIcon(R.drawable.ic_add);
+//                // add to menu
+//                menu.addMenuItem(plusItem);
+//
+//                SwipeMenuItem loveItem = new SwipeMenuItem(getContext());
+//                // set item background
+//                loveItem.setBackground(R.color.pinkwhite);
+//                // set item width
+//                loveItem.setWidth(100);
+//                // set a icon
+//                loveItem.setIcon(R.drawable.ic_love);
+//                // add to menu
+//                menu.addMenuItem(loveItem);
+//            }
+//        };
+//        // set creator
+//        listView.setMenuCreator(creator);
+//        ClickItemSong();
     }
     public void ClickItemSong(){
 //        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
