@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,8 +22,11 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
+import com.nhom6.mediaplayer.MainActivity;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
+import com.nhom6.mediaplayer.databinding.ActivityAlbumBinding;
+import com.nhom6.mediaplayer.databinding.ActivitySongOfPlaylistBinding;
 import com.nhom6.mediaplayer.model.Album;
 import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.PlayList;
@@ -33,18 +37,26 @@ import java.util.ArrayList;
 public class SongOfPlaylistActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     Activity activity=this;
-    int kt=0;
-    int test=0;
-
-    int idObject=0;
+    int kt=0;//kiểm tra nếu intent truyền tới của playlist thì xét button xóa cho từng playlist
+    int test=0;//nhận dạng khi truy vấn sqlite
+    int idObject=0;//tùy theo đối tượng intent truyền vào
+    //
     PlayList playlist;
     Album album;
     Artist artist;
+    //
     TextView PlayListName;
     private SearchView searchView;
     SwipeMenuListView LvSongInPlayList;
+    //
     ArrayList<Song> _songs = new ArrayList<Song>();
     final Context context = this;
+
+    //binding
+    ActivitySongOfPlaylistBinding activitySongOfPlaylistBinding;
+    Song SongPlaybar=new Song();
+    Song SongPlaybarChange=new Song();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +66,8 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_song_of_playlist);
 
+        activitySongOfPlaylistBinding = (ActivitySongOfPlaylistBinding) DataBindingUtil.setContentView(this,
+                R.layout.activity_song_of_playlist);
         this.PlayListName=this.findViewById(R.id.txtPlaylistname);
         this.LvSongInPlayList=this.findViewById(R.id.listSongofActivity);
         getdata();
@@ -65,6 +79,16 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
         ClickItem();
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
+        SetPlaybar();
+    }
+
+    public void SetPlaybar(){
+        Intent intent = this.getIntent();
+        //TH show tất cả bài hát có trong 1 playlist được chọn
+        if(intent.getSerializableExtra("song")!=null) {
+            SongPlaybar  = (Song) intent.getSerializableExtra("song");
+            activitySongOfPlaylistBinding.setSong(SongPlaybar);
+        }
     }
 
     public void getdata(){
@@ -88,6 +112,7 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
             MyDatabaseHelper db = new MyDatabaseHelper(this);
             idObject=this.album.getAlbumID();
             _songs = db.GetListSongInAlbum(idObject);
+
         }
         //TH show tất cả bài hát có trong 1 ca sĩ được chọn
         if(intent.getSerializableExtra("Singer")!=null) {
@@ -186,8 +211,7 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
-
+                SongPlaybarChange=_songs.get(position);
 
                 //TODO: khi mình intent 1 item sang PlayActivity mình sẽ gửi 2 thứ: position của item và listID ( toàn bộ )
                 //Lấy item tại vị trí click
@@ -253,5 +277,29 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
         LvSongInPlayList.setAdapter(listSongAdapter);
         setSwipeListView();
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=null ;
+        if(test==1){//của thằng playlist
+            intent = new Intent(context, PlaylistActivity.class);
+        }
+        else {
+            if (test == 2) {//của thằng album
+                intent = new Intent(context, AlbumActivity.class);
+            }
+            else if(test==3){//của thằng singer
+                intent = new Intent(context, SingerActivity.class);
+            }
+        }
+
+        if(SongPlaybar.getSongname()!=SongPlaybarChange.getSongname()){
+            intent.putExtra("song", SongPlaybarChange);
+            startActivity(intent);
+        }
+
+
+        super.onBackPressed();
     }
 }

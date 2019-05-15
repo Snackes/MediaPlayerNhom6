@@ -19,61 +19,33 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
-<<<<<<< HEAD
-=======
 import com.nhom6.mediaplayer.Manager.AlbumManager;
 import com.nhom6.mediaplayer.Manager.ArtistManager;
 import com.nhom6.mediaplayer.Manager.SongManager;
->>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
 import com.nhom6.mediaplayer.activity.AlbumActivity;
 import com.nhom6.mediaplayer.activity.LoveActivity;
 import com.nhom6.mediaplayer.activity.PlayActivity;
 import com.nhom6.mediaplayer.activity.PlaylistActivity;
 import com.nhom6.mediaplayer.activity.ShowAllSong;
 import com.nhom6.mediaplayer.activity.SingerActivity;
-import com.nhom6.mediaplayer.activity.SongOfPlaylistActivity;
-import com.nhom6.mediaplayer.databinding.ActivityAllSongBinding;
 import com.nhom6.mediaplayer.model.Album;
 import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.Song;
 import com.nhom6.mediaplayer.databinding.ActivityMainBinding;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    public static final int PLAYSCREEN_RESULT = 1;
     private SearchView searchView;
     Context context = this;
     ArrayList<Song> _songs = new ArrayList<Song>();
-<<<<<<< HEAD
-    View activity;
-=======
     ArrayList<Album> _albums=new ArrayList<Album>();
     ArrayList<Artist> _artists =new ArrayList<Artist>();
->>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
+    Song SongPlaybar=new Song();
 
     //dùng để binding
     ActivityMainBinding binding;
 
-<<<<<<< HEAD
-
-    //khai báo các thứ cần thiết để chơi nhạc
-    private static Song song;
-    private static Integer songID;
-    // bundle nhận intent
-    Bundle Package;
-    // position của bài hát trong list mà intent gửi qua
-    public Integer position;
-    ArrayList<String> lstUrlSong = new ArrayList<String>();
-    ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
-    //tạo object Database
-    MyDatabaseHelper db = new MyDatabaseHelper(this);
-
-    //các state
-=======
->>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,94 +55,59 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_main);
 
-        //set binding
         binding = (ActivityMainBinding) DataBindingUtil.setContentView(this, R.layout.activity_main);
-<<<<<<< HEAD
-        getDataIntent();
-=======
->>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
+        //check có tức là đây chỉ gọi để refresh thằng playbar rồi thôi
+        Intent intent = this.getIntent();
+        if(intent.getSerializableExtra("song") !=null) {
+            SongPlaybar = (Song) intent.getSerializableExtra("song");
+            setSongPlayBar();
+            return;
+        }
         setSongPlayBar();
-        LayoutInflater inflaterDia = getLayoutInflater();
         //kiem tra permission
         CheckUserPermission(this);
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
 
-
-    }
-
-<<<<<<< HEAD
-    private void getDataIntent() {
-        //nhận intent từ activity kia
-        Intent i = getIntent();
-        if (i != null) {
-            //lấy bundle
-            Package = i.getExtras();
-            if (Package != null) {
-                lstUrlSong = Package.getStringArrayList("lstUrlSong");
-                lstIDSong = Package.getIntegerArrayList("lstIDSong");
-                position = Package.getInt("position");
-
-                //lấy id theo position
-                songID = lstIDSong.get(position);
-
-                //tạo object Song để chứa
-                song = db.GetInfoSong(songID);
-            }
-        } else song = new Song();
-        //
     }
 
     public void setSongPlayBar() {
-        if (song!= null) {
-            binding.setSong(song);
-        } else {
-            Song setSong=new Song();
-            setSong.setSongname("default");
-            setSong.setArtistname("default");
-            binding.setSong(setSong);
-=======
-    public void setSongPlayBar() {
-        MyDatabaseHelper db=new MyDatabaseHelper(context);
-        _songs=db.GetListSong();
-        Song song = new Song();
-        if (_songs.size()!=0) {
-            song=_songs.get(0);
-            binding.setSong(song);
-        } else {
-            song.setSongname("default");
-            song.setArtistname("default");
-            binding.setSong(song);
->>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
+
+        //nếu có tương tác thì xét bài đang tương tác cho playbar
+        if(SongPlaybar.getSongname()!=null){
+            binding.setSong(SongPlaybar);
         }
-
-
+        //còn không thì xét mặc định cho nó
+        else {
+            MyDatabaseHelper db = new MyDatabaseHelper(context);
+            _songs = db.GetListSong();
+            if (_songs.size() != 0) {
+                SongPlaybar = _songs.get(0);
+                binding.setSong(SongPlaybar);
+            } else {
+                SongPlaybar.setSongname("default");
+                SongPlaybar.setArtistname("default");
+                binding.setSong(SongPlaybar);
+            }
+        }
     }
 
     public void ShowAllSong(View view) {
-<<<<<<< HEAD
-        Intent i = new Intent(this, ShowAllSong.class);
-        startActivity(i);
-=======
-        Song song=new Song();
-        if (_songs.size()!=0) {
-            song=_songs.get(0);
-        }
-
         Intent intent = new Intent(context, ShowAllSong.class);
-        intent.putExtra("song", song);
+        intent.putExtra("song", SongPlaybar);
         startActivity(intent);
->>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
     }
 
     public void ShowPlayList(View view) {
-        Intent i = new Intent(this, PlaylistActivity.class);
-        startActivity(i);
+        Intent intent = new Intent(context, PlaylistActivity.class);
+        intent.putExtra("song", SongPlaybar);
+        startActivity(intent);
     }
 
     public void ShowAlbum(View view) {
-        Intent i = new Intent(this, AlbumActivity.class);
-        startActivity(i);
+        Intent intent = new Intent(context, AlbumActivity.class);
+        intent.putExtra("song", SongPlaybar);
+        startActivity(intent);
     }
 
     public void ShowPlayScreen(View view) {
@@ -179,13 +116,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     public void ShowSinger(View view) {
-        Intent i = new Intent(this, SingerActivity.class);
-        startActivity(i);
+        Intent intent = new Intent(context, SingerActivity.class);
+        intent.putExtra("song", SongPlaybar);
+        startActivity(intent);
     }
 
     public void ShowLoveSong(View view) {
-        Intent i = new Intent(this, LoveActivity.class);
-        startActivity(i);
+        Intent intent = new Intent(context, LoveActivity.class);
+        intent.putExtra("song", SongPlaybar);
+        startActivity(intent);
     }
 
     public void clickScan(View view) {
@@ -213,9 +152,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             db.addSong(_songs);
             db.addAlbum(_albums);
             db.addSinger(_artists);
-            Song song=new Song();
-            song=_songs.get(0);
-            binding.setSong(song);
+
+            if(SongPlaybar.getAlbum()==null) {
+                SongPlaybar = _songs.get(0);
+                binding.setSong(SongPlaybar);
+            }
         }
     }
 
@@ -261,12 +202,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onQueryTextChange(String newText) {
-<<<<<<< HEAD
-        Intent intent = new Intent(context, ShowAllSong.class);
-        intent.putExtra("SearchInMain", newText);
-        startActivity(intent);
-=======
->>>>>>> 1973ab634604896e1e30c6f948d795648cfcf63e
         return false;
     }
 }

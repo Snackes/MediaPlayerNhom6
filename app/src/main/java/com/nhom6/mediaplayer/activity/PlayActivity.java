@@ -98,6 +98,11 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     //
     ViewPager viewPager;
 
+    //
+    Song SongPlaybar = new Song();
+    Song SongPlaybarChange = new Song();
+    //
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,15 +120,13 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         getDataIntent();
 
 
-
-
         mediaBrowserCompat = new MediaBrowserCompat(this, new ComponentName(this, BackgroundAudioService.class),
                 connectionCallback, getIntent().getExtras());
         mediaBrowserCompat.connect();
 
     }
-    public void setDataIntent(View view)
-    {
+
+    public void setDataIntent(View view) {
         //set bundle cho  fragment playing
         Bundle fragmentPlaying = new Bundle();
         fragmentPlaying.putString("Title", song.getSongname());
@@ -383,8 +386,10 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         //lấy id theo position
         songID = lstIDSong.get(position);
 
+
         //tạo object Song để chứa
         song = db.GetInfoSong(songID);
+        SongPlaybar=song;
         //
     }
 
@@ -461,6 +466,16 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
             mediaControllerCompat.getTransportControls().setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ONE);
             btn_repeat.setColorFilter(ContextCompat.getColor(context, R.color.colorchange));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (SongPlaybar.getSongname() != SongPlaybarChange.getSongname()) {
+            Intent intent = new Intent(context, ShowAllSong.class);
+            intent.putExtra("song", SongPlaybarChange);
+            startActivity(intent);
+        }
+        super.onBackPressed();
     }
 
 }

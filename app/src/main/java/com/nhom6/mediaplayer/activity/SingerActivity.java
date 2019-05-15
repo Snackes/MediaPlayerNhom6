@@ -2,6 +2,7 @@ package com.nhom6.mediaplayer.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,9 +20,12 @@ import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
 import com.nhom6.mediaplayer.adapter.SingerAdapter;
+import com.nhom6.mediaplayer.databinding.ActivityAlbumBinding;
+import com.nhom6.mediaplayer.databinding.ActivitySingerBinding;
 import com.nhom6.mediaplayer.model.Album;
 import com.nhom6.mediaplayer.model.Artist;
 import com.nhom6.mediaplayer.model.PlayList;
+import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
 
@@ -33,6 +37,8 @@ public class SingerActivity extends AppCompatActivity implements SearchView.OnQu
     //khai báo artistManager để loadSong
     ArtistManager artistsManager = new ArtistManager();
     public ArrayList<Artist> _artists = new ArrayList<Artist>();
+    ActivitySingerBinding activitySingerBinding;
+    Song SongPlaybar=new Song();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +48,7 @@ public class SingerActivity extends AppCompatActivity implements SearchView.OnQu
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_singer);
-
+        activitySingerBinding = (ActivitySingerBinding) DataBindingUtil.setContentView(this, R.layout.activity_singer);
         int kt=getdata();
         //nếu không có danh sách album thì khỏi làm gì cho mệt
         if(kt==0){
@@ -59,6 +65,16 @@ public class SingerActivity extends AppCompatActivity implements SearchView.OnQu
 
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
+        SetPlaybar();
+    }
+
+    public void SetPlaybar(){
+        Intent intent = this.getIntent();
+        //TH show tất cả bài hát có trong 1 playlist được chọn
+        if(intent.getSerializableExtra("song")!=null) {
+            SongPlaybar  = (Song) intent.getSerializableExtra("song");
+            activitySingerBinding.setSong(SongPlaybar);
+        }
     }
     public int getdata(){
         MyDatabaseHelper db=new MyDatabaseHelper(this);
@@ -82,6 +98,7 @@ public class SingerActivity extends AppCompatActivity implements SearchView.OnQu
                 Artist artist=_artists.get(position);
                 Intent intent = new Intent(context, SongOfPlaylistActivity.class);
                 intent.putExtra("Singer", artist);
+                intent.putExtra("song", SongPlaybar);
                 startActivity(intent);
             }
         });

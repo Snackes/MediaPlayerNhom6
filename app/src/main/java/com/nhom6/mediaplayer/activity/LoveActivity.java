@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.MainActivity;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
+import com.nhom6.mediaplayer.databinding.ActivityAlbumBinding;
+import com.nhom6.mediaplayer.databinding.ActivityLoveBinding;
 import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
@@ -41,6 +44,7 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
     public Context context = this;
     public ArrayList<Song> _lovesongs = new ArrayList<Song>();
     public ListSongAdapter listsongtAdapter;
+    ActivityLoveBinding activityLoveBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_love);
 
+        activityLoveBinding = (ActivityLoveBinding) DataBindingUtil.setContentView(this, R.layout.activity_love);
         MyDatabaseHelper db=new MyDatabaseHelper(context);
         Refresh=false;
         if(db.CheckTableSong()==0){
@@ -69,6 +74,16 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
 
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
+        SetPlaybar();
+    }
+
+    public void SetPlaybar(){
+        Intent intent = this.getIntent();
+        //TH show tất cả bài hát có trong 1 playlist được chọn
+        if(intent.getSerializableExtra("song")!=null) {
+            Song newsong  = (Song) intent.getSerializableExtra("song");
+            activityLoveBinding.setSong(newsong);
+        }
     }
 
     //Xét icon xóa cho từng bài hát

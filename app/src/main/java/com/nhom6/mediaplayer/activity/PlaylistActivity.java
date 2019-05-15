@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -28,11 +29,10 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
-import com.nhom6.mediaplayer.MainActivity;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
 import com.nhom6.mediaplayer.R;
-import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
+import com.nhom6.mediaplayer.databinding.ActivityPlaylistBinding;
 import com.nhom6.mediaplayer.model.PlayList;
 import com.nhom6.mediaplayer.model.Song;
 
@@ -41,15 +41,21 @@ import java.util.ArrayList;
 
 
 public class PlaylistActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
-    private SearchView searchView;
+
     Activity activity=this;
+    //
+    private SearchView searchView;
     final Context context = this;
     private Button buttonCreatePlaylist;
-    //khai báo ListView cho adapter
     private SwipeMenuListView listView;
     //khai báo SongManager để loadSong
     PlayListManager playlistsManager = new PlayListManager();
     public ArrayList<PlayList> _playlists = new ArrayList<PlayList>();
+
+    //binding
+    ActivityPlaylistBinding activityPlaylistBinding;
+    Song SongPlaybar=new Song();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +65,7 @@ public class PlaylistActivity extends AppCompatActivity implements SearchView.On
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_playlist);
 
+        activityPlaylistBinding = (ActivityPlaylistBinding) DataBindingUtil.setContentView(this, R.layout.activity_playlist);
         listView = (SwipeMenuListView) findViewById(R.id.listPlayList);
         buttonCreatePlaylist = findViewById(R.id.btnCreatePlayList);
         //tạo mới 1 playlist
@@ -74,6 +81,16 @@ public class PlaylistActivity extends AppCompatActivity implements SearchView.On
 
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
+        SetPlaybar();
+    }
+
+    public void SetPlaybar(){
+        Intent intent = this.getIntent();
+        //TH show tất cả bài hát có trong 1 playlist được chọn
+        if(intent.getSerializableExtra("song")!=null) {
+            SongPlaybar  = (Song) intent.getSerializableExtra("song");
+            activityPlaylistBinding.setSong(SongPlaybar);
+        }
     }
     //xử lí khi click vào 1 playlist
     public void clickItemPlaylist(){
@@ -83,7 +100,8 @@ public class PlaylistActivity extends AppCompatActivity implements SearchView.On
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PlayList playList=_playlists.get(position);
                 Intent intent = new Intent(context, SongOfPlaylistActivity.class);
-                intent.putExtra("playlist",(Serializable)playList);
+                intent.putExtra("playlist",playList);
+                intent.putExtra("song", SongPlaybar);
                 startActivity(intent);
             }
         });

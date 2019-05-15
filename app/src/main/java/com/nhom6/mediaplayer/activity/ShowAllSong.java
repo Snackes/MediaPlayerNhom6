@@ -30,7 +30,6 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.nhom6.mediaplayer.Database.MyDatabaseHelper;
 import com.nhom6.mediaplayer.MainActivity;
 import com.nhom6.mediaplayer.Manager.PlayListManager;
-import com.nhom6.mediaplayer.Manager.SongManager;
 import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.adapter.PlaylistAdapter;
@@ -41,7 +40,7 @@ import com.nhom6.mediaplayer.databinding.ActivityAllSongBinding;
 import java.util.ArrayList;
 
 public class ShowAllSong extends AppCompatActivity implements SearchView.OnQueryTextListener {
-    Activity activity=this;
+    Activity activity = this;
     final Context context = this;
     private Button buttonCreatePlaylist;
     private SearchView searchView;
@@ -50,13 +49,13 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
     private ListView listViewAdd;
     PlayListManager playlistsManager = new PlayListManager();
     public ArrayList<PlayList> _playlists = new ArrayList<PlayList>();
-    //khai báo SongManager để loadSong
-    SongManager songsManager = new SongManager();
     public ArrayList<Song> _songs = new ArrayList<Song>();
     //
 
     //dùng để binding
     ActivityAllSongBinding binding;
+    Song SongPlaybar = new Song();
+    Song SongPlaybarChange = new Song();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +66,15 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_all_song);
 
-        binding = (ActivityAllSongBinding) DataBindingUtil.setContentView(this,        R.layout.activity_all_song);
+        binding = (ActivityAllSongBinding) DataBindingUtil.setContentView(this,
+                R.layout.activity_all_song);
 
         //INIT VIEW
         listView = (SwipeMenuListView) findViewById(R.id.listViewSong);
         searchView = findViewById(R.id.searchView);
 
-        int kt=getdata();
-        if(kt==0){
+        int kt = getdata();
+        if (kt == 0) {
             return;
         }
 
@@ -90,33 +90,31 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
         SetPlaybar();
 
     }
-    public void SetPlaybar(){
+
+    public void SetPlaybar() {
         Intent intent = this.getIntent();
-        //TH show tất cả bài hát có trong 1 playlist được chọn
-        if(intent.getSerializableExtra("song")!=null) {
-            Song newsong  = (Song) intent.getSerializableExtra("song");
-            binding.setSong(newsong);
+        if (intent.getSerializableExtra("song") != null) {
+            SongPlaybar = (Song) intent.getSerializableExtra("song");
+            binding.setSong(SongPlaybar);
         }
     }
 
-    public int getdata(){
+    public int getdata() {
         MyDatabaseHelper db = new MyDatabaseHelper(this);
 
         Intent intent = this.getIntent();
         //TH show tất cả bài hát có trong 1 ca sĩ được chọn
-        if(intent.getSerializableExtra("SearchInMain")!=null) {
+        if (intent.getSerializableExtra("SearchInMain") != null) {
             _songs = db.GetListSong();
-            String NewText=intent.getSerializableExtra("SearchInMain").toString();
-            searchView.setQuery(NewText,false);
+            String NewText = intent.getSerializableExtra("SearchInMain").toString();
+            searchView.setQuery(NewText, false);
             onQueryTextChange(NewText);
             return 1;
-        }
-        else {
-            if(db.CheckTableSong()==0){
+        } else {
+            if (db.CheckTableSong() == 0) {
                 Toast.makeText(getApplicationContext(), "Không có bài hát, chọn Scan để quét các bài hát có trong máy..!", Toast.LENGTH_LONG).show();
                 return 0;
-            }
-            else {
+            } else {
                 _songs = db.GetListSong();
                 return 1;
             }
@@ -155,7 +153,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
     }
 
     //xử lí khi chọn 1 trong 2 chức năng của 1 bài hát trong listview
-    public void ClickSwipeMenuItem(){
+    public void ClickSwipeMenuItem() {
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @SuppressLint("WrongConstant")
             @Override
@@ -171,7 +169,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                         //tiến hành lấy toàn bộ playlist trong máy
                         _playlists = playlistsManager.loadPlayList(context);
                         //đưa vào adapter để hiển thị
-                        PlaylistAdapter listPlayListAdapter = new PlaylistAdapter(activity,_playlists);
+                        PlaylistAdapter listPlayListAdapter = new PlaylistAdapter(activity, _playlists);
                         listViewAdd.setAdapter(listPlayListAdapter);
 
                         listViewAdd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -199,14 +197,13 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                         break;
                     case 1://thêm zô danh sách bài hát yêu thích
                         MyDatabaseHelper db = new MyDatabaseHelper(context);
-                        int k=db.CheckSongFavorite(_songs.get(position).getSongid());
-                        if(k==0) {
+                        int k = db.CheckSongFavorite(_songs.get(position).getSongid());
+                        if (k == 0) {
 
                             db.AddSongFavorite(_songs.get(position).getSongid());
                             Toast.makeText(getApplicationContext(),
                                     "Đã thêm vào Yêu Thích...", 50).show();
-                        }
-                        else {
+                        } else {
                             new android.app.AlertDialog.Builder(context)
                                     .setTitle("Bài hát đã có trong yêu thích.")
                                     .setMessage("Bạn muốn xóa khỏi yêu thích..?")
@@ -215,7 +212,7 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                                             new DialogInterface.OnClickListener() {
                                                 @TargetApi(11)
                                                 public void onClick(DialogInterface dialog, int id) {
-                                                    MyDatabaseHelper db=new MyDatabaseHelper(context);
+                                                    MyDatabaseHelper db = new MyDatabaseHelper(context);
                                                     db.deleteSongInFavorite(_songs.get(position).getSongid());
                                                     Toast.makeText(getApplicationContext(),
                                                             "Đã xóa khỏi Yêu Thích...", 50).show();
@@ -289,6 +286,8 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                SongPlaybarChange = _songs.get(position);
+
                 //TODO: khi mình intent 1 item sang PlayActivity mình sẽ gửi 2 thứ: position của item và listID ( toàn bộ )
 
                 //lấy listID
@@ -302,7 +301,6 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                 Package.putInt("position", position);
                 Package.putStringArrayList("lstUrlSong", lstUrlSong);
                 Package.putIntegerArrayList("lstIDSong", lstIDSong);
-
 
 
                 Intent i = new Intent(context, PlayActivity.class);
@@ -346,10 +344,20 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
     public boolean onQueryTextChange(String newText) {
         String text = newText;
         MyDatabaseHelper db = new MyDatabaseHelper(this);
-        _songs = db.SearchSong(text,0,0);
+        _songs = db.SearchSong(text, 0, 0);
         ListSongAdapter listSongAdapter = new ListSongAdapter(this, _songs);
         listView.setAdapter(listSongAdapter);
         setSwipeListView();
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (SongPlaybar.getSongname() != SongPlaybarChange.getSongname()) {
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.putExtra("song", SongPlaybarChange);
+            startActivity(intent);
+        }
+        super.onBackPressed();
     }
 }
