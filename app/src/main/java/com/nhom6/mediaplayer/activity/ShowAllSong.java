@@ -296,6 +296,8 @@ public class ShowAllSong extends AppCompatActivity implements SearchView.OnQuery
                 Bundle Package = new Bundle();
                 // nhét thông tin vào bundle
                 Package.putInt("position", position);
+                Package.putInt("test", 0);
+                Package.putInt("IDObject", 0);
                 //Package.putStringArrayList("lstUrlSong", lstUrlSong);
                 Package.putIntegerArrayList("lstIDSong", lstIDSong);
 

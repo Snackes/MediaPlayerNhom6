@@ -211,6 +211,9 @@ public class SongOfPlaylistActivity extends AppCompatActivity implements SearchV
                 Bundle Package = new Bundle();
                 // nhét thông tin vào bundle
                 Package.putInt("position", position);
+                Package.putInt("test", test);
+                Package.putInt("IDObject", idObject);
+
                 //Package.putStringArrayList("lstUrlSong",lstUrlSong);
                 Package.putIntegerArrayList("lstIDSong",lstIDSong);
                 //

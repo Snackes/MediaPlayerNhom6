@@ -75,7 +75,9 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
     private ImageButton btn_repeat;
     private ImageButton btn_shuffle;
     public MediaSeekBar seekBar  ;
-
+    //khai báo để search
+    private static Integer test;
+    private static Integer idObject;
 
     //khai báo các thứ cần thiết để chơi nhạc
     private static Song song;
@@ -139,6 +141,9 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         //set bundle cho fragment listplaying
         Bundle fragmentListPlaying = new Bundle();
         fragmentListPlaying.putIntegerArrayList("listID", lstIDSong);
+        fragmentListPlaying.putInt("test", test);
+        fragmentListPlaying.putInt("IDObject",idObject);
+
         //
         //init fragment
         songPlayingFragment = new SongPlayingFragment();
@@ -319,6 +324,10 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         Package = i.getExtras();
         //lstUrlSong = Package.getStringArrayList("lstUrlSong");
         lstIDSong = Package.getIntegerArrayList("lstIDSong");
+        test = Package.getInt("test");
+        idObject = Package.getInt("IDObject");
+
+
         position = 0;
         position = Package.getInt("position");
 

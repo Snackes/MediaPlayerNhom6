@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenuListView;
@@ -34,7 +35,7 @@ import static android.support.v4.media.session.MediaControllerCompat.getMediaCon
  * Use the {@link ListPlayingSongFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListPlayingSongFragment extends Fragment {
+public class ListPlayingSongFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private SwipeMenuListView listView;
     SongManager songsManager = new SongManager();
@@ -42,6 +43,12 @@ public class ListPlayingSongFragment extends Fragment {
     ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
 
     PlayActivity activity;
+
+    //Khái báo nhận dữ liệu từ playactivity để search
+    private static Integer test;
+    private static Integer idObject;
+
+    private SearchView searchView;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -98,6 +105,9 @@ public class ListPlayingSongFragment extends Fragment {
         //Kiểm tra xem trong csdl bảng song đã có dữ liệu chưa?
 
         lstIDSong = getArguments().getIntegerArrayList("listID");
+        test = getArguments().getInt("test");
+        idObject = getArguments().getInt("IDObject");
+
 
         for (Integer item : lstIDSong) {
             Song newsong = db.GetInfoSong(item);
@@ -111,8 +121,9 @@ public class ListPlayingSongFragment extends Fragment {
 
         ListSongAdapter listSongAdapter = new ListSongAdapter(getActivity(), _songs);
         listView.setAdapter(listSongAdapter);
+        searchView = rootview.findViewById(R.id.searchView);
         ClickItem();
-
+        searchView.setOnQueryTextListener(this);
         //
         activity = (PlayActivity) getActivity();
 
@@ -176,4 +187,20 @@ public class ListPlayingSongFragment extends Fragment {
             }
         });
     }
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        String text = newText;
+        MyDatabaseHelper db = new MyDatabaseHelper(getContext());
+        _songs = db.SearchSong(text,idObject,test);
+        ListSongAdapter listSongAdapter = new ListSongAdapter(getActivity(), _songs);
+        listView.setAdapter(listSongAdapter);
+        ClickItem();
+        return false;
+    }
+
 }

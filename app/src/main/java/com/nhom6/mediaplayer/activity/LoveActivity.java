@@ -166,6 +166,8 @@ public class LoveActivity extends AppCompatActivity implements SearchView.OnQuer
                 Bundle Package = new Bundle();
                 // nhét thông tin vào bundle
                 Package.putInt("position", position);
+                Package.putInt("test", 4);
+                Package.putInt("IDObject", 1);
                 //Package.putStringArrayList("lstUrlSong", lstUrlSong);
                 Package.putIntegerArrayList("lstIDSong", lstIDSong);
 
