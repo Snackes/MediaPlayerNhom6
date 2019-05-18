@@ -4,17 +4,15 @@ package com.nhom6.mediaplayer.Manager;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 
-import com.nhom6.mediaplayer.model.Album;
 import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
 
 public class SongManager extends Activity {
 
+    Context context=this;
     public ArrayList<Song> _songs = new ArrayList<Song>(); // list tất cả các songs
 
 
@@ -60,10 +58,11 @@ public class SongManager extends Activity {
                     //
                     //get AlbumArt
                     ImageOfAlbum imageAlbum = new ImageOfAlbum();
-                    Bitmap bm = imageAlbum.getAlbumArt(context,albumid);
+                    String img = imageAlbum.getAlbumArt(context,albumid);
+
 
                     ///
-                    Song s = new Song(title,artist,album,duration,url,songid,artistid,albumid,bm);
+                    Song s = new Song(title,artist,album,duration,url,songid,artistid,albumid,img);
                     _songs.add(s);
 
                 } while (cursor.moveToNext());
@@ -102,10 +101,10 @@ public class SongManager extends Activity {
                 //
                 //get AlbumArt
                 ImageOfAlbum imageAlbum = new ImageOfAlbum();
-                Bitmap bm = imageAlbum.getAlbumArt(context,albumid);
+                String img = imageAlbum.getAlbumArt(context,albumid);
 
                 //khởi tạo với những giá trị đã lấy đc
-                _newSong = new Song(title,artist,album,duration,url,songid,artistid,albumid,bm);
+                _newSong = new Song(title,artist,album,duration,url,songid,artistid,albumid,img);
 
             }
             cursor.close();
@@ -114,6 +113,9 @@ public class SongManager extends Activity {
 
         return _newSong;
     }
+
+
+
 
 
 

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".fragment.SongPlayingFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TableLayout
+        android:id="@+id/playHead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#80E4E6ED"
+        android:shrinkColumns="0"
+        android:stretchColumns="1"
+        tools:layout_editor_absoluteX="8dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btnDown"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:onClick="ShowMainSreen"
+                android:src="@drawable/ic_down"
+                android:tint="@color/cardview_light_background"
+                tools:ignore="OnClick" />
+
+            <ImageButton
+                android:id="@+id/btnThemPlayList"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:backgroundTint="#FCFCFC"
+                android:foregroundTint="#00FEFBFB"
+                android:onClick="showPlayListDialog"
+                android:src="@drawable/ic_add"
+                android:tint="@color/cardview_light_background"
+                tools:ignore="OnClick" />
+
+            <ImageButton
+                android:id="@+id/btnLove"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:onClick="clickLove"
+                android:src="@drawable/ic_love"
+                tools:ignore="OnClick" />
+        </TableRow>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgMusic"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/adele" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="false"
+            android:scrollbarAlwaysDrawHorizontalTrack="false"
+            android:scrollbarAlwaysDrawVerticalTrack="false">
+
+            <TextView
+                android:id="@+id/songTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="Tên bài hát đang chạy ở đây nè hihi. Đoạn này dùng để set tên bài hát thôi"
+                android:textAlignment="textStart"
+                android:textColor="#FAF6F6"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:visibility="visible" />
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/artist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/singer"
+            android:textAlignment="center"
+            android:textColor="#F8F4F4"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <com.nhom6.mediaplayer.service.MediaSeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="268dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:indeterminate="false"
+            android:max="100"
+            android:outlineAmbientShadowColor="#DED4D4"
+            android:outlineSpotShadowColor="#00897B"
+            android:progressTint="#DED4D4"
+            android:thumbTint="#DED4D4" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.nhom6.mediaplayer.service.MediaTextView
+                android:id="@+id/playingTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+                android:textColor="#F7EAEF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.nhom6.mediaplayer.service.MediaTextView
+                android:id="@+id/totalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+
+                android:textAlignment="textEnd"
+                android:textColor="#FBEFEF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

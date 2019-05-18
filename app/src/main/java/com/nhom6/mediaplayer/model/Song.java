@@ -11,12 +11,12 @@ public class Song {
     private int Duration;
     private String SongUrl;
     private int Songid;
-    private Bitmap AlbumArt;
-
+    private String AlbumArt;
+    private int Favorite;
     //constructor
     public Song(){}
 
-    public Song(String songname, String artistname, String Album, int Duration, String songUrl, int Songid, int ArtistID, int AlbumID, Bitmap AlbumArt) {
+    public Song(String songname, String artistname, String Album, int Duration, String songUrl, int Songid, int ArtistID, int AlbumID, String AlbumArt) {
         this.Songname = songname;
         this.Artistname = artistname;
         this.SongUrl = songUrl;
@@ -29,11 +29,11 @@ public class Song {
 
     }
 
-    public Bitmap getAlbumArt() {
+    public String getAlbumArt() {
         return AlbumArt;
     }
 
-    public void setAlbumArt(Bitmap albumArt) {
+    public void setAlbumArt(String albumArt) {
         AlbumArt = albumArt;
     }
 
@@ -100,5 +100,13 @@ public class Song {
 
     public void setSongname(String songname) {
         Songname = songname;
+    }
+
+    public int getFavorite() {
+        return Favorite;
+    }
+
+    public void setFavorite(int favorite) {
+        Favorite = favorite;
     }
 }

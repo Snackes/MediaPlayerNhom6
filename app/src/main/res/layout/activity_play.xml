@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.PlayActivity"
+    android:background="@drawable/gardientback"
+    android:orientation="vertical"
+    app:layout_constraintTop_toTopOf="@+id/body"
+    android:id="@+id/layoutPlay">
+
+
+    <LinearLayout
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/playbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/playbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/playbar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="bottom|center"
+        android:orientation="horizontal"
+        android:touchscreenBlocksFocus="false"
+        android:verticalScrollbarPosition="defaultPosition"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:id="@+id/btnShuf"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_shuf"
+
+            android:tint="@color/pinkwhite" />
+
+        <ImageButton
+            android:id="@+id/btnPre"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="PreviousSong"
+            android:src="@drawable/ic_pre"
+            android:tint="@color/pinkwhite"
+            tools:ignore="OnClick" />
+
+        <ImageButton
+            android:id="@+id/btnPlayMenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal"
+            android:onClick="PlaySong"
+            android:src="@drawable/ic_pause_new"
+            android:tint="@color/pinkwhite"
+            tools:ignore="OnClick" />
+
+        <ImageButton
+            android:id="@+id/btnNext"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="NextSong"
+            android:src="@drawable/ic_next"
+            android:tint="@color/pinkwhite"
+            tools:ignore="OnClick" />
+
+        <ImageButton
+            android:id="@+id/btnRepeat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_repeat"
+
+            android:tint="@color/pinkwhite" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

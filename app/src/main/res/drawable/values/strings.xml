@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">MusicPlayer</string>
+    <string name="songs">Songs</string>
+    <string name="Albums">Albums</string>
+    <string name="Artists">Artists</string>
+    <string name="thuvien">Thư Viện</string>
+    <string name="AllSong">Tất cả bài hát</string>
+    <string name="playlist">PlayList</string>
+    <string name="love">Yêu Thích</string>
+    <string name="singer">Ca Sĩ</string>
+    <string name="album">Album</string>
+    <string name="scan">Scan</string>
+    <string name="title">Title</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="red">red</string>
+    <string name="blue">blue</string>
+    <string name="green">green</string>
+    <string name="songname">songname</string>
+    <string name="action_settings">action_settings</string>
+    <string name="item1">item1</string>
+    <string name="item2">item2</string>
+    <string name="btn_label">abc</string>
+    <string name="playlistName">Name of PlayList</string>
+    <string name="cancel">Cancel</string>
+    <string name="signin">Sign In</string>
+    <string name="create">Create</string>
+    <string name="choose">Choose</string>
+    <string name="SameSong">Danh sách phát</string>
+    <string name="lovesong">Bài hát yêu thích</string>
+
+
+
+</resources>

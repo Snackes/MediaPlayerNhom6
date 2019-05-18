@@ -1,6 +1,8 @@
 package com.nhom6.mediaplayer.model;
 
-public class Artist {
+import java.io.Serializable;
+
+public class Artist implements Serializable {
     //
     private int artistID; // ID nghệ sĩ
     private String artistName; // tên nghệ sĩ

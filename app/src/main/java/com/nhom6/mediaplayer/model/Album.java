@@ -1,14 +1,13 @@
 package com.nhom6.mediaplayer.model;
+import java.io.Serializable;
 
-import android.graphics.Bitmap;
-
-public class Album {
+public class Album implements Serializable {
     //
     private int albumID; // id của album
     private String albumTitle; // tên album
     private String artistName;// tên artist
     private int songCount;// số bài hát trong album này
-    private Bitmap albumArt;//
+    private String albumArt;//
     //
 
 
@@ -46,11 +45,11 @@ public class Album {
         this.songCount = songCount;
     }
 
-    public Bitmap getAlbumArt() {
+    public String getAlbumArt() {
         return albumArt;
     }
 
-    public void setAlbumArt(Bitmap albumArt) {
+    public void setAlbumArt(String albumArt) {
         this.albumArt = albumArt;
     }
 
@@ -58,7 +57,7 @@ public class Album {
     public Album(){}
 
     //
-    public  Album(int albumID, String albumTitle, String artistName,int songCount, Bitmap albumArt)
+    public  Album(int albumID, String albumTitle, String artistName,int songCount, String albumArt)
     {
         this.albumID = albumID;
         this.albumTitle = albumTitle;
