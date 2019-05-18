@@ -122,7 +122,6 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_play);
-
         //init View
         initView();
         //
@@ -328,6 +327,7 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
 
         //tạo object Song để chứa
         song = db.GetInfoSong(songID);
+        SaveData.setSongId(songID);
 
     }
 
@@ -491,8 +491,6 @@ public class PlayActivity extends AppCompatActivity implements SongPlayingFragme
      * simple.
      */
     private class MediaBrowserListener extends MediaControllerCompat.Callback {
-
-
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat playbackState) {
             mIsPlaying = playbackState != null && playbackState.getState() == PlaybackStateCompat.STATE_PLAYING;

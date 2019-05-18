@@ -126,7 +126,7 @@ public class MediaNotificationManager {
                 .setColor(ContextCompat.getColor(mService, R.color.greenic))
                 .setSmallIcon(R.drawable.ic_stat_image_audiotrack)
                 // Pending intent that is fired when user clicks on notification.
-                .setContentIntent(createContentIntent())
+                //.setContentIntent(createContentIntent())
                 // Title - Usually Song name.
                 .setContentTitle(description.getTitle())
                 // Subtitle - Usually Artist name.
@@ -191,6 +191,8 @@ public class MediaNotificationManager {
         openUI.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         return PendingIntent.getActivity(
                 mService, REQUEST_CODE, openUI, PendingIntent.FLAG_CANCEL_CURRENT);
+
+
     }
 
 }

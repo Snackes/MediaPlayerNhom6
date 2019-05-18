@@ -64,10 +64,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="-1dp">
 
-        <include
-            layout="@layout/playbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

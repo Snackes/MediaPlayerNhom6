@@ -235,11 +235,6 @@
         tools:layout_editor_absoluteX="-20dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <include
-            layout="@layout/playbar"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            bind:song="@{song}"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

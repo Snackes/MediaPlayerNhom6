@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,11 @@ import com.nhom6.mediaplayer.R;
 import com.nhom6.mediaplayer.activity.PlayActivity;
 import com.nhom6.mediaplayer.adapter.ListSongAdapter;
 import com.nhom6.mediaplayer.model.Song;
+import com.nhom6.mediaplayer.service.MediaBrowserHelper;
 
 import java.util.ArrayList;
+
+import static android.support.v4.media.session.MediaControllerCompat.getMediaController;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,11 +41,7 @@ public class ListPlayingSongFragment extends Fragment {
     public ArrayList<Song> _songs = new ArrayList<Song>();
     ArrayList<Integer> lstIDSong = new ArrayList<Integer>();
 
-    PlayActivity activity ;
-
-
-
-
+    PlayActivity activity;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -90,7 +90,7 @@ public class ListPlayingSongFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootview =  inflater.inflate(R.layout.fragment_list_playing_song, container, false);
+        View rootview = inflater.inflate(R.layout.fragment_list_playing_song, container, false);
         listView = rootview.findViewById(R.id.listPlaying);
 
         //
@@ -99,27 +99,24 @@ public class ListPlayingSongFragment extends Fragment {
 
         lstIDSong = getArguments().getIntegerArrayList("listID");
 
-        for (Integer item : lstIDSong ) {
+        for (Integer item : lstIDSong) {
             Song newsong = db.GetInfoSong(item);
             _songs.add(newsong);
         }
-
 
 
         //đưa vào adapter để hiển thị
 /*        ListSongAdapter listSongAdapter = new ListSongAdapter(context,R.layout.row_item_song,_songs);
         listView.setAdapter(listSongAdapter);*/
 
-        ListSongAdapter listSongAdapter = new ListSongAdapter(getActivity(),_songs);
+        ListSongAdapter listSongAdapter = new ListSongAdapter(getActivity(), _songs);
         listView.setAdapter(listSongAdapter);
-        setSwipeListView();
         ClickItem();
 
         //
         activity = (PlayActivity) getActivity();
 
         //
-
 
 
         return rootview;
@@ -163,46 +160,19 @@ public class ListPlayingSongFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    private void setSwipeListView() {
-//        SwipeMenuCreator creator = new SwipeMenuCreator() {
-//            @Override
-//            public void create(SwipeMenu menu) {
-//                // create "add playlist" item
-//                SwipeMenuItem plusItem = new SwipeMenuItem(getContext());
-//                // set item background
-//                plusItem.setBackground(R.color.greenic);
-//                // set item width
-//                plusItem.setWidth(100);
-//                // set a icon
-//                plusItem.setIcon(R.drawable.ic_add);
-//                // add to menu
-//                menu.addMenuItem(plusItem);
-//
-//                SwipeMenuItem loveItem = new SwipeMenuItem(getContext());
-//                // set item background
-//                loveItem.setBackground(R.color.pinkwhite);
-//                // set item width
-//                loveItem.setWidth(100);
-//                // set a icon
-//                loveItem.setIcon(R.drawable.ic_love);
-//                // add to menu
-//                menu.addMenuItem(loveItem);
-//            }
-//        };
-//        // set creator
-//        listView.setMenuCreator(creator);
-//        ClickItemSong();
-    }
 
-    public void ClickItem()
-    {
+    public void ClickItem() {
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), "hahaha" + position, Toast.LENGTH_SHORT).show();
-
+                //Toast.makeText(getContext(), "hahaha" + position, Toast.LENGTH_SHORT).show();
+                MediaControllerCompat mediaController = MediaBrowserHelper.getMediaController();
+                mediaController.getTransportControls().prepareFromMediaId(String.valueOf(position), null);
+                // playsong
+                mediaController.getTransportControls().play();
             }
         });
     }

@@ -37,7 +37,7 @@ public class MediaBrowserHelper {
 
     private MediaBrowserCompat mMediaBrowser;
     @Nullable
-    private MediaControllerCompat mMediaController;
+    private static MediaControllerCompat mMediaController;
 
     public MediaBrowserHelper(Context context,
                               Class<? extends MediaBrowserServiceCompat> serviceClass) {
@@ -110,7 +110,7 @@ public class MediaBrowserHelper {
     }
 
     @NonNull
-    protected final MediaControllerCompat getMediaController() {
+    public static final MediaControllerCompat getMediaController() {
         if (mMediaController == null) {
             throw new IllegalStateException("MediaController is null!");
         }

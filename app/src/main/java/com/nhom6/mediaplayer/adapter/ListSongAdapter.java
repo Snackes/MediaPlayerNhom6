@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -11,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nhom6.mediaplayer.R;
+import com.nhom6.mediaplayer.activity.SaveData;
 import com.nhom6.mediaplayer.model.Song;
 
 import java.util.ArrayList;
@@ -18,6 +23,7 @@ import java.util.List;
 
 public class ListSongAdapter extends BaseAdapter {
     Activity activity;
+    int dm=1;
     private Context context;
     public ArrayList<Song>arrayListsong=new ArrayList<Song>();
     public  ListSongAdapter(Activity activity1,ArrayList<Song>arrayList){
@@ -52,6 +58,7 @@ public class ListSongAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        dm++;
         if (convertView == null) {
             convertView = View.inflate(activity.getApplication(),
                     R.layout.row_item_song, null);
@@ -74,12 +81,4 @@ public class ListSongAdapter extends BaseAdapter {
         // Trả về view kết quả.
         return convertView;
     }
-    // refresh Adapter Method calling in Homepage Activity
-
-    public synchronized void refresAdapter(List<Song> _song) {
-        _song.clear();
-        arrayListsong.addAll(_song);
-        notifyDataSetChanged();
-    }
-
 }
